@@ -27,5 +27,7 @@
 -poprawa obrotu
 -dodanie komentarzy
 -dodanie turbo
+-poprawa turbo
+-płynniejsza zmiana prędkości po turbo
 
 
