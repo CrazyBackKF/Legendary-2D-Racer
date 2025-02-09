@@ -24,6 +24,9 @@ addEventListener("keydown", (e) => {
         case "s":
             player.key.s = true;
             break;
+        case "t":
+            player.key.t = true;
+            break;
     }
 })
 
@@ -40,6 +43,9 @@ addEventListener("keyup", (e) => {
             break;
         case "s":
             player.key.s = false;
+            break;
+        case "t":
+            player.key.t = false;
             break;
     }
 })

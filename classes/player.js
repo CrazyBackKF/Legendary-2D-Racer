@@ -10,6 +10,8 @@ class Player {
         this.speedValue = 0.015;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.008;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3;
+        this.turboAmount = 5;
+        this.howLongTNotClicked = 0;
         this.velocity = {
             x: 0,
             y: 0
@@ -18,7 +20,8 @@ class Player {
             a: false,
             d: false,
             w: false,
-            s: false
+            s: false,
+            t: false
         }
     }
 
@@ -28,6 +31,7 @@ class Player {
         this.accelerate();
         this.turn();
         this.physics();
+        this.turbo();
     }
 
     // Metoda która dodaje prędkość pojazdu
@@ -113,4 +117,41 @@ class Player {
             else return 2 + (this.speed / this.maxSpeed) * 1.2;
         }
     }
+
+    turbo()
+    {
+        
+        
+        if(!this.key.t)
+            this.howLongTNotClicked++; // tu sprawdza ile t nie zostalo klikenite jak znacie jakis inny zajebisty wbudowany sposob na to to podmiencie 
+
+        if(this.howLongTNotClicked >= 300 && this.turboAmount < 5) //jak vhwile nie zuyjesz turbo to zaczyna sie dodawac
+        {
+            this.turboAmount += 0.004;
+            if(this.turboAmount > 5)
+                this.turboAmount = 5;
+        }
+
+        if(this.key.t)
+        {
+            this.howLongTNotClicked = 0;
+            if(this.turboAmount > 0) // a tu ni ma co tlumaaczyc chyba
+            {
+                this.maxSpeed = 4.5;
+                this.turboAmount -= 0.01;
+            }   
+        }
+        else if(this.turboAmount <= 0)
+        {
+            this.maxSpeed = 3;
+            this.turboAmount = 0;    
+        }
+        else
+        {
+            this.maxSpeed = 3;
+        }
+
+
+    }
+
 }
