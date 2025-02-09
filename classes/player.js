@@ -1,4 +1,7 @@
 // Tworzenie klasy Player
+
+// zedytowana wiadomość
+
 class Player {
     constructor({ position }) {
         this.position = position;
