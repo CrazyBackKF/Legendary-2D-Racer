@@ -25,5 +25,6 @@
 -zmiana wartości 'this.speedValue' i 'this.friction'
 -poprawa hamowania i zwiększania predkości
 -poprawa obrotu
+-dodanie komentarzy
 
 

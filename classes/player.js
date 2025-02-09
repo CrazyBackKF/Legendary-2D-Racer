@@ -4,10 +4,11 @@ class Player {
         this.position = position;
         this.width = 20;
         this.height = 50;
-        this.angle = 0;
+        this.angle = 0; //zmienna opisujaca kat obrotu pojazdu podczas skretu
+        //zmienne predkosci pojazd
         this.speed = 0;
-        this.speedValue = 0.015;
-        this.friction = 0.008;
+        this.speedValue = 0.015;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
+        this.friction = 0.008;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3;
         this.velocity = {
             x: 0,
