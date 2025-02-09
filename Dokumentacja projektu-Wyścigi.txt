@@ -1,0 +1,29 @@
+8.02.2025
+-stworzenie projektu
+-dodanie do pliku 'index.html' znacznik <canvas> i zainkludowanie pliku 'script.js'
+-zainicjowanie zmiennych odnoszących się do znacznika <canvas>
+-ustalenie wysokości i szerokości znacznika zgodnego wielkościami z przeglądarki
+-usunięcie marginesu w znaczniku <body>
+-stworzenie pętli gry ['animate()']
+-dodanie addEventListener odpowiedzialnego za ciągłą zmianę wielkości znacznika <canvas>
+-stworzenie klasy 'Player'
+-stworzenie obiektu gracza
+-stworzenie funkcji w klasie 'Player' ['constructor()', 'update()', 'draw()', 'turn()', 'accelerate()', 'physics()']
+-obsluga przycisków
+-stworzenie funkcji zmieniającej stopnie na radianty [używane w funkcji rotate()]
+-rozdzielenie klasy do innego pliku
+-przeniesienie funkcji do osobnego pliku 
+-podlaczenie nowych plików do pliku 'index.html'
+-dodanie ograniczenia prędkości pojazdu
+-dodanie zmiany szybkości obracania pojazdu względem prędkości
+-naprawienie szybkości obrotu (nie działało jeżdżąc do tyłu)
+-usunięcie zmiennej 'lastDirection' i zastąpienie jej innymi warukami z uzyciem 'this.speed'
+-zoptymalizowanie zmiany zmiennej 'this.speed' ('this.speedValue' zmienia prędkość na podstawie przycisków, 'this.friction' jeżeli nie klikamy "w" lub "s" zwalnia o jej wartość)
+
+9.02.2025
+-naprawa zmiany szybkości obrotu [były złe znaki co mogło spowodować później błędy]
+-zmiana wartości 'this.speedValue' i 'this.friction'
+-poprawa hamowania i zwiększania predkości
+-poprawa obrotu
+
+
