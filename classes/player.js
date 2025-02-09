@@ -1,8 +1,4 @@
 // Tworzenie klasy Player
-
-// zedytowana wiadomość
-// skibidi sigma
-
 class Player {
     constructor({ position }) {
         this.position = position;
