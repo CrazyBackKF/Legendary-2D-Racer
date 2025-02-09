@@ -26,5 +26,6 @@
 -poprawa hamowania i zwiększania predkości
 -poprawa obrotu
 -dodanie komentarzy
+-dodanie turbo
 
 
