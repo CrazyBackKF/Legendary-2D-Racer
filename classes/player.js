@@ -62,7 +62,7 @@ class Player {
             if (this.speed > 0) this.speed -= this.speedValue;
             else this.speed -= (this.speedValue + this.friction);
         }
-        console.log(this.speed);
+
         this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier);
         this.velocity.x = this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier;
     }
@@ -128,12 +128,8 @@ class Player {
             this.turboAmount += 0.004;
             if(this.turboAmount > 5) this.turboAmount = 5;
         }
-
-        if (!this.key.t)
-        {
-            this.speedMultiplier = 1;
-            return;
-        }
+        console.log(this.speedMultiplier)
+        if (!this.key.t && this.speedMultiplier > 1) this.speedMultiplier -= 0.005; // Dzięki tej lini zmiana prędkości jest płynniejsza;
 
         if(this.key.t && this.turboAmount > 0) // Gdy wciśnięty klawisz t to prędkość zwiększa się 1.5 razy
         {
