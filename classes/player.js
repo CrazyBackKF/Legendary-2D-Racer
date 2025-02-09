@@ -1,22 +1,25 @@
 // Tworzenie klasy Player
 class Player {
     constructor({ position }) {
-        this.position = position; 
+        this.position = position; //pozycja pojazdu
+        //wymiary hitboxa pojazdu
         this.width = 20;
         this.height = 50;
         this.angle = 0; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
-        this.speed = 0;
-        this.speedMultiplier = 1;
+        this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
+        this.speedMultiplier = 1; //służy do zwiększania prędkości po naciśnięciu turbo
         this.speedValue = 0.015;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.008;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
-        this.maxSpeed = 3;
-        this.turboAmount = 5;
-        this.howLongTNotClicked = 0;
+        this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
+        this.turboAmount = 5; //maksymalna ilość turbo
+        this.lastTurbo = 0; //ostatnie kliknięcie turbo
+        //prędkość w poziomie x i y
         this.velocity = {
             x: 0,
             y: 0
         }
+        //lista klawiszy którymi można sterować, pobrana z addEventListenerów
         this.key = {
             a: false,
             d: false,
@@ -123,17 +126,16 @@ class Player {
     // Metoda która dodaje turbo gdy wciśnie się t
     turbo()
     {
-        if(Date.now() - this.howLongTNotClicked >= 500 && this.turboAmount < 5) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
+        if(Date.now() - this.lastTurbo >= 500 && this.turboAmount < 5) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
         {
             this.turboAmount += 0.004;
             if(this.turboAmount > 5) this.turboAmount = 5;
         }
-        console.log(this.speedMultiplier)
         if (!this.key.t && this.speedMultiplier > 1) this.speedMultiplier -= 0.005; // Dzięki tej lini zmiana prędkości jest płynniejsza;
 
         if(this.key.t && this.turboAmount > 0) // Gdy wciśnięty klawisz t to prędkość zwiększa się 1.5 razy
         {
-            this.howLongTNotClicked = Date.now();
+            this.lastTurbo = Date.now();
             this.speedMultiplier = 1.5;
             this.turboAmount -= 0.01; 
         }
@@ -141,6 +143,7 @@ class Player {
         {
             this.speedMultiplier = 1;
             this.turboAmount = 0;
+            this.speedMultiplier -= 0.005;
         }
 
     }
