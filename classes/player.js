@@ -9,11 +9,14 @@ class Player {
         //zmienne predkosci pojazd
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
         this.speedMultiplier = 1; //służy do zwiększania prędkości po naciśnięciu turbo
+        this.driftMultiplier = 1;
         this.speedValue = 0.015;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.008;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
         this.turboAmount = 5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
+        this.image = new Image();
+        this.image.src = "img/sport_green.png";
         //prędkość w poziomie x i y
         this.velocity = {
             x: 0,
@@ -25,7 +28,8 @@ class Player {
             d: false,
             w: false,
             s: false,
-            t: false
+            t: false,
+            space: false
         }
     }
 
@@ -33,6 +37,7 @@ class Player {
     update() {
         this.draw();
         this.accelerate();
+        this.drift();
         this.turn();
         this.physics();
         this.turbo();
@@ -73,15 +78,12 @@ class Player {
     // Metoda która wyświetla pojazd
     draw() {
         c.save();
-        c.translate(player.position.x + player.width / 2, player.position.y + player.height / 2);
+        c.translate(player.position.x + player.width / 2, player.position.y + player.height / 4);
         c.rotate(convertToRadians(this.angle));
 
-        c.fillStyle = "red";
-        c.fillRect(-player.width / 2, -player.height / 2, player.width, player.height);
-
-        c.fillStyle = "white";
-        c.font = "50px Arial";
-        c.fillText("↑", -12.5, 12.5);
+        c.drawImage(this.image, -player.width / 2, -player.height / 4,);
+        c.fillStyle = "rgba(255, 0, 0, 0.5)";
+        c.fillRect(-player.width / 2, -player.height / 4, this.image.width, this.image.height);
 
         c.restore();
     }
@@ -114,38 +116,49 @@ class Player {
     // Metoda która zmienia szybkość obrotu w zależności od szybkości auta
     changeTurningSpeed() {
         if (this.speed > 0) {
-            if (this.speed <= 2) return this.speed / 1.5;
-            else return 2 - (this.speed / this.maxSpeed) * 1.2;
+            if (this.speed <= 2) return this.speed / 1.7 * this.driftMultiplier;
+            else return ((2 - (this.speed / this.maxSpeed)) * 0.8) * this.driftMultiplier;
         }
         else if (this.speed < 0) {
-            if (this.speed >= -2) return -this.speed / 1.5;
-            else return 2 + (this.speed / this.maxSpeed) * 1.2;
+            if (this.speed >= -2) return -this.speed / 1.7 * this.driftMultiplier;
+            else return (2 + (this.speed / this.maxSpeed) * 0.8) * this.driftMultiplier;
         }
     }
 
     // Metoda która dodaje turbo gdy wciśnie się t
-    turbo()
-    {
-        if(Date.now() - this.lastTurbo >= 500 && this.turboAmount < 5) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
+    turbo() {
+        if (Date.now() - this.lastTurbo >= 500 && this.turboAmount < 5) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
         {
             this.turboAmount += 0.004;
-            if(this.turboAmount > 5) this.turboAmount = 5;
+            if (this.turboAmount > 5) this.turboAmount = 5;
         }
         if (!this.key.t && this.speedMultiplier > 1) this.speedMultiplier -= 0.005; // Dzięki tej lini zmiana prędkości jest płynniejsza;
 
-        if(this.key.t && this.turboAmount > 0) // Gdy wciśnięty klawisz t to prędkość zwiększa się 1.5 razy
+        if (this.key.t && this.turboAmount > 0) // Gdy wciśnięty klawisz t to prędkość zwiększa się 1.5 razy
         {
             this.lastTurbo = Date.now();
             this.speedMultiplier = 1.5;
-            this.turboAmount -= 0.01; 
+            this.turboAmount -= 0.01;
         }
-        else if(this.turboAmount <= 0)
-        {
+        else if (this.turboAmount <= 0) {
             this.speedMultiplier = 1;
             this.turboAmount = 0;
             this.speedMultiplier -= 0.005;
         }
 
+    }
+
+    drift() {
+        console.log(this.speed + " " + this.driftMultiplier)
+        if (this.key.space && this.speed > 2) {
+            this.driftMultiplier = 0.7 * this.speed;
+            if (this.key.w) return;
+            if(this.speed > 0) this.speed -= 0.02;
+            else this.speed = 0;
+        }
+        else {
+            this.driftMultiplier = 1;
+        }
     }
 
 }
