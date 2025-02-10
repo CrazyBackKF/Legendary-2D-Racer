@@ -30,4 +30,8 @@
 -poprawa turbo
 -płynniejsza zmiana prędkości po turbo
 
+10.02.2025
+-dodanie driftu
+-zmiana mechaniki skrętu
+
 
