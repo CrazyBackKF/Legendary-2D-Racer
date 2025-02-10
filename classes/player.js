@@ -149,7 +149,6 @@ class Player {
     }
 
     drift() {
-        console.log(this.speed + " " + this.driftMultiplier)
         if (this.key.space && this.speed > 2) {
             this.driftMultiplier = 0.7 * this.speed;
             if (this.key.w) return;
