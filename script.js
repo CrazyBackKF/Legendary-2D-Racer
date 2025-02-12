@@ -2,9 +2,6 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
 // Tworzenie nowej instancji klasy Player dla gracza
 const player = new Player({
     position: {

@@ -3,8 +3,8 @@ class Player {
     constructor({ position }) {
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
-        this.width = 20;
-        this.height = 50;
+        this.width = 10;
+        this.height = 20;
         this.angle = 0; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości

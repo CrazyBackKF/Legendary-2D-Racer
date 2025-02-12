@@ -3,12 +3,6 @@ function convertToRadians(angle) {
     return (angle * Math.PI / 180);
 }
 
-// Funkcja odpowiadająca za zmianę rozmiaru canvasu, względem okna przeglądarki
-addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-})
-
 // Obsługa przycisków
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {

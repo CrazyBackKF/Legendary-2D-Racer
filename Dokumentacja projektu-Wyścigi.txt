@@ -34,4 +34,7 @@
 -dodanie driftu
 -zmiana mechaniki skrętu
 
+12.02.2025
+-dodanie tła na etap 1
+
 
