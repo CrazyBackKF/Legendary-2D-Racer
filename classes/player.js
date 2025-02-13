@@ -167,7 +167,7 @@ class Player {
             const rotatedRect = { x: this.position.x, y: this.position.y, width: this.width, height: this.height, angle: this.angle };
             const square = { sq_x: (collisionsTab[i].position.x * 2 - canvas.width / 2), sq_y: (collisionsTab[i].position.y * 2 - canvas.height), sq_size: collisionsTab[i].width * 2 };   
 
-            if (isCollidingSAT(rotatedRect, square))
+            if (isColliding(rotatedRect, square))
             {
                 console.log("chuj");
                 break;

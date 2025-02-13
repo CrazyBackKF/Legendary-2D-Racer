@@ -2,7 +2,7 @@ function rotatePoint(px, py, angle, cx, cy) {
     let rad = angle * Math.PI / 180;
     let cosA = Math.cos(rad);
     let sinA = Math.sin(rad);
-    
+
     let dx = px - cx;
     let dy = py - cy;
 
@@ -12,37 +12,45 @@ function rotatePoint(px, py, angle, cx, cy) {
     };
 }
 
-// Pobieranie normalnych osi (wektory prostopadłe do krawędzi)
-function getAxes(corners) {
-    return [
-        { x: -(corners[1].y - corners[0].y), y: (corners[1].x - corners[0].x) }, // Krawędź 1
-        { x: -(corners[2].y - corners[0].y), y: (corners[2].x - corners[0].x) }  // Krawędź 2
-    ].map(axis => {
-        let length = Math.sqrt(axis.x * axis.x + axis.y * axis.y);
-        return { x: axis.x / length, y: axis.y / length };
-    });
+// Sprawdzenie, czy punkt (px, py) jest wewnątrz kwadratu
+function isPointInSquare(px, py, sq_x, sq_y, sq_size) {
+    return px >= sq_x && px <= sq_x + sq_size && py >= sq_y && py <= sq_y + sq_size;
 }
 
-// Rzutowanie punktów na oś
-function projectPolygon(vertices, axis) {
-    let min = Infinity, max = -Infinity;
-    for (let v of vertices) {
-        let projection = (v.x * axis.x + v.y * axis.y);
-        if (projection < min) min = projection;
-        if (projection > max) max = projection;
+// Sprawdzenie, czy dwa odcinki się przecinają
+function doLinesIntersect(A, B, C, D) {
+    function crossProduct(v1, v2) {
+        return v1.x * v2.y - v1.y * v2.x;
     }
-    return { min, max };
+
+    function subtract(v1, v2) {
+        return { x: v1.x - v2.x, y: v1.y - v2.y };
+    }
+
+    let AB = subtract(B, A);
+    let AC = subtract(C, A);
+    let AD = subtract(D, A);
+    let CD = subtract(D, C);
+    let CA = subtract(A, C);
+    let CB = subtract(B, C);
+
+    let cross1 = crossProduct(AB, AC);
+    let cross2 = crossProduct(AB, AD);
+    let cross3 = crossProduct(CD, CA);
+    let cross4 = crossProduct(CD, CB);
+
+    return (cross1 * cross2 < 0) && (cross3 * cross4 < 0);
 }
 
-// Sprawdzenie kolizji SAT
-function isCollidingSAT(rotatedRect, square) {
+// Sprawdzenie kolizji
+function isColliding(rotatedRect, square) {
     let { x, y, width, height, angle } = rotatedRect;
     let { sq_x, sq_y, sq_size } = square;
 
-    // **Obliczamy środek prostokąta**
+    // Środek prostokąta
     let cx = x + width / 2, cy = y + height / 2;
 
-    // **Wierzchołki rotowanego prostokąta** (ustawione względem środka)
+    // Wierzchołki prostokąta po rotacji
     let corners = [
         rotatePoint(x, y, angle, cx, cy),
         rotatePoint(x + width, y, angle, cx, cy),
@@ -50,7 +58,7 @@ function isCollidingSAT(rotatedRect, square) {
         rotatePoint(x + width, y + height, angle, cx, cy)
     ];
 
-    // **Wierzchołki kwadratu**
+    // Wierzchołki kwadratu
     let squareCorners = [
         { x: sq_x, y: sq_y },
         { x: sq_x + sq_size, y: sq_y },
@@ -58,19 +66,49 @@ function isCollidingSAT(rotatedRect, square) {
         { x: sq_x + sq_size, y: sq_y + sq_size }
     ];
 
-    // **Pobieramy osie normalne dla obu figur**
-    let axes = [...getAxes(corners), { x: 1, y: 0 }, { x: 0, y: 1 }];
-
-    // **Sprawdzamy kolizję na każdej osi**
-    for (let axis of axes) {
-        let proj1 = projectPolygon(corners, axis);
-        let proj2 = projectPolygon(squareCorners, axis);
-
-        // Jeśli na jakiejś osi nie nachodzą się, to nie ma kolizji
-        if (proj1.max < proj2.min || proj2.max < proj1.min) {
-            return false;
+    // **1️⃣ Sprawdzenie, czy jakikolwiek róg prostokąta jest w kwadracie**
+    for (let corner of corners) {
+        if (isPointInSquare(corner.x, corner.y, sq_x, sq_y, sq_size)) {
+            return true; // Kolizja!
         }
     }
 
-    return true; // Jeśli nie znaleźliśmy separacji, to mamy kolizję
+    // **2️⃣ Sprawdzenie, czy jakikolwiek róg kwadratu jest w prostokącie**
+    let rectMinX = Math.min(...corners.map(c => c.x));
+    let rectMaxX = Math.max(...corners.map(c => c.x));
+    let rectMinY = Math.min(...corners.map(c => c.y));
+    let rectMaxY = Math.max(...corners.map(c => c.y));
+
+    for (let corner of squareCorners) {
+        if (corner.x >= rectMinX && corner.x <= rectMaxX &&
+            corner.y >= rectMinY && corner.y <= rectMaxY) {
+            return true; // Kolizja!
+        }
+    }
+
+    // **3️⃣ Sprawdzenie, czy krawędzie przecinają się**
+    let rectEdges = [
+        [corners[0], corners[1]],
+        [corners[1], corners[3]],
+        [corners[3], corners[2]],
+        [corners[2], corners[0]]
+    ];
+
+    let squareEdges = [
+        [squareCorners[0], squareCorners[1]],
+        [squareCorners[1], squareCorners[3]],
+        [squareCorners[3], squareCorners[2]],
+        [squareCorners[2], squareCorners[0]]
+    ];
+
+    for (let rectEdge of rectEdges) {
+        for (let squareEdge of squareEdges) {
+            if (doLinesIntersect(rectEdge[0], rectEdge[1], squareEdge[0], squareEdge[1])) {
+                return true; // Kolizja!
+            }
+        }
+    }
+
+    return false; // Jeśli żaden test nie wykrył kolizji, brak kolizji
 }
+
