@@ -3,8 +3,8 @@ class Player {
     constructor({ position }) {
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
-        this.width = 10;
-        this.height = 20;
+        this.width = 20;
+        this.height = 50;
         this.angle = 0; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
@@ -79,12 +79,14 @@ class Player {
     // Metoda która wyświetla pojazd
     draw() {
         c.save();
-
+        c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
+        c.rotate(convertToRadians(this.angle));
         //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
+        
         c.fillStyle = "rgba(255, 0, 0, 1)";
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
-
+        c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
         c.restore();
+
     }
 
     // Metoda która obraca pojazd
@@ -162,25 +164,10 @@ class Player {
     checkCollisions() {
         for (let i = 0; i < collisionsTab.length; i++)
         {
-            const car = {
-                position: {
-                    x: this.position.x,
-                    y: this.position.y,
-                },
-                width: this.width,
-                height: this.height
-            }
-            
-            const collision = {
-                position: {
-                    x: (collisionsTab[i].position.x * 2 + canvas.width / 2),
-                    y: (collisionsTab[i].position.y * 2 + canvas.height),
-                },
-                width: collisionsTab[i].width * 2,
-                height: collisionsTab[i].height * 2
-            }
+            const rotatedRect = { x: this.position.x, y: this.position.y, width: this.width, height: this.height, angle: this.angle };
+            const square = { sq_x: (collisionsTab[i].position.x * 2 - canvas.width / 2), sq_y: (collisionsTab[i].position.y * 2 - canvas.height), sq_size: collisionsTab[i].width * 2 };   
 
-            if (checkCollisionsCondition(car, collision))
+            if (isCollidingSAT(rotatedRect, square))
             {
                 console.log("chuj");
                 break;

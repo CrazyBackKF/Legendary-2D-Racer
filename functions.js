@@ -3,12 +3,16 @@ function convertToRadians(angle) {
     return (angle * Math.PI / 180);
 }
 
-function checkCollisionsCondition(object1, object2) {
-    return (object1.position.x <= object2.position.x + object2.width &&
-            object1.position.x + object1.width >= object2.position.x &&
-            object1.position.y <= object2.position.y + object2.height &&
-            object1.position.y + object1.height >= object2.position.y);
+function checkCollisionsCondition(corners, object) {
+    if (corners.rt.y <= object.position.y + object.height &&
+        corners.lt.y >= object.position.y + object.height &&
+        corners.rt.x <= object.position.x + object.width &&
+        corners.lt.x >= object.position.x + object.width)
+        {
+            return "collision"
+        }
 }
+
 
 // Obsługa przycisków
 addEventListener("keydown", (e) => {
