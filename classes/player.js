@@ -39,6 +39,7 @@ class Player {
         this.accelerate();
         this.drift();
         this.turn();
+        this.checkCollisions();
         this.physics();
         this.turbo();
     }
@@ -78,12 +79,10 @@ class Player {
     // Metoda która wyświetla pojazd
     draw() {
         c.save();
-        c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
-        c.rotate(convertToRadians(this.angle));
 
         //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
         c.fillStyle = "rgba(255, 0, 0, 1)";
-        c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
+        c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
         c.restore();
     }
@@ -157,6 +156,35 @@ class Player {
         }
         else {
             this.driftMultiplier = 1;
+        }
+    }
+
+    checkCollisions() {
+        for (let i = 0; i < collisionsTab.length; i++)
+        {
+            const car = {
+                position: {
+                    x: this.position.x,
+                    y: this.position.y,
+                },
+                width: this.width,
+                height: this.height
+            }
+            
+            const collision = {
+                position: {
+                    x: (collisionsTab[i].position.x * 2 + canvas.width / 2),
+                    y: (collisionsTab[i].position.y * 2 + canvas.height),
+                },
+                width: collisionsTab[i].width * 2,
+                height: collisionsTab[i].height * 2
+            }
+
+            if (checkCollisionsCondition(car, collision))
+            {
+                console.log("chuj");
+                break;
+            }
         }
     }
 
