@@ -38,6 +38,10 @@
 -dodanie tła na etap 1
 
 13.02.2025
--dodanie kolizji
+-dodanie bloków kolizji
+
+14.02.2025
+-poprawa bloków kolizji
+-dodanie reakcji na kolizje (do poprawy)
 
 

@@ -15,6 +15,7 @@ class Player {
         this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
         this.turboAmount = 5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
+        this.isColliding = false;
         //this.image = new Image();
         //this.image.src = "img/sport_green.png";
         //prędkość w poziomie x i y
@@ -35,6 +36,10 @@ class Player {
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
     update() {
+        this.lastSafePosition = {
+            x: this.position.x,
+            y: this.position.y
+        };
         this.draw();
         this.accelerate();
         this.drift();
@@ -82,7 +87,7 @@ class Player {
         c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
         c.rotate(convertToRadians(this.angle));
         //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
-        
+
         c.fillStyle = "rgba(255, 0, 0, 1)";
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
         c.restore();
@@ -95,21 +100,21 @@ class Player {
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;
-                if (this.angle == 0) this.angle = 360;
+                if (this.angle <= 0) this.angle = 360;
             }
             if (this.speed < 0) {
                 this.angle += turnSpeed;
-                if (this.angle == 360) this.angle = 0;
+                if (this.angle >= 360) this.angle = 0;
             }
         }
         if (this.key.d) {
             if (this.speed > 0) {
                 this.angle += turnSpeed;
-                if (this.angle == 360) this.angle = 0;
+                if (this.angle >= 360) this.angle = 0;
             }
             if (this.speed < 0) {
                 this.angle -= turnSpeed;
-                if (this.angle == 0) this.angle = 360;
+                if (this.angle <= 0) this.angle = 360;
             }
         }
     }
@@ -149,11 +154,12 @@ class Player {
 
     }
 
+    // Metoda która dodaje drift po wciśnięciu spacji
     drift() {
         if (this.key.space && this.speed > 2) {
             this.driftMultiplier = 0.7 * this.speed;
             if (this.key.w) return;
-            if(this.speed > 0) this.speed -= 0.02;
+            if (this.speed > 0) this.speed -= 0.02;
             else this.speed = 0;
         }
         else {
@@ -161,18 +167,54 @@ class Player {
         }
     }
 
+    // Metoda sprawdza kolizję między samochodzem a blokami kolizji
     checkCollisions() {
-        for (let i = 0; i < collisionsTab.length; i++)
-        {
-            const rotatedRect = { x: this.position.x, y: this.position.y, width: this.width, height: this.height, angle: this.angle};
-            const square = { x: (collisionsTab[i].position.x * 2 - canvas.width / 2), y: (collisionsTab[i].position.y * 2 - canvas.height), width: collisionsTab[i].width * 2, height: collisionsTab[i].height * 2};   
+        const collidingCorners = new Set();
+        for (let i = 0; i < collisionsTab.length; i++) {
+            const rotatedRect = { x: this.position.x, y: this.position.y, width: this.width, height: this.height, angle: this.angle };
+            const square = { x: (collisionsTab[i].position.x * 2 + mapTranslation.x), y: (collisionsTab[i].position.y * 2 + mapTranslation.y), width: collisionsTab[i].width * 2, height: collisionsTab[i].height * 2 };
 
-            if (isColliding(rotatedRect, square))
-            {
-                console.log("kolizja")
-                break;
+            if (isColliding(rotatedRect, square)) {
+                collidingCorners.add(isColliding(rotatedRect, square))
+                this.checkHorizontalCollisions(collidingCorners);
+            }
+
+        }
+        collidingCorners.clear();
+
+    }
+
+
+    // Metoda która reaguje na kolizje
+    checkHorizontalCollisions(collidingCorners) {
+        
+        /// do zrobienia ////////////////////////////////////////////
+        
+        if (this.angle > 45 && this.angle < 90) this.angle += 1;                 
+            else if (this.angle <= 45 && this.angle > 0) this.angle -= 1; 
+            if (this.angle > 270 && this.angle < 315) this.angle -= 1; 
+            else if (this.angle >= 315 && this.angle < 360) this.angle += 1; 
+            if (this.angle > 225 && this.angle < 270) this.angle += 1; 
+            else if (this.angle <= 180 && this.angle > 225) this.angle -= 1; 
+            if (this.angle > 270 && this.angle < 315) this.angle += 1; 
+            else if (this.angle >= 315 && this.angle < 360) this.angle -= 1; 
+
+        ////////////////////////////////////////////////////////
+        if (collidingCorners.has("lt") || collidingCorners.has("rt")) { 
+
+            if (this.speed > 0) {
+                this.speed = 0;
+                this.velocity.y = 0;
+                this.velocity.x = 0;
+            }
+        }
+
+        if (collidingCorners.has("rb") || collidingCorners.has("lb")) {
+            if (this.speed < 0) {
+                this.speed = 0;
+                this.velocity.y = 0;
+                this.velocity.x = 0;
             }
         }
     }
-
 }

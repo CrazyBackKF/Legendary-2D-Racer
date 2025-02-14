@@ -1,6 +1,10 @@
 //Pobieranie elementu canvas z pliku index.html i tworzenie kontekstu
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
+const mapTranslation = {
+    x: 0,
+    y: -canvas.height
+}
 
 const stage = {
     1: {
@@ -44,13 +48,14 @@ function animate() {
     c.fillStyle = "black";
     c.fillRect(0, 0, canvas.width, canvas.height);
     c.save();
-    c.translate(-canvas.width / 2, -canvas.height);
+    c.translate(mapTranslation.x, mapTranslation.y);
     c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
     for (let i = 0; i < collisionsTab.length; i++)
     {
         collisionsTab[i].draw();
+        collisionsTab[i].angle += 0.01;
     }
     player.update();
 
