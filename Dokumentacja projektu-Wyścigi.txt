@@ -37,4 +37,7 @@
 12.02.2025
 -dodanie tła na etap 1
 
+13.02.2025
+-dodanie kolizji
+
 
