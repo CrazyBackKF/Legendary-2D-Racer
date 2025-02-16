@@ -44,4 +44,7 @@
 -poprawa bloków kolizji
 -dodanie reakcji na kolizje (do poprawy)
 
+16.02.2025
+-poprawa reakcji na kolizje
+
 
