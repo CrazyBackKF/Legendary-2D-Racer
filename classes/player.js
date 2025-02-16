@@ -176,45 +176,62 @@ class Player {
 
             if (isColliding(rotatedRect, square)) {
                 collidingCorners.add(isColliding(rotatedRect, square))
-                this.checkHorizontalCollisions(collidingCorners);
+                this.reactToCollisions(collidingCorners)
             }
 
         }
         collidingCorners.clear();
-
     }
 
-
-    // Metoda która reaguje na kolizje
-    checkHorizontalCollisions(collidingCorners) {
-        
-        /// do zrobienia ////////////////////////////////////////////
-        
-        if (this.angle > 45 && this.angle < 90) this.angle += 1;                 
-            else if (this.angle <= 45 && this.angle > 0) this.angle -= 1; 
-            if (this.angle > 270 && this.angle < 315) this.angle -= 1; 
-            else if (this.angle >= 315 && this.angle < 360) this.angle += 1; 
-            if (this.angle > 225 && this.angle < 270) this.angle += 1; 
-            else if (this.angle <= 180 && this.angle > 225) this.angle -= 1; 
-            if (this.angle > 270 && this.angle < 315) this.angle += 1; 
-            else if (this.angle >= 315 && this.angle < 360) this.angle -= 1; 
-
-        ////////////////////////////////////////////////////////
-        if (collidingCorners.has("lt") || collidingCorners.has("rt")) { 
-
-            if (this.speed > 0) {
-                this.speed = 0;
-                this.velocity.y = 0;
+    reactToCollisions(collidingCorners) {
+        if ((collidingCorners.has("lt") && collidingCorners.has("rt")) || (collidingCorners.has("lb") && collidingCorners.has("rb"))) {
+            if ((this.angle < 45 && this.angle >= 0) || (this.angle > 315 && this.angle < 360)) {
+                if (this.speed > 0) this.velocity.y = 5;
+                else this.velocity.y = -5;
                 this.velocity.x = 0;
+            }
+            else if (this.angle > 135 && this.angle < 225) {
+                if (this.speed > 0) this.velocity.y = -5;
+                else this.velocity.y = 5;
+                this.velocity.x = 0;
+            }
+            else if (this.angle >= 225 && this.angle < 315) {
+                if (this.speed > 0) this.velocity.x = 5;
+                else this.velocity.x = -5;
+                this.velocity.y = 0;
+            }
+            else {
+                if (this.speed > 0) this.velocity.x = -5;
+                else this.velocity.x = 5;
+                this.velocity.y = 0;
+            }
+            this.speed = 0;
+        }
+        else if (getCollisionDirection(collidingCorners, this.angle) == "vertical") {
+            if (this.angle >= 90 && this.angle < 270) {
+                if (this.speed > 0) this.velocity.y = -1;
+                else this.velocity.y = 1;
+            }
+            else {
+                if (this.speed > 0) this.velocity.y = 1;
+                else this.velocity.y = -1;
             }
         }
-
-        if (collidingCorners.has("rb") || collidingCorners.has("lb")) {
-            if (this.speed < 0) {
-                this.speed = 0;
-                this.velocity.y = 0;
-                this.velocity.x = 0;
+        else if (getCollisionDirection(collidingCorners, this.angle) == "horizontal") {
+            if (this.angle >= 225 && this.angle < 315) {
+                if (this.speed > 0) this.velocity.x = 1;
+                else this.velocity.x = -1;
             }
+            else {
+                if (this.speed > 0) this.velocity.x = -1;
+                else this.velocity.x = 1;
+            }
+        }
+        if (correctAngle(collidingCorners, this.angle)) {
+            this.velocity.y = 0;
+            this.velocity.x = 0;
+            this.angle = correctAngle(collidingCorners, this.angle)
         }
     }
+
 }
