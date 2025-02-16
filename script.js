@@ -38,7 +38,7 @@ background.src = stage[1].imgSrc;
 const player = new Player({
     position: {
         x: 300,
-        y: 200
+        y: 400
     }
 })
 

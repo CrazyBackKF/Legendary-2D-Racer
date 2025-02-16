@@ -77,12 +77,14 @@ function getCollisionDirection(collidingCorners, angle) {
 
 function correctAngle(collidingCorners, angle) {
         if (collidingCorners.has("lb")) {
+            if (player.key.a) return;
             if (angle > 270 && angle < 300) return 270.1;
             if (angle > 90 && angle < 120) return 90.1;
             if (angle > 0 && angle < 30) return 0.1;
             if (angle > 180 && angle < 210) return 180.1;
         }
         if (collidingCorners.has("rb")) {
+            if (player.key.d) return;
             if (angle > 60 && angle < 90) return 89.9;
             if (angle > 240 && angle < 270) return 269.9;
             if (angle > 330 && angle < 360) return 359.9;

@@ -5,7 +5,7 @@ class Player {
         //wymiary hitboxa pojazdu
         this.width = 20;
         this.height = 50;
-        this.angle = 0; //zmienna opisujaca kat obrotu pojazdu podczas skretu
+        this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
         this.speedMultiplier = 1; //służy do zwiększania prędkości po naciśnięciu turbo
@@ -223,8 +223,8 @@ class Player {
                 else this.velocity.x = -1;
             }
             else {
-                if (this.speed > 0) this.velocity.x = -1;
-                else this.velocity.x = 1;
+                if (this.speed > 0) this.velocity.x = 1;
+                else this.velocity.x = -1;
             }
         }
         if (correctAngle(collidingCorners, this.angle)) {
