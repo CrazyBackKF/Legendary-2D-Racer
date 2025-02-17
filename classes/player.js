@@ -171,39 +171,41 @@ class Player {
     checkCollisions() {
         let wasColliding = this.isColliding; // Zapamiętaj poprzedni stan kolizji
         this.isColliding = false; // Resetuj kolizję przed sprawdzeniem
-    
+
+        //okreslanie wartosci obiektu kolizyjnego
         for (let i = 0; i < collisionsTab.length; i++) {
-            const rotatedRect = { 
-                x: this.position.x, 
-                y: this.position.y, 
-                width: this.width, 
-                height: this.height, 
-                angle: this.angle 
+            const rotatedRect = {
+                x: this.position.x,
+                y: this.position.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle
             };
-            const square = { 
-                x: (collisionsTab[i].position.x * 2 + mapTranslation.x), 
-                y: (collisionsTab[i].position.y * 2 + mapTranslation.y), 
-                width: collisionsTab[i].width * 2, 
-                height: collisionsTab[i].height * 2 
+            const square = {
+                //skalowanie pozycji zgodnie z mapa
+                x: (collisionsTab[i].position.x * 2 + mapTranslation.x),
+                y: (collisionsTab[i].position.y * 2 + mapTranslation.y),
+                width: collisionsTab[i].width * 2,
+                height: collisionsTab[i].height * 2
             };
-    
+
             if (isColliding(rotatedRect, square)) {
                 this.isColliding = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
         }
-    
+
         // Reaguj na kolizję tylko, jeśli PRZEDTEM nie było kolizji
         if (this.isColliding && !wasColliding) {
             this.reactToCollisions();
         }
     }
-    
+
     reactToCollisions() {
         if (this.speed < 1 && this.speed > 0) this.speed = -0.5
         else if (this.speed > -1 && this.speed <= 0) this.speed = 0.5
         else this.speed *= -0.2; // Odwróć prędkość JEDEN raz przy wejściu w kolizję
         console.log("Kolizja!");
     }
-    
+
 }

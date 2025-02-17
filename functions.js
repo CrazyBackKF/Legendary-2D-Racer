@@ -3,18 +3,18 @@ function convertToRadians(angle) {
     return (angle * Math.PI / 180);
 }
 
+//funkcja ktora jest warukiem innej funkcji
 function checkCollisionsCondition(corners, object) {
     if (corners.rt.y <= object.position.y + object.height &&
         corners.lt.y >= object.position.y + object.height &&
         corners.rt.x <= object.position.x + object.width &&
-        corners.lt.x >= object.position.x + object.width)
-        {
-            return "collision"
-        }
+        corners.lt.x >= object.position.x + object.width) {
+        return "collision"
+    }
 }
 
 
-// Obsługa przycisków
+// Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {
         case "a":
