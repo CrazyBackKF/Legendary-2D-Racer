@@ -23,6 +23,26 @@ function getPoints(obj, angle, cx, cy) {
         rb: {
             x: cx + (obj.x + obj.width - cx) * cosA - (obj.y + obj.height - cy) * sinA,
             y: cy + (obj.x + obj.width - cx) * sinA + (obj.y + obj.height - cy) * cosA
+        },
+
+        ht: {
+            x: cx + (obj.x + obj.width / 2 - cx) * cosA - (obj.y - cy) * sinA,
+            y: cy + (obj.x + obj.width / 2 - cx) * sinA + (obj.y - cy) * cosA
+        },
+        
+        hb: {
+            x: cx + (obj.x + obj.width / 2 - cx) * cosA - (obj.y + obj.height - cy) * sinA,
+            y: cy + (obj.x + obj.width / 2 - cx) * sinA + (obj.y + obj.height - cy) * cosA
+        },
+
+        hl: {
+            x: cx + (obj.x - cx) * cosA - (obj.y + obj.height / 2 - cy) * sinA,
+            y: cy + (obj.x - cx) * sinA + (obj.y + obj.height / 2 - cy) * cosA
+        },
+
+        hr: {
+            x: cx + (obj.x + obj.width - cx) * cosA - (obj.y + obj.height / 2 - cy) * sinA,
+            y: cy + (obj.x + obj.width - cx) * sinA + (obj.y + obj.height / 2 - cy) * cosA
         }
     }
 }
