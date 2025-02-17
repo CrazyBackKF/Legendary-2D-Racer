@@ -2,6 +2,7 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
+//wyswietlanie mapy
 const stage = {
     1: {
         imgSrc: "img/tlo1.png",
@@ -9,24 +10,26 @@ const stage = {
     }
 }
 
+//okreslanie parametrow hitboxa
 const collisionsTab = [];
 
- for (let i = 0; i < stage[1].collisions.length; i++) {
-     for (let j = 0; j < stage[1].collisions[i].length; j++) {
-         if (stage[1].collisions[i][j] == 1) {
-             collisionsTab.push(new collisionBlock({
-                 position: {
-                     x: j * 8,
-                     y: i * 8
-                 },
-                 width: 8,
-                 height: 8
-             }))
-         }
-     }
- }
+for (let i = 0; i < stage[1].collisions.length; i++) {
+    for (let j = 0; j < stage[1].collisions[i].length; j++) {
+        if (stage[1].collisions[i][j] == 1) {
+            collisionsTab.push(new collisionBlock({
+                position: {
+                    x: j * 8,
+                    y: i * 8
+                },
+                width: 8,
+                height: 8
+            }))
+        }
+    }
+}
 
 
+//ustawienie mapy jako tlo
 const background = new Image();
 background.src = stage[1].imgSrc;
 
@@ -48,8 +51,7 @@ function animate() {
     c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
-    for (let i = 0; i < collisionsTab.length; i++)
-    {
+    for (let i = 0; i < collisionsTab.length; i++) {
         collisionsTab[i].draw();
         collisionsTab[i].angle += 0.01;
     }

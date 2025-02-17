@@ -5,41 +5,50 @@ function getPoints(obj, angle, cx, cy) {
     let sinA = Math.sin(rad);
 
     return {
+        //rog left top
         lt: {
             x: cx + (obj.x - cx) * cosA - (obj.y - cy) * sinA,
             y: cy + (obj.x - cx) * sinA + (obj.y - cy) * cosA
         },
 
+        //rog right top
         rt: {
             x: cx + (obj.x + obj.width - cx) * cosA - (obj.y - cy) * sinA,
             y: cy + (obj.x + obj.width - cx) * sinA + (obj.y - cy) * cosA
         },
 
+        //rog left bottom
         lb: {
             x: cx + (obj.x - cx) * cosA - (obj.y + obj.height - cy) * sinA,
             y: cy + (obj.x - cx) * sinA + (obj.y + obj.height - cy) * cosA
         },
 
+        //rog right bottom
         rb: {
             x: cx + (obj.x + obj.width - cx) * cosA - (obj.y + obj.height - cy) * sinA,
             y: cy + (obj.x + obj.width - cx) * sinA + (obj.y + obj.height - cy) * cosA
         },
 
+        //rogi hitboxa bloku
+        //rog left top
         ht: {
             x: cx + (obj.x + obj.width / 2 - cx) * cosA - (obj.y - cy) * sinA,
             y: cy + (obj.x + obj.width / 2 - cx) * sinA + (obj.y - cy) * cosA
         },
-        
+
+        //rog right top
         hb: {
             x: cx + (obj.x + obj.width / 2 - cx) * cosA - (obj.y + obj.height - cy) * sinA,
             y: cy + (obj.x + obj.width / 2 - cx) * sinA + (obj.y + obj.height - cy) * cosA
         },
 
+        //rog left bottom
         hl: {
             x: cx + (obj.x - cx) * cosA - (obj.y + obj.height / 2 - cy) * sinA,
             y: cy + (obj.x - cx) * sinA + (obj.y + obj.height / 2 - cy) * cosA
         },
 
+        //rog right bottom
         hr: {
             x: cx + (obj.x + obj.width - cx) * cosA - (obj.y + obj.height / 2 - cy) * sinA,
             y: cy + (obj.x + obj.width - cx) * sinA + (obj.y + obj.height / 2 - cy) * cosA
@@ -54,7 +63,6 @@ function isColliding(obj1, obj2) {
     for (let key in obj1.corners) {
         const corner = obj1.corners[key];
         if (corner.x >= obj2.x && corner.x <= obj2.x + obj2.width && corner.y >= obj2.y && corner.y <= obj2.y + obj2.height) {
-            console.log()
             return key;
         }
     }
