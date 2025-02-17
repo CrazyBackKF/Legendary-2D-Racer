@@ -7,7 +7,7 @@ class collisionBlock {
 
     draw() {
         c.save();
-        c.translate(mapTranslation.x, mapTranslation.y);
+        c.translate(player.camerabox.translation.x, player.camerabox.translation.y);
         c.scale(2, 2);
         c.fillStyle = "rgba(0, 0, 255, 0.5)";
         c.fillRect(this.position.x, this.position.y, this.width, this.height);

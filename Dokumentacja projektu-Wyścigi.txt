@@ -47,4 +47,8 @@
 16.02.2025
 -poprawa reakcji na kolizje
 
+17.-2.2025
+-dodanie ruchu kamery
+-nieudana próba ulepszenia kolizji
+
 

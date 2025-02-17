@@ -32,14 +32,26 @@ class Player {
             t: false,
             space: false
         }
+        this.camerabox = {
+            width: 800,
+            height: 450,
+            position: {
+                x: this.position.x + this.width / 2 - 800 / 2, // Centrowanie w poziomie
+                y: this.position.y + this.height / 4 - 450 / 2  // Centrowanie w pionie
+            },
+            translation: {
+                x: 0,
+                y: -canvas.height
+            }
+        };
+        
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
     update() {
-        this.lastSafePosition = {
-            x: this.position.x,
-            y: this.position.y
-        };
+        this.moveCamerabox();
+        this.moveCameraVertically();
+        this.moveCameraHorizontally();
         this.draw();
         this.accelerate();
         this.drift();
@@ -91,6 +103,9 @@ class Player {
         c.fillStyle = "rgba(255, 0, 0, 1)";
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
         c.restore();
+
+        c.fillStyle = "rgba(0, 255, 0, 0.5)"
+        c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
 
     }
 
@@ -181,8 +196,8 @@ class Player {
                 angle: this.angle 
             };
             const square = { 
-                x: (collisionsTab[i].position.x * 2 + mapTranslation.x), 
-                y: (collisionsTab[i].position.y * 2 + mapTranslation.y), 
+                x: (collisionsTab[i].position.x * 2 + this.camerabox.translation.x), 
+                y: (collisionsTab[i].position.y * 2 + this.camerabox.translation.y), 
                 width: collisionsTab[i].width * 2, 
                 height: collisionsTab[i].height * 2 
             };
@@ -200,10 +215,39 @@ class Player {
     }
     
     reactToCollisions() {
-        if (this.speed < 1 && this.speed > 0) this.speed = -0.5
-        else if (this.speed > -1 && this.speed <= 0) this.speed = 0.5
-        else this.speed *= -0.2; // Odwróć prędkość JEDEN raz przy wejściu w kolizję
-        console.log("Kolizja!");
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        if (this.speed < 1.5 && this.speed > 0) this.speed = -1
+        else if (this.speed > -1.5 && this.speed <= 0) this.speed = 1
+        else this.speed *= -0.3; // Odwróć prędkość JEDEN raz przy wejściu w kolizję
+    }
+
+    moveCamerabox() {
+        this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2;
+        this.camerabox.position.y = this.position.y + this.height / 4 - this.camerabox.height / 2;
+    }
+
+    moveCameraVertically() {
+        // warunki sprawdzające czy kamera nie wychodzi poza mapę
+        if (this.camerabox.translation.y - this.velocity.y < -canvas.height || this.camerabox.translation.y - this.velocity.y > 0) return;
+
+        // w przeciwnym wypadku, gdy "camerabox" wyjdzie poza granicę canvasu to przesuń mapę o prędkość z 
+        // jaką się poruszamy i zatrzymaj gracza, żeby sprawić iluzję przesuwania się samochodu, mimo że przesuwa się mapa
+        else if ((this.camerabox.position.y <= 0 && this.velocity.y < 0) || (this.camerabox.position.y + this.camerabox.height >= canvas.height && this.velocity.y > 0)) {
+            this.camerabox.translation.y -= this.velocity.y;
+            this.position.y -= this.velocity.y
+        }
+    }
+
+    moveCameraHorizontally() {
+        console.log(this.camerabox.translation.x)
+        // to samo z poziomą orientacją
+        if (this.camerabox.translation.x - this.velocity.x < -canvas.width || this.camerabox.translation.x - this.velocity.x > 0) return;
+
+        else if ((this.camerabox.position.x <= 0 && this.velocity.x < 0) || (this.camerabox.position.x + this.camerabox.width >= canvas.width && this.velocity.x > 0)) {
+            this.camerabox.translation.x -= this.velocity.x;
+            this.position.x -= this.velocity.x;
+        }
     }
     
 }
