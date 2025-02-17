@@ -196,15 +196,10 @@ class Player {
                 height: this.height,
                 angle: this.angle
             };
-            const square = { 
-                x: (collisionsTab[i].position.x * 2 + this.camerabox.translation.x), 
-                y: (collisionsTab[i].position.y * 2 + this.camerabox.translation.y), 
-                width: collisionsTab[i].width * 2, 
-                height: collisionsTab[i].height * 2 
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (collisionsTab[i].position.x * 2 + mapTranslation.x),
-                y: (collisionsTab[i].position.y * 2 + mapTranslation.y),
+                x: (collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
                 width: collisionsTab[i].width * 2,
                 height: collisionsTab[i].height * 2
             };
@@ -257,14 +252,4 @@ class Player {
         }
     }
     
-}
-        // to samo z poziomą orientacją
-        if (this.camerabox.translation.x - this.velocity.x < -canvas.width || this.camerabox.translation.x - this.velocity.x > 0) return;
-
-        else if ((this.camerabox.position.x <= 0 && this.velocity.x < 0) || (this.camerabox.position.x + this.camerabox.width >= canvas.width && this.velocity.x > 0)) {
-            this.camerabox.translation.x -= this.velocity.x;
-            this.position.x -= this.velocity.x;
-        }
-    }
-
 }
