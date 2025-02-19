@@ -1,6 +1,9 @@
 //Pobieranie elementu canvas z pliku index.html i tworzenie kontekstu
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
+const key = {
+    q: false
+}
 
 //wyswietlanie mapy
 const stage = {
@@ -41,6 +44,17 @@ const player = new Player({
     }
 })
 
+const bots = [];
+for (let i = 0; i < 4; i++) {
+    bots.push(new Bot(
+        {
+            position: {
+                x: 200 + (i * 100) - player.camerabox.translation.x,
+                y: 300 - player.camerabox.translation.y
+            }
+        }
+    ))
+}
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate() {
@@ -51,11 +65,16 @@ function animate() {
     c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
-    for (let i = 0; i < collisionsTab.length; i++) {
-        collisionsTab[i].draw();
-        collisionsTab[i].angle += 0.01;
+    if (key.q) {
+        for (let i = 0; i < collisionsTab.length; i++) {
+            collisionsTab[i].draw();
+            collisionsTab[i].angle += 0.01;
+        }
     }
     player.update();
+    for (let i = 0; i < 4; i++) {
+        bots[i].update();
+    }
 
     requestAnimationFrame(animate);
 }

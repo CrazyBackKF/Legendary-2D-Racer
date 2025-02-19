@@ -35,6 +35,10 @@ addEventListener("keydown", (e) => {
         case " ":
             player.key.space = true;
             break;
+        case 'q':
+            if (!key.q) key.q = true
+            else key.q = false
+            break;
     }
 })
 
