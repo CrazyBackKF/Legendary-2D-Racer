@@ -44,7 +44,7 @@ class Player {
                 y: -canvas.height
             }
         };
-        
+
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
@@ -56,7 +56,7 @@ class Player {
         this.accelerate();
         this.drift();
         this.turn();
-        this.checkCollisions();
+        //this.checkCollisions();
         this.physics();
         this.turbo();
     }
@@ -104,9 +104,10 @@ class Player {
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
         c.restore();
 
-        c.fillStyle = "rgba(0, 255, 0, 0.5)"
-        c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
-
+        if (key.q) {
+            c.fillStyle = "rgba(0, 255, 0, 0.5)"
+            c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
+        }
     }
 
     // Metoda która obraca pojazd
@@ -242,7 +243,6 @@ class Player {
     }
 
     moveCameraHorizontally() {
-        console.log(this.camerabox.translation.x)
         // to samo z poziomą orientacją
         if (this.camerabox.translation.x - this.velocity.x < -canvas.width || this.camerabox.translation.x - this.velocity.x > 0) return;
 
@@ -251,5 +251,5 @@ class Player {
             this.position.x -= this.velocity.x;
         }
     }
-    
+
 }
