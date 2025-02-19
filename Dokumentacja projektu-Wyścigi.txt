@@ -86,4 +86,27 @@
 - poprawa wartości obiektów auta i bloku, aby były bardziej optymalne i dokładne do używania w funkcjach
 - wykrywanie kolizji (tylko bool)
 - dodanie rogów hitboxa (przeciw działanie możliwym bug'om ze kolizja jakoś nie będzie wykrywana)
--dodanie ruchu kamery
+- dodanie obiektu hitboxa kamery (mozliwosc przesuwania sie mapy wzgledem kamery)
+- wypelnienie tego hitboxa
+- zmiana zachowania auta na kolizje (mniejsze odepchniecie)
+- stworzenei trzech funkcji 'moveCamerabox()', 'moveCameraVertically()', 'moveCameraHorizontally()'
+- podmiana 'mapTransition' na 'player.cameraBox.transition'
+- poprawa czytelnosci kodu
+- poprawa bledy (niedopatrzenie w zamianie 'mapTransition')
+
+19.02.2025
+- dodanie keyloggera na wyswietlanie hitboxow pod q
+- obsluga q
+- stworzenie klasy 'Bot' (rozszerzenie klasy 'Player')
+- dodanie 4 obiektow do tej klasy (4 boty)
+- wyswietlanie ich
+- zakomentowanie 'reactToCollision()' (planowana zmiana mechaniki)
+- naprawienie przeslanych plikow (zle byly przeslane i sie zduplowaly)
+- dodanie do mapy checkpointow
+- nowy plik z klasa 'CheckpointBlock()' (rozszerzenie 'collisionsBlock')
+- zmiana w tych kalsach koloru (nowy obiekt)
+- dodanie tych chekpointow do tablicy i wyswietlenie ich w 'script.js' (analogicznie jak ze sciana)
+- naprawa wystepowanych bledow z rysowaniem i pozycja 
+- dodanie zmiennej 'isPassed'
+- skopiowanie z wczesniejszego for'a sprawdzajacego kolizje z sciana i wklejenie na warosci dla checkpointa
+- okreslanie czy zostal zaliczony checkpoint (mozliwosc liczenia kolek) 

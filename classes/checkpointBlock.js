@@ -1,10 +1,9 @@
-//klasa ktora pozwoli nam na wyswietlenie hitboxow
-class collisionBlock {
-    constructor({ position, width, height , color}) {
-        this.position = position;
-        this.width = width;
-        this.height = height;
-        this.color = color;//kolor hitboxa
+//rozszerzenie klasy collisionBlock dziala na takiej samej zasadzie 
+class CheckpointBlock extends collisionBlock {
+    constructor({position, width, height ,color, isPassed})
+    {
+        super({position, width, height , color})
+        this.isPassed = isPassed
     }
 
     draw() {

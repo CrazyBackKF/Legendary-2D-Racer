@@ -56,7 +56,7 @@ class Player {
         this.accelerate();
         this.drift();
         this.turn();
-        //this.checkCollisions();
+        this.checkCollisions();
         this.physics();
         this.turbo();
     }
@@ -188,7 +188,7 @@ class Player {
         let wasColliding = this.isColliding; // Zapamiętaj poprzedni stan kolizji
         this.isColliding = false; // Resetuj kolizję przed sprawdzeniem
 
-        //okreslanie wartosci obiektu kolizyjnego
+        //okreslanie wartosci obiektu kolizyjnego z sciana
         for (let i = 0; i < collisionsTab.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
@@ -208,12 +208,37 @@ class Player {
             if (isColliding(rotatedRect, square)) {
                 this.isColliding = true;
                 break; // Wystarczy wykryć jedną kolizję
+            } 
+
+            if (this.isColliding && !wasColliding) {
+                //this.reactToCollisions();
             }
+            
         }
 
-        // Reaguj na kolizję tylko, jeśli PRZEDTEM nie było kolizji
-        if (this.isColliding && !wasColliding) {
-            this.reactToCollisions();
+        //okreslanie kolizji z checkpointem
+        for (let i = 0; i < checkpointsTab.length; i++) {
+            const rotatedRect = {
+                x: this.position.x,
+                y: this.position.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle
+            };
+
+            //pozycja checkpointa analogiczna do square z poprzednioego for'a   
+            const checkpoint = {
+                x: (checkpointsTab[i].position.x * 2+ this.camerabox.translation.x),
+                y: (checkpointsTab[i].position.y *2     + this.camerabox.translation.y),
+                width: checkpointsTab[i].width * 2,
+                height: checkpointsTab[i].height * 2
+            }
+
+            if (isColliding(rotatedRect, checkpoint)) {
+                //jezeli byl zaliczony ustawiamy na true
+                checkpointsTab[i].isPassed = true;
+                break;
+            } 
         }
     }
 
@@ -226,6 +251,7 @@ class Player {
     }
 
     moveCamerabox() {
+        //pozycja camery
         this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2;
         this.camerabox.position.y = this.position.y + this.height / 4 - this.camerabox.height / 2;
     }

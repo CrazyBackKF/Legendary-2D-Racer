@@ -15,9 +15,21 @@ const stage = {
 
 //okreslanie parametrow hitboxa
 const collisionsTab = [];
+const checkpointsTab = [];
+let witdhMultiplier = 1;
+let heightMultipler = 1;
 
-for (let i = 0; i < stage[1].collisions.length; i++) {
+for (let i = 1; i < stage[1].collisions.length; i++) {
     for (let j = 0; j < stage[1].collisions[i].length; j++) {
+        if(stage[1].collisions[i - 1][j] == 1)
+        {
+            witdhMultiplier = 1;
+            heightMultipler = 8;
+        }
+        else if (stage[1].collisions[i][j - 1] == 1){
+            witdhMultiplier = 8;
+            heightMultipler = 1;
+        }
         if (stage[1].collisions[i][j] == 1) {
             collisionsTab.push(new collisionBlock({
                 position: {
@@ -25,7 +37,21 @@ for (let i = 0; i < stage[1].collisions.length; i++) {
                     y: i * 8
                 },
                 width: 8,
-                height: 8
+                height: 8,
+                color: 'rgba(0, 0, 255, 0.5)',
+            }))
+        }
+        //ustalenie miejsca z checkpointem
+        else if (stage[1].collisions[i][j] == 2){
+            checkpointsTab.push(new CheckpointBlock({
+                position: {
+                    x: j * 8,
+                    y: i * 8
+                },
+                width: 8 * witdhMultiplier,
+                height: 8 * heightMultipler,    
+                color: 'rgba(255,255,00, 0.5)',
+                isPassed: false
             }))
         }
     }
@@ -57,19 +83,23 @@ for (let i = 0; i < 4; i++) {
 }
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
-function animate() {
-    c.fillStyle = "black";
-    c.fillRect(0, 0, canvas.width, canvas.height);
+function animate() {    
     c.save();
     c.translate(player.camerabox.translation.x, player.camerabox.translation.y);
     c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
     if (key.q) {
-        for (let i = 0; i < collisionsTab.length; i++) {
+        //rysowanie scian
+        for (let i = 0; i < collisionsTab.length; i++) { 
             collisionsTab[i].draw();
             collisionsTab[i].angle += 0.01;
         }
+        //rysowanie checkpointow
+        for (let i = 0; i < checkpointsTab.length; i++) { 
+            checkpointsTab[i].draw();
+        }
+
     }
     player.update();
     for (let i = 0; i < 4; i++) {
