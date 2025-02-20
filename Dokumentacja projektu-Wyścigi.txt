@@ -110,3 +110,13 @@
 - dodanie zmiennej 'isPassed'
 - skopiowanie z wczesniejszego for'a sprawdzajacego kolizje z sciana i wklejenie na warosci dla checkpointa
 - okreslanie czy zostal zaliczony checkpoint (mozliwosc liczenia kolek) 
+
+20.02.2025
+- dodanie zmiennej 'index' do 'CheckpointBlock()'
+- dodanie obiektu kolejnosci indexow (checkpointy nie renderuja sie z trasa mapy tylko zgodnie z tablica [srodkowy checkpoint jest ostatni, meta - pierwszy jest 4])
+- zakodowanie petli okreslajacej 'index' danego checkpointa
+- w funkcji 'checkCollisions' w klasie 'Player()' dodanie zmiennej do obiektu 'checkpoint' (index)
+- dodanie dwoch zmiennych do 'Player()' 'lastCheckpoint' i 'laps'
+- dodanie zmiany 'lastCheckpoint'
+- zakodowanie if'a ktory sprawdza czy gracz przekroczyl mete/start (w niej petla, ktora sprawdza pokolei czy 'isPassed' jest ustawiony na false jesli nie sprawdza czy gracz zakonczyl ostatnie okrazenie a na samym koncu dodaje kolo i zmienia wszytkie 'isPassed' na false)
+- dodanie komentarzy 

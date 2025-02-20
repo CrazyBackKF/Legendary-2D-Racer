@@ -7,9 +7,10 @@ const key = {
 
 //wyswietlanie mapy
 const stage = {
-    1: {
+    a: {
         imgSrc: "img/tlo1.png",
         collisions: collisions.background1.parse2d(),
+        checkpointOrder:[5,1,4,0,2,3] //kolejnosc checkpointow dla mapy a
     }
 }
 
@@ -19,18 +20,20 @@ const checkpointsTab = [];
 let witdhMultiplier = 1;
 let heightMultipler = 1;
 
-for (let i = 1; i < stage[1].collisions.length; i++) {
-    for (let j = 0; j < stage[1].collisions[i].length; j++) {
-        if(stage[1].collisions[i - 1][j] == 1)
+for (let i = 1; i < stage.a.collisions.length; i++) {
+    for (let j = 0; j < stage.a.collisions[i].length; j++) {
+        //okreslanie rodzaju hitboxa
+        if(stage.a.collisions[i - 1][j] == 1)
         {
             witdhMultiplier = 1;
             heightMultipler = 8;
         }
-        else if (stage[1].collisions[i][j - 1] == 1){
+        else if (stage.a.collisions[i][j - 1] == 1){
             witdhMultiplier = 8;
             heightMultipler = 1;
         }
-        if (stage[1].collisions[i][j] == 1) {
+
+        if (stage.a.collisions[i][j] == 1) {
             collisionsTab.push(new collisionBlock({
                 position: {
                     x: j * 8,
@@ -42,7 +45,7 @@ for (let i = 1; i < stage[1].collisions.length; i++) {
             }))
         }
         //ustalenie miejsca z checkpointem
-        else if (stage[1].collisions[i][j] == 2){
+        else if (stage.a.collisions[i][j] == 2){
             checkpointsTab.push(new CheckpointBlock({
                 position: {
                     x: j * 8,
@@ -51,16 +54,17 @@ for (let i = 1; i < stage[1].collisions.length; i++) {
                 width: 8 * witdhMultiplier,
                 height: 8 * heightMultipler,    
                 color: 'rgba(255,255,00, 0.5)',
-                isPassed: false
+                isPassed: false,
             }))
         }
     }
 }
 
+const desiredOrder = stage.a.checkpointOrder; //okreslenie kolejnosci checkpointow
 
 //ustawienie mapy jako tlo
 const background = new Image();
-background.src = stage[1].imgSrc;
+background.src = stage.a.imgSrc;
 
 // Tworzenie nowej instancji klasy Player dla gracza
 const player = new Player({
@@ -89,6 +93,9 @@ function animate() {
     c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
+    for (let i = 0; i < checkpointsTab.length; i++) { 
+        checkpointsTab[i].index = desiredOrder[i] //okreslanie indexow checkpointo zgledem mapy nie wzgedem wyrenderowania (,np ostani byl pierwszy)
+    }
     if (key.q) {
         //rysowanie scian
         for (let i = 0; i < collisionsTab.length; i++) { 
@@ -99,7 +106,6 @@ function animate() {
         for (let i = 0; i < checkpointsTab.length; i++) { 
             checkpointsTab[i].draw();
         }
-
     }
     player.update();
     for (let i = 0; i < 4; i++) {

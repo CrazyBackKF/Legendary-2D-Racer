@@ -12,7 +12,7 @@ class Player {
         this.driftMultiplier = 1;
         this.speedValue = 0.03;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
-        this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
+        this.maxSpeed = 2; //maksymalna prędkość z jaką może jechać pojazd
         this.turboAmount = 5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;
@@ -44,6 +44,8 @@ class Player {
                 y: -canvas.height
             }
         };
+        this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
+        this.laps = 1; //zmienna opisujaca ilosc okrazen
 
     }
 
@@ -231,17 +233,54 @@ class Player {
                 x: (checkpointsTab[i].position.x * 2+ this.camerabox.translation.x),
                 y: (checkpointsTab[i].position.y *2     + this.camerabox.translation.y),
                 width: checkpointsTab[i].width * 2,
-                height: checkpointsTab[i].height * 2
+                height: checkpointsTab[i].height * 2,
+                index:  checkpointsTab[i].index
             }
 
-            if (isColliding(rotatedRect, checkpoint)) {
+            
+            if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - checkpoint.index == -1) {
+                //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
+                //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
+                //sprawdzamy czy gracz pejechal mete/start
+                if(checkpointsTab[i].index == 0)
+                    {
+                        for(let j = 0; j < checkpointsTab.length; j++)
+                        {
+                            //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
+                            if(!checkpointsTab[j].isPassed)
+                            {
+                                break;
+                            }
+                            else if(this.laps == 3) //jezli sa 3 okrazenia to koniec
+                            {
+                                console.log('wygrales')
+                                break;
+                            }
+                            else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
+                            {
+                                checkpointsTab.forEach(checkpoint => {
+                                    checkpoint.isPassed = false;
+                                });
+                                this.laps++;
+                                break;
+                            }
+                        }
+                    }
                 //jezeli byl zaliczony ustawiamy na true
                 checkpointsTab[i].isPassed = true;
+                //zmieniamy lastCheckpoint poniewaz przekraczamy nowy
+                this.lastCheckpoint++
+                //sprawdzanie czy zaliczylismy ostatni checkpoint 
+                if(this.lastCheckpoint == 5)
+                {
+                    this.lastCheckpoint = -1
+                }
                 break;
             } 
         }
     }
 
+    //metoda reagujaca na kolizje
     reactToCollisions() {
         this.velocity.x = 0;
         this.velocity.y = 0;
@@ -250,6 +289,7 @@ class Player {
         else this.speed *= -0.3; // Odwróć prędkość JEDEN raz przy wejściu w kolizję
     }
 
+    //ruch kamery(nizej okreslenie czy pionowo czy poziomo)
     moveCamerabox() {
         //pozycja camery
         this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2;
