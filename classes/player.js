@@ -40,7 +40,7 @@ class Player {
                 y: this.position.y + this.height / 4 - 450 / 2  // Centrowanie w pionie
             },
             translation: {
-                x: 0,
+                x: -canvas.width / 2,
                 y: -canvas.height
             }
         };
@@ -59,6 +59,7 @@ class Player {
         this.drift();
         this.turn();
         this.checkCollisions();
+        this.checkCheckpoints();
         this.physics();
         this.turbo();
     }
@@ -191,7 +192,7 @@ class Player {
         this.isColliding = false; // Resetuj kolizję przed sprawdzeniem
 
         //okreslanie wartosci obiektu kolizyjnego z sciana
-        for (let i = 0; i < collisionsTab.length; i++) {
+        for (let i = 0; i < stage.a.collisionsTab.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
                 y: this.position.y,
@@ -201,10 +202,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: collisionsTab[i].width * 2,
-                height: collisionsTab[i].height * 2
+                x: (stage.a.collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage.a.collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage.a.collisionsTab[i].width * 2,
+                height: stage.a.collisionsTab[i].height * 2
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -217,9 +218,11 @@ class Player {
             }
             
         }
+    }
 
+    checkCheckpoints() {
         //okreslanie kolizji z checkpointem
-        for (let i = 0; i < checkpointsTab.length; i++) {
+        for (let i = 0; i < stage.a.checkpointsTab.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
                 y: this.position.y,
@@ -230,11 +233,11 @@ class Player {
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
             const checkpoint = {
-                x: (checkpointsTab[i].position.x * 2+ this.camerabox.translation.x),
-                y: (checkpointsTab[i].position.y *2     + this.camerabox.translation.y),
-                width: checkpointsTab[i].width * 2,
-                height: checkpointsTab[i].height * 2,
-                index:  checkpointsTab[i].index
+                x: (stage.a.checkpointsTab[i].position.x * 2+ this.camerabox.translation.x),
+                y: (stage.a.checkpointsTab[i].position.y *2     + this.camerabox.translation.y),
+                width: stage.a.checkpointsTab[i].width * 2,
+                height: stage.a.checkpointsTab[i].height * 2,
+                index:  stage.a.checkpointsTab[i].index
             }
 
             
@@ -242,23 +245,20 @@ class Player {
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
-                if(checkpointsTab[i].index == 0)
+                if(stage.a.checkpointsTab[i].index == 0)
                     {
-                        for(let j = 0; j < checkpointsTab.length; j++)
+                        for(let j = 0; j < stage.a.checkpointsTab.length; j++)
                         {
                             //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
-                            if(!checkpointsTab[j].isPassed)
-                            {
-                                break;
-                            }
-                            else if(this.laps == 3) //jezli sa 3 okrazenia to koniec
+                            if(!stage.a.checkpointsTab[j].isPassed) break;
+                            else if(this.laps == 1) //jezli sa 3 okrazenia to koniec
                             {
                                 console.log('wygrales')
                                 break;
                             }
                             else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
                             {
-                                checkpointsTab.forEach(checkpoint => {
+                                stage.a.checkpointsTab.forEach(checkpoint => {
                                     checkpoint.isPassed = false;
                                 });
                                 this.laps++;
@@ -267,11 +267,12 @@ class Player {
                         }
                     }
                 //jezeli byl zaliczony ustawiamy na true
-                checkpointsTab[i].isPassed = true;
+                stage.a.checkpointsTab[i].isPassed = true;
+                console.log(stage.a.checkpointsTab[i].index)
                 //zmieniamy lastCheckpoint poniewaz przekraczamy nowy
                 this.lastCheckpoint++
                 //sprawdzanie czy zaliczylismy ostatni checkpoint 
-                if(this.lastCheckpoint == 5)
+                if(this.lastCheckpoint == stage.a.checkpointsTab)
                 {
                     this.lastCheckpoint = -1
                 }
@@ -279,6 +280,8 @@ class Player {
             } 
         }
     }
+
+        
 
     //metoda reagujaca na kolizje
     reactToCollisions() {

@@ -9,54 +9,9 @@ const key = {
 const stage = {
     a: {
         imgSrc: "img/tlo1.png",
-        collisions: collisions.background1.parse2d(),
-        checkpointOrder:[5,1,4,0,2,3] //kolejnosc checkpointow dla mapy a
-    }
-}
-
-//okreslanie parametrow hitboxa
-const collisionsTab = [];
-const checkpointsTab = [];
-let witdhMultiplier = 1;
-let heightMultipler = 1;
-
-for (let i = 1; i < stage.a.collisions.length; i++) {
-    for (let j = 0; j < stage.a.collisions[i].length; j++) {
-        //okreslanie rodzaju hitboxa
-        if(stage.a.collisions[i - 1][j] == 1)
-        {
-            witdhMultiplier = 1;
-            heightMultipler = 8;
-        }
-        else if (stage.a.collisions[i][j - 1] == 1){
-            witdhMultiplier = 8;
-            heightMultipler = 1;
-        }
-
-        if (stage.a.collisions[i][j] == 1) {
-            collisionsTab.push(new collisionBlock({
-                position: {
-                    x: j * 8,
-                    y: i * 8
-                },
-                width: 8,
-                height: 8,
-                color: 'rgba(0, 0, 255, 0.5)',
-            }))
-        }
-        //ustalenie miejsca z checkpointem
-        else if (stage.a.collisions[i][j] == 2){
-            checkpointsTab.push(new CheckpointBlock({
-                position: {
-                    x: j * 8,
-                    y: i * 8
-                },
-                width: 8 * witdhMultiplier,
-                height: 8 * heightMultipler,    
-                color: 'rgba(255,255,00, 0.5)',
-                isPassed: false,
-            }))
-        }
+        collisionsTab: getCheckpointsAndCollisions(collisions.background1.parse2d()).collisions,
+        checkpointsTab: getCheckpointsAndCollisions(collisions.background1.parse2d()).checkpoints,
+        checkpointOrder:[4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18] //kolejnosc checkpointow dla mapy a
     }
 }
 
@@ -85,6 +40,9 @@ for (let i = 0; i < 4; i++) {
         }
     ))
 }
+for (let i = 0; i < stage.a.checkpointsTab.length; i++) { 
+    stage.a.checkpointsTab[i].index = desiredOrder[i] //okreslanie indexow checkpointo zgledem mapy nie wzgedem wyrenderowania (,np ostani byl pierwszy)
+}
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate() {    
@@ -93,18 +51,15 @@ function animate() {
     c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
-    for (let i = 0; i < checkpointsTab.length; i++) { 
-        checkpointsTab[i].index = desiredOrder[i] //okreslanie indexow checkpointo zgledem mapy nie wzgedem wyrenderowania (,np ostani byl pierwszy)
-    }
     if (key.q) {
         //rysowanie scian
-        for (let i = 0; i < collisionsTab.length; i++) { 
-            collisionsTab[i].draw();
-            collisionsTab[i].angle += 0.01;
+        for (let i = 0; i < stage.a.collisionsTab.length; i++) { 
+            stage.a.collisionsTab[i].draw();
+            stage.a.collisionsTab[i].angle += 0.01;
         }
         //rysowanie checkpointow
-        for (let i = 0; i < checkpointsTab.length; i++) { 
-            checkpointsTab[i].draw();
+        for (let i = 0; i < stage.a.checkpointsTab.length; i++) { 
+            stage.a.checkpointsTab[i].draw();
         }
     }
     player.update();
