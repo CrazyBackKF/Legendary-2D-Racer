@@ -13,9 +13,10 @@ function checkCollisionsCondition(corners, object) {
     }
 }
 
-function getCheckpointsAndCollisions(collisions) {
+function getCollisions(collisions) {
     const checkpointsTab = [];
     const collisionsTab = [];
+    const roadTab = [];
     let witdhMultiplier, heightMultipler;
     for (let i = 1; i < collisions.length; i++) {
         for (let j = 0; j < collisions[i].length; j++) {
@@ -54,9 +55,19 @@ function getCheckpointsAndCollisions(collisions) {
                     isPassed: false,
                 }))
             }
+            else if (collisions[i][j] == 3) {
+                roadTab.push(new Road({
+                    position: {
+                        x: j * 8,
+                        y: i * 8
+                    },
+                    width: 8,
+                    height: 8,color: 'rgba(255, 255, 255, 0.5)'
+                }))
+            }
         }
     }
-    return {collisions: collisionsTab, checkpoints: checkpointsTab};
+    return {collisions: collisionsTab, checkpoints: checkpointsTab, road: roadTab};
 }
 
 

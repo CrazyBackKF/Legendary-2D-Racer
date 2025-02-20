@@ -16,6 +16,8 @@ class Player {
         this.turboAmount = 5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;
+        this.lastRoadTime = 0;
+        this.isOnRoad = false;
         //this.image = new Image();
         //this.image.src = "img/sport_green.png";
         //prędkość w poziomie x i y
@@ -58,8 +60,10 @@ class Player {
         this.accelerate();
         this.drift();
         this.turn();
+        this.checkIfHitCanvas();
         this.checkCollisions();
         this.checkCheckpoints();
+        this.checkRoad();
         this.physics();
         this.turbo();
     }
@@ -110,6 +114,27 @@ class Player {
         if (key.q) {
             c.fillStyle = "rgba(0, 255, 0, 0.5)"
             c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
+        }
+    }
+
+    //metoda nie pozwala wyjechać za brzegi ekranu
+    checkIfHitCanvas() {
+        const rotatedRect = {
+            x: this.position.x,
+            y: this.position.y,
+            width: this.width,
+            height: this.height,
+            angle: this.angle
+        };
+
+        const corners = getPoints(rotatedRect, this.angle, rotatedRect.x + rotatedRect.width / 2, rotatedRect.y + rotatedRect.height / 4);
+
+        for (let key in corners) {
+            const corner = corners[key];
+            if (corner.y <= 0) this.velocity.y += 2;
+            if (corner.y >= canvas.height) this.velocity.y -= 2;
+            if (corner.x <= 0) this.velocity.x += 2;
+            if (corner.x >= canvas.width) this.velocity.x -= 2;
         }
     }
 
@@ -220,6 +245,49 @@ class Player {
         }
     }
 
+    //po wyjechaniu z drogi na 5 sekund, samochód wraca do ostatniego checkpointu
+    checkRoad() {
+        this.isOnRoad = false;
+        for (let i = 0; i < stage.a.roadTab.length; i++) {
+            const rotatedRect = {
+                x: this.position.x,
+                y: this.position.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle
+            };
+            const square = {
+                //skalowanie pozycji zgodnie z mapa
+                x: (stage.a.roadTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage.a.roadTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage.a.roadTab[i].width * 2,
+                height: stage.a.roadTab[i].height * 2
+            };
+
+            if (isColliding(rotatedRect, square)) {
+                this.isOnRoad = true;
+                break; // Wystarczy wykryć jedną kolizję
+            }
+        }
+        if (this.isOnRoad) {
+            this.lastRoadTime = 0;
+            return;
+        }
+        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
+            stage.a.checkpointsTab.forEach(element => {
+                if (element.index == this.lastCheckpoint) {
+                    this.position.x = (element.position.x + element.width / 2) * 2 + this.camerabox.translation.x;
+                    this.position.y = (element.position.y + element.height / 2) * 2 + this.camerabox.translation.y;
+                    this.camerabox.translation.x = -(element.position.x + element.width);
+                    this.camerabox.translation.y = -(element.position.y + element.height);
+                }
+            })
+        }
+        if (this.lastRoadTime == 0) {
+            this.lastRoadTime = Date.now();
+        }
+    }
+
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem
         for (let i = 0; i < stage.a.checkpointsTab.length; i++) {
@@ -251,7 +319,7 @@ class Player {
                         {
                             //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
                             if(!stage.a.checkpointsTab[j].isPassed) break;
-                            else if(this.laps == 1) //jezli sa 3 okrazenia to koniec
+                            else if(this.laps == 3) //jezli sa 3 okrazenia to koniec
                             {
                                 console.log('wygrales')
                                 break;
@@ -272,7 +340,7 @@ class Player {
                 //zmieniamy lastCheckpoint poniewaz przekraczamy nowy
                 this.lastCheckpoint++
                 //sprawdzanie czy zaliczylismy ostatni checkpoint 
-                if(this.lastCheckpoint == stage.a.checkpointsTab)
+                if(this.lastCheckpoint == stage.a.checkpointsTab.length - 1)
                 {
                     this.lastCheckpoint = -1
                 }

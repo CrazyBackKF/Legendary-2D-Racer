@@ -121,3 +121,4 @@
 - zakodowanie if'a ktory sprawdza czy gracz przekroczyl mete/start (w niej petla, ktora sprawdza pokolei czy 'isPassed' jest ustawiony na false jesli nie sprawdza czy gracz zakonczyl ostatnie okrazenie a na samym koncu dodaje kolo i zmienia wszytkie 'isPassed' na false)
 - dodanie komentarzy 
 - optymalizacja kodu, dodanie większej ilości checkpointów
+- dodanie wracanie do checkpointów gdy na 5 sekund wyjechało się za obszar trasy

@@ -9,8 +9,9 @@ const key = {
 const stage = {
     a: {
         imgSrc: "img/tlo1.png",
-        collisionsTab: getCheckpointsAndCollisions(collisions.background1.parse2d()).collisions,
-        checkpointsTab: getCheckpointsAndCollisions(collisions.background1.parse2d()).checkpoints,
+        collisionsTab: getCollisions(collisions.background1.parse2d()).collisions,
+        checkpointsTab: getCollisions(collisions.background1.parse2d()).checkpoints,
+        roadTab: getCollisions(collisions.background1.parse2d()).road,
         checkpointOrder:[4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18] //kolejnosc checkpointow dla mapy a
     }
 }
@@ -61,10 +62,26 @@ function animate() {
         for (let i = 0; i < stage.a.checkpointsTab.length; i++) { 
             stage.a.checkpointsTab[i].draw();
         }
+        //rysowanie drogi
+        for (let i = 0; i < stage.a.roadTab.length; i++) { 
+            stage.a.roadTab[i].draw();
+        }
     }
     player.update();
     for (let i = 0; i < 4; i++) {
         bots[i].update();
+    }
+
+    if (!player.isOnRoad) {
+        c.fillStyle = "rgba(255, 165, 0, 0.9)"
+        c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
+        c.strokeStyle = "black"
+        c.strokeRect((canvas.width - 500) / 2, 50, 500, 100)
+        c.fillStyle = "red";
+        c.font = '30px "Press Start 2P"';
+        c.textAlign = "center";
+        c.textBaseline = "middle"
+        c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
 
     requestAnimationFrame(animate);

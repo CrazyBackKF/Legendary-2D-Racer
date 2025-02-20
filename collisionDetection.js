@@ -63,7 +63,8 @@ function isColliding(obj1, obj2) {
     for (let key in obj1.corners) {
         const corner = obj1.corners[key];
         if (corner.x >= obj2.x && corner.x <= obj2.x + obj2.width && corner.y >= obj2.y && corner.y <= obj2.y + obj2.height) {
-            return key;
+            return true;
         }
     }
+    return false;
 }
