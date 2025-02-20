@@ -1,8 +1,7 @@
 //rozszerzenie klasy collisionBlock dziala na takiej samej zasadzie 
 class CheckpointBlock extends collisionBlock {
-    constructor({position, width, height ,color, isPassed, index})
-    {
-        super({position, width, height , color})
+    constructor({ position, width, height, color, isPassed, index }) {
+        super({ position, width, height, color })
         this.isPassed = isPassed // czy checkpoint zotal zaliczony
         this.index = index //index chekpointa
     }

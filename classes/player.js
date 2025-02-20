@@ -236,12 +236,12 @@ class Player {
             if (isColliding(rotatedRect, square)) {
                 this.isColliding = true;
                 break; // Wystarczy wykryć jedną kolizję
-            } 
+            }
 
             if (this.isColliding && !wasColliding) {
                 //this.reactToCollisions();
             }
-            
+
         }
     }
 
@@ -280,6 +280,7 @@ class Player {
                     this.position.y = (element.position.y + element.height / 2) * 2 + this.camerabox.translation.y;
                     this.camerabox.translation.x = -(element.position.x + element.width);
                     this.camerabox.translation.y = -(element.position.y + element.height);
+                    this.speed = 0;
                 }
             })
         }
@@ -301,55 +302,53 @@ class Player {
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
             const checkpoint = {
-                x: (stage.a.checkpointsTab[i].position.x * 2+ this.camerabox.translation.x),
-                y: (stage.a.checkpointsTab[i].position.y *2     + this.camerabox.translation.y),
+                x: (stage.a.checkpointsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage.a.checkpointsTab[i].position.y * 2 + this.camerabox.translation.y),
                 width: stage.a.checkpointsTab[i].width * 2,
                 height: stage.a.checkpointsTab[i].height * 2,
-                index:  stage.a.checkpointsTab[i].index
+                index: stage.a.checkpointsTab[i].index
             }
 
-            
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - checkpoint.index == -1) {
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
-                if(stage.a.checkpointsTab[i].index == 0)
-                    {
-                        for(let j = 0; j < stage.a.checkpointsTab.length; j++)
+                if (stage.a.checkpointsTab[i].index == 0) {
+                    for (let j = 0; j < stage.a.checkpointsTab.length; j++) {
+                        //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
+                        if (!stage.a.checkpointsTab[j].isPassed) break;
+                        else if (this.laps == 3) //jezli sa 3 okrazenia to koniec
                         {
-                            //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
-                            if(!stage.a.checkpointsTab[j].isPassed) break;
-                            else if(this.laps == 3) //jezli sa 3 okrazenia to koniec
-                            {
-                                console.log('wygrales')
-                                break;
-                            }
-                            else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
-                            {
-                                stage.a.checkpointsTab.forEach(checkpoint => {
-                                    checkpoint.isPassed = false;
-                                });
-                                this.laps++;
-                                break;
-                            }
+                            console.log('wygrales')
+                            break;
+                        }
+                        else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
+                        {
+                            stage.a.checkpointsTab.forEach(checkpoint => {
+                                checkpoint.isPassed = false;
+                            });
+                            this.laps++;
+                            break;
                         }
                     }
+                }
                 //jezeli byl zaliczony ustawiamy na true
                 stage.a.checkpointsTab[i].isPassed = true;
                 console.log(stage.a.checkpointsTab[i].index)
                 //zmieniamy lastCheckpoint poniewaz przekraczamy nowy
                 this.lastCheckpoint++
                 //sprawdzanie czy zaliczylismy ostatni checkpoint 
-                if(this.lastCheckpoint == stage.a.checkpointsTab.length - 1)
-                {
+                console.log(this.lastCheckpoint + " " + stage.a.checkpointsTab)
+                if (this.lastCheckpoint == stage.a.checkpointsTab.length - 1) {
                     this.lastCheckpoint = -1
                 }
                 break;
-            } 
+            }
         }
     }
 
-        
+
+
 
     //metoda reagujaca na kolizje
     reactToCollisions() {
