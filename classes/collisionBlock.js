@@ -1,6 +1,6 @@
 //klasa ktora pozwoli nam na wyswietlenie hitboxow
 class collisionBlock {
-    constructor({ position, width, height , color}) {
+    constructor({ position, width, height, color }) {
         this.position = position;
         this.width = width;
         this.height = height;
