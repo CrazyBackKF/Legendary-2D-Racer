@@ -1,43 +1,129 @@
 8.02.2025
--stworzenie projektu
--dodanie do pliku 'index.html' znacznik <canvas> i zainkludowanie pliku 'script.js'
--zainicjowanie zmiennych odnoszących się do znacznika <canvas>
--ustalenie wysokości i szerokości znacznika zgodnego wielkościami z przeglądarki
--usunięcie marginesu w znaczniku <body>
--stworzenie pętli gry ['animate()']
--dodanie addEventListener odpowiedzialnego za ciągłą zmianę wielkości znacznika <canvas>
--stworzenie klasy 'Player'
--stworzenie obiektu gracza
--stworzenie funkcji w klasie 'Player' ['constructor()', 'update()', 'draw()', 'turn()', 'accelerate()', 'physics()']
--obsluga przycisków
--stworzenie funkcji zmieniającej stopnie na radianty [używane w funkcji rotate()]
--rozdzielenie klasy do innego pliku
--przeniesienie funkcji do osobnego pliku 
--podlaczenie nowych plików do pliku 'index.html'
--dodanie ograniczenia prędkości pojazdu
--dodanie zmiany szybkości obracania pojazdu względem prędkości
--naprawienie szybkości obrotu (nie działało jeżdżąc do tyłu)
--usunięcie zmiennej 'lastDirection' i zastąpienie jej innymi warukami z uzyciem 'this.speed'
--zoptymalizowanie zmiany zmiennej 'this.speed' ('this.speedValue' zmienia prędkość na podstawie przycisków, 'this.friction' jeżeli nie klikamy "w" lub "s" zwalnia o jej wartość)
+- stworzenie projektu
+- dodanie do pliku 'index.html' znacznik `<canvas>` i zainkludowanie pliku 'script.js'
+- zainicjowanie zmiennych odnoszących się do znacznika `<canvas>`
+- ustalenie wysokości i szerokości znacznika zgodnie z wielkościami przeglądarki
+- usunięcie marginesu w znaczniku `<body>`
+- stworzenie pętli gry ['animate()']
+- dodanie 'addEventListener' odpowiedzialnego za ciągłą zmianę wielkości znacznika `<canvas>`
+- stworzenie klasy 'Player'
+- stworzenie obiektu gracza
+- stworzenie funkcji w klasie 'Player' ['constructor()', 'update()', 'draw()', 'turn()', 'accelerate()', 'physics()']
+- obsługa przycisków
+- stworzenie funkcji zmieniającej stopnie na radiany [używane w funkcji 'rotate()']
+- rozdzielenie klasy do innego pliku
+- przeniesienie funkcji do osobnego pliku
+- podłączenie nowych plików do pliku 'index.html'
+- dodanie ograniczenia prędkości pojazdu
+- dodanie zmiany szybkości obracania pojazdu względem prędkości
+- naprawienie szybkości obrotu (nie działało jeżdżąc do tyłu)
+- usunięcie zmiennej 'lastDirection' i zastąpienie jej innymi warunkami z użyciem 'this.speed'
+- zoptymalizowanie zmiany zmiennej 'this.speed' ('this.speedValue' zmienia prędkość na podstawie przycisków, 'this.friction' jeżeli nie klikamy "w" lub "s" zwalnia o jej wartość)
 
 9.02.2025
--naprawa zmiany szybkości obrotu [były złe znaki co mogło spowodować później błędy]
--zmiana wartości 'this.speedValue' i 'this.friction'
--poprawa hamowania i zwiększania predkości
--poprawa obrotu
--dodanie komentarzy
--dodanie turbo
--poprawa turbo
--płynniejsza zmiana prędkości po turbo
+- naprawa zmiany szybkości obrotu [były złe znaki co mogło spowodować później błędy]
+- zmiana wartości 'this.speedValue' i 'this.friction'
+- poprawa hamowania i zwiększania prędkości
+- poprawa obrotu
+- dodanie komentarzy
+- dodanie turbo
+- poprawa turbo
+- płynniejsza zmiana prędkości po turbo
 
 10.02.2025
--dodanie driftu
--zmiana mechaniki skrętu
+- dodanie driftu
+- zmiana mechaniki skrętu
 
 12.02.2025
--dodanie tła na etap 1
+- poprawa wielkości znacznika `<canvas>` aby było stałe
+- później będzie fullscreen
+- dodanie tła na etap 1 jako plik .tmx1
+- przetransformowanie pliku .tmx do tablicy w pliku .js
 
 13.02.2025
--dodanie kolizji
+- stworzenie klasy na hitboxy kolizji
+- wyskalowanie do mapy (mapa będzie się przesuwać wraz z graczem)
+- dodanie pierwotnej wersji funkcji 'checkCollisions'
+- stworzenie funkcji która zwraca cały warunek sprawdzania kolizji
+- podłączenie obu plików (classes.js i collisionsBlock.js)
+- zmienienie tablicy z mapą na dwuwymiarową (pozycja x i y)
+- dodanie mechaniki rysowania hitboxów na tło i skalowanie wielkości i pozycji zgodnie do mapy
 
+14.02.2025
+- zmiana parametrów obiektu 'car' i 'collision' z nazwą włącznie
+- dodanie pliku collisionDetected
+- stworzenie funkcji obliczającej rogi obiektu
+- stworzenie funkcji sprawdzającej czy jakiś z tych punktów jest zawarty w drugim obiekcie
+- podłączenie 'collisionDetected.js'
+- poprawa warunku w funkcji 'checkCollisions' aby była zgodna z nowo powstałym plikiem
+- poprawa 'c.translate' aby była bardziej optymalna
+- dodanie bool'a sprawdzającego czy jest kolizja
+- dodanie obiektu 'lastSafePosition'
+- poprawa warunków w funkcji 'turn' w klasie 'Player'
+- dodanie nowego set'u 'collidingCorners'
+- stworzenie funkcji 'horizontalsCollisions'
+- dodanie warunku zmieniającego kąt padania po kolizji
+- początkowa wersja działania kolizji (auto się zatrzymuje)
+- zrobienie 'if' który wykonuje 'horizontalsCollisions' gdy kolizja występuje
+- zmiana nazwy argumentu w 'collisionDetected.js'
+- poprawa zwracania wierzchołka (jeśli występuje kolizja zwraca nazwę wierzchołka z kolizją)
+- kolejna poprawa wielkości canvasa
 
+16.02.2025
+- przemodelowanie 'horizontalsCollisions'
+- dodanie rozbudowanego 'if'a sprawdzającego czy jest kolizja na rogach, jeżeli tak to sprawdza gdzie dokładnie i odbija samochód (dodaje prędkość z przeciwnym znakiem)
+- dodanie 'else if' sprawdzającego kolizję pośrodku punktów, też odbija samochód
+- zmiana wartości 'angle' (obrócenie samochodu po uderzeniu)
+- dodanie funkcji która return'uje kierunek
+- stworzenie funkcji która obraca samochód
+- optymalizacja
+
+17.02.2025
+- usunięcie funkcji dodanych wczoraj w 'collisionDetected', były błędne i trudne do ogarnięcia
+- usunięcie funkcji odpowiedzialnej za reakcję na kolizję i poprawa na bardziej płynną
+- usunięcie set'a
+- dodanie bool'i
+- poprawa wartości obiektów auta i bloku, aby były bardziej optymalne i dokładne do używania w funkcjach
+- wykrywanie kolizji (tylko bool)
+- dodanie rogów hitboxa (przeciw działanie możliwym bug'om ze kolizja jakoś nie będzie wykrywana)
+- dodanie obiektu hitboxa kamery (mozliwosc przesuwania sie mapy wzgledem kamery)
+- wypelnienie tego hitboxa
+- zmiana zachowania auta na kolizje (mniejsze odepchniecie)
+- stworzenei trzech funkcji 'moveCamerabox()', 'moveCameraVertically()', 'moveCameraHorizontally()'
+- podmiana 'mapTransition' na 'player.cameraBox.transition'
+- poprawa czytelnosci kodu
+- poprawa bledy (niedopatrzenie w zamianie 'mapTransition')
+
+19.02.2025
+- dodanie keyloggera na wyswietlanie hitboxow pod q
+- obsluga q
+- stworzenie klasy 'Bot' (rozszerzenie klasy 'Player')
+- dodanie 4 obiektow do tej klasy (4 boty)
+- wyswietlanie ich
+- zakomentowanie 'reactToCollision()' (planowana zmiana mechaniki)
+- naprawienie przeslanych plikow (zle byly przeslane i sie zduplowaly)
+- dodanie do mapy checkpointow
+- nowy plik z klasa 'CheckpointBlock()' (rozszerzenie 'collisionsBlock')
+- zmiana w tych kalsach koloru (nowy obiekt)
+- dodanie tych chekpointow do tablicy i wyswietlenie ich w 'script.js' (analogicznie jak ze sciana)
+- naprawa wystepowanych bledow z rysowaniem i pozycja 
+- dodanie zmiennej 'isPassed'
+- skopiowanie z wczesniejszego for'a sprawdzajacego kolizje z sciana i wklejenie na warosci dla checkpointa
+- okreslanie czy zostal zaliczony checkpoint (mozliwosc liczenia kolek) 
+
+20.02.2025
+- dodanie zmiennej 'index' do 'CheckpointBlock()'
+- dodanie obiektu kolejnosci indexow (checkpointy nie renderuja sie z trasa mapy tylko zgodnie z tablica [srodkowy checkpoint jest ostatni, meta - pierwszy jest 4])
+- zakodowanie petli okreslajacej 'index' danego checkpointa
+- w funkcji 'checkCollisions' w klasie 'Player()' dodanie zmiennej do obiektu 'checkpoint' (index)
+- dodanie dwoch zmiennych do 'Player()' 'lastCheckpoint' i 'laps'
+- dodanie zmiany 'lastCheckpoint'
+- zakodowanie if'a ktory sprawdza czy gracz przekroczyl mete/start (w niej petla, ktora sprawdza pokolei czy 'isPassed' jest ustawiony na false jesli nie sprawdza czy gracz zakonczyl ostatnie okrazenie a na samym koncu dodaje kolo i zmienia wszytkie 'isPassed' na false)
+- dodanie komentarzy 
+- optymalizacja kodu, dodanie większej ilości checkpointów
+- dodanie wracanie do checkpointów gdy na 5 sekund wyjechało się za obszar trasy
+
+21.02.2025
+- naprawa przesuwania mapy
+- optymalizacja kodu
+- początek robienia botów
