@@ -3,6 +3,7 @@ class Bot extends Player {
         super({ position, color })
         this.angle = 270;
         this.currentCheckpoint = 0;
+        this.maxSpeed = 3;
     }
 
     update() {
@@ -22,7 +23,7 @@ class Bot extends Player {
     }
 
     move() {
-        this.speed += Math.random() * 0.15 + 0.1;
+        if (this.speed <= this.maxSpeed) this.speed += 0.02
     }
 
     accelerate() {

@@ -127,3 +127,4 @@
 - naprawa przesuwania mapy
 - optymalizacja kodu
 - początek robienia botów
+- optymalizacja prędkości botów

@@ -55,6 +55,7 @@ for (let i = 0; i < 4; i++) {
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate() {
+    c.clearRect(0, 0, canvas.width, canvas.height)
     c.save();
     c.translate(player.camerabox.translation.x, player.camerabox.translation.y);
     c.scale(2, 2);
