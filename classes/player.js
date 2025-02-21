@@ -1,10 +1,11 @@
 // Tworzenie klasy Player
 class Player {
-    constructor({ position }) {
+    constructor({ position, color}) {
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
         this.width = 20;
         this.height = 50;
+        this.color = color
         this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
@@ -107,7 +108,7 @@ class Player {
         c.rotate(convertToRadians(this.angle));
         //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
 
-        c.fillStyle = "rgba(255, 0, 0, 1)";
+        c.fillStyle = this.color;
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
         c.restore();
 
@@ -217,7 +218,7 @@ class Player {
         this.isColliding = false; // Resetuj kolizję przed sprawdzeniem
 
         //okreslanie wartosci obiektu kolizyjnego z sciana
-        for (let i = 0; i < stage.a.collisionsTab.length; i++) {
+        for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
                 y: this.position.y,
@@ -227,10 +228,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (stage.a.collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (stage.a.collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: stage.a.collisionsTab[i].width * 2,
-                height: stage.a.collisionsTab[i].height * 2
+                x: (stage[currentMap].collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage[currentMap].collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage[currentMap].collisionsTab[i].width * 2,
+                height: stage[currentMap].collisionsTab[i].height * 2
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -248,7 +249,7 @@ class Player {
     //po wyjechaniu z drogi na 5 sekund, samochód wraca do ostatniego checkpointu
     checkRoad() {
         this.isOnRoad = false;
-        for (let i = 0; i < stage.a.roadTab.length; i++) {
+        for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
                 y: this.position.y,
@@ -258,10 +259,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (stage.a.roadTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (stage.a.roadTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: stage.a.roadTab[i].width * 2,
-                height: stage.a.roadTab[i].height * 2
+                x: (stage[currentMap].roadTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage[currentMap].roadTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage[currentMap].roadTab[i].width * 2,
+                height: stage[currentMap].roadTab[i].height * 2
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -273,16 +274,18 @@ class Player {
             this.lastRoadTime = 0;
             return;
         }
-        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
-            stage.a.checkpointsTab.forEach(element => {
-                if (element.index == this.lastCheckpoint) {
-                    this.position.x = (element.position.x + element.width / 2) * 2 + this.camerabox.translation.x;
-                    this.position.y = (element.position.y + element.height / 2) * 2 + this.camerabox.translation.y;
+        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 4) {
+            for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
+                const element = stage[currentMap].checkpointsTab[i];
+                if (stage[currentMap].checkpointsTab[i].isPassed) {
+                    this.position.x = element.position.x
+                    this.position.y = element.position.y
                     this.camerabox.translation.x = -(element.position.x + element.width);
                     this.camerabox.translation.y = -(element.position.y + element.height);
                     this.speed = 0;
+                    break;
                 }
-            })
+            }
         }
         if (this.lastRoadTime == 0) {
             this.lastRoadTime = Date.now();
@@ -291,7 +294,7 @@ class Player {
 
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem
-        for (let i = 0; i < stage.a.checkpointsTab.length; i++) {
+        for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
                 y: this.position.y,
@@ -302,21 +305,21 @@ class Player {
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
             const checkpoint = {
-                x: (stage.a.checkpointsTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (stage.a.checkpointsTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: stage.a.checkpointsTab[i].width * 2,
-                height: stage.a.checkpointsTab[i].height * 2,
-                index: stage.a.checkpointsTab[i].index
+                x: (stage[currentMap].checkpointsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage[currentMap].checkpointsTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage[currentMap].checkpointsTab[i].width * 2,
+                height: stage[currentMap].checkpointsTab[i].height * 2,
+                index: stage[currentMap].checkpointsTab[i].index
             }
 
-            if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - checkpoint.index == -1) {
+            if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
-                if (stage.a.checkpointsTab[i].index == 0) {
-                    for (let j = 0; j < stage.a.checkpointsTab.length; j++) {
+                if (i == 0) {
+                    for (let j = 0; j < stage[currentMap].checkpointsTab.length; j++) {
                         //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
-                        if (!stage.a.checkpointsTab[j].isPassed) break;
+                        if (!stage[currentMap].checkpointsTab[j].isPassed) break;
                         else if (this.laps == 3) //jezli sa 3 okrazenia to koniec
                         {
                             console.log('wygrales')
@@ -324,7 +327,7 @@ class Player {
                         }
                         else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
                         {
-                            stage.a.checkpointsTab.forEach(checkpoint => {
+                            stage[currentMap].checkpointsTab.forEach(checkpoint => {
                                 checkpoint.isPassed = false;
                             });
                             this.laps++;
@@ -333,13 +336,11 @@ class Player {
                     }
                 }
                 //jezeli byl zaliczony ustawiamy na true
-                stage.a.checkpointsTab[i].isPassed = true;
-                console.log(stage.a.checkpointsTab[i].index)
+                stage[currentMap].checkpointsTab[i].isPassed = true;
                 //zmieniamy lastCheckpoint poniewaz przekraczamy nowy
-                this.lastCheckpoint++
+                this.lastCheckpoint = i
                 //sprawdzanie czy zaliczylismy ostatni checkpoint 
-                console.log(this.lastCheckpoint + " " + stage.a.checkpointsTab)
-                if (this.lastCheckpoint == stage.a.checkpointsTab.length - 1) {
+                if (this.lastCheckpoint == stage[currentMap].checkpointsTab.length - 1) {
                     this.lastCheckpoint = -1
                 }
                 break;
