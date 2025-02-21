@@ -128,3 +128,4 @@
 - optymalizacja kodu
 - początek robienia botów
 - optymalizacja prędkości botów
+- dodanie podstawowego skrętu botów

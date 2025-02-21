@@ -32,7 +32,7 @@ const player = new Player({
         x: 300,
         y: 400
     },
-    color:'red'
+    color: 'red'
 })
 
 const bots = [];
@@ -51,6 +51,17 @@ for (let i = 0; i < 4; i++) {
         }
     ));
 }
+
+// bot do debugowania
+//bots.push(new Bot(
+//    {
+//        position: {
+//            x: 300 - player.camerabox.translation.x,
+//            y: 315 - player.camerabox.translation.y
+//        },
+//        color: "orange"
+//    }
+//));
 
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
@@ -72,12 +83,12 @@ function animate() {
             stage[currentMap].checkpointsTab[i].draw();
         }
         //rysowanie drogi
-        for (let i = 0; i < stage[currentMap].roadTab.length; i++) { 
+        for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             stage[currentMap].roadTab[i].draw();
         }
     }
     player.update();
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < bots.length; i++) {
         bots[i].update();
     }
 

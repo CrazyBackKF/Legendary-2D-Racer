@@ -274,7 +274,7 @@ class Player {
             this.lastRoadTime = 0;
             return;
         }
-        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 4) {
+        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
                 const element = stage[currentMap].checkpointsTab[i];
                 if (stage[currentMap].checkpointsTab[i].isPassed) {
