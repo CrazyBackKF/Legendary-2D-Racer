@@ -5,6 +5,12 @@ const key = {
     q: false
 }
 let currentMap = 'a';
+const global = {
+    scale: {
+        x: 2,
+        y: 2
+    }
+}
 
 //wyswietlanie mapy
 const stage = {
@@ -36,32 +42,35 @@ const player = new Player({
 })
 
 const bots = [];
-const botsColor = ['orange', 'darkGreen', 'pink', 'violet']
-for (let i = 0; i < 4; i++) {
-    let row = Math.floor(i / 2); // Rząd (0 lub 1)
-    let col = i % 2;             // Kolumna (0 lub 1)
-
-    bots.push(new Bot(
-        {
-            position: {
-                x: 300 + (col * 75) - player.camerabox.translation.x,
-                y: 315 + (row * 50) - player.camerabox.translation.y
-            },
-            color: botsColor[i]
-        }
-    ));
-}
+const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
+const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
+//for (let i = 0; i < 4; i++) {
+//    let row = Math.floor(i / 2); // Rząd (0 lub 1)
+//    let col = i % 2;             // Kolumna (0 lub 1)
+//
+//    bots.push(new Bot(
+//        {
+//            position: {
+//                x: 300 + (col * 75) - player.camerabox.translation.x,
+//                y: 330 + (row * 50) - player.camerabox.translation.y
+//            },
+//            color: botsColor[i],
+//            behavior: behavior[i]
+//        }
+//    ));
+//}
 
 // bot do debugowania
-//bots.push(new Bot(
-//    {
-//        position: {
-//            x: 300 - player.camerabox.translation.x,
-//            y: 315 - player.camerabox.translation.y
-//        },
-//        color: "orange"
-//    }
-//));
+bots.push(new Bot(
+    {
+        position: {
+            x: 300 - player.camerabox.translation.x,
+            y: 315 - player.camerabox.translation.y
+        },
+        color: "orange",
+        behavior: "stabilny"
+    }
+));
 
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
@@ -69,7 +78,7 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height)
     c.save();
     c.translate(player.camerabox.translation.x, player.camerabox.translation.y);
-    c.scale(2, 2);
+    c.scale(global.scale.x, global.scale.y);
     c.drawImage(background, 0, 0);
     c.restore();
     if (key.q) {

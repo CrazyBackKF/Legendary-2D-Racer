@@ -228,10 +228,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (stage[currentMap].collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (stage[currentMap].collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: stage[currentMap].collisionsTab[i].width * 2,
-                height: stage[currentMap].collisionsTab[i].height * 2
+                x: (stage[currentMap].collisionsTab[i].position.x * global.scale.x + this.camerabox.translation.x),
+                y: (stage[currentMap].collisionsTab[i].position.y * global.scale.y + this.camerabox.translation.y),
+                width: stage[currentMap].collisionsTab[i].width * global.scale.x,
+                height: stage[currentMap].collisionsTab[i].height * global.scale.y
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -259,10 +259,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (stage[currentMap].roadTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (stage[currentMap].roadTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: stage[currentMap].roadTab[i].width * 2,
-                height: stage[currentMap].roadTab[i].height * 2
+                x: (stage[currentMap].roadTab[i].position.x * global.scale.x + this.camerabox.translation.x),
+                y: (stage[currentMap].roadTab[i].position.y * global.scale.y + this.camerabox.translation.y),
+                width: stage[currentMap].roadTab[i].width * global.scale.x,
+                height: stage[currentMap].roadTab[i].height * global.scale.y
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -282,6 +282,7 @@ class Player {
                     this.position.y = element.position.y
                     this.camerabox.translation.x = -(element.position.x + element.width);
                     this.camerabox.translation.y = -(element.position.y + element.height);
+                    this.angle = element.angle;
                     this.speed = 0;
                     break;
                 }
@@ -305,14 +306,17 @@ class Player {
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
             const checkpoint = {
-                x: (stage[currentMap].checkpointsTab[i].position.x * 2 + this.camerabox.translation.x),
-                y: (stage[currentMap].checkpointsTab[i].position.y * 2 + this.camerabox.translation.y),
-                width: stage[currentMap].checkpointsTab[i].width * 2,
-                height: stage[currentMap].checkpointsTab[i].height * 2,
+                x: (stage[currentMap].checkpointsTab[i].position.x * global.scale.x + this.camerabox.translation.x),
+                y: (stage[currentMap].checkpointsTab[i].position.y * global.scale.y + this.camerabox.translation.y),
+                width: stage[currentMap].checkpointsTab[i].width * global.scale.x,
+                height: stage[currentMap].checkpointsTab[i].height * global.scale.y,
                 index: stage[currentMap].checkpointsTab[i].index
             }
 
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
+                //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
+                stage[currentMap].checkpointsTab[i].angle = this.angle; 
+                
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
@@ -369,8 +373,9 @@ class Player {
 
     moveCameraVertically() {
         // warunki sprawdzające czy kamera nie wychodzi poza mapę
+        
         if (this.camerabox.translation.y - this.velocity.y < -canvas.height || this.camerabox.translation.y - this.velocity.y > 0) return;
-
+        
         // w przeciwnym wypadku, gdy "camerabox" wyjdzie poza granicę canvasu to przesuń mapę o prędkość z 
         // jaką się poruszamy i zatrzymaj gracza, żeby sprawić iluzję przesuwania się samochodu, mimo że przesuwa się mapa
         else if ((this.camerabox.position.y <= 0 && this.velocity.y < 0) || (this.camerabox.position.y + this.camerabox.height >= canvas.height && this.velocity.y > 0)) {

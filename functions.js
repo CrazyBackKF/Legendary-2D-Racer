@@ -79,7 +79,6 @@ function reorderArray(arr, order) {
     return reordered;
 }
 
-
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {
