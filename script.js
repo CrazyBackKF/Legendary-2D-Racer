@@ -5,10 +5,16 @@ const key = {
     q: false
 }
 let currentMap = 'a';
+let lastFrame = 0;
+let deltaTime = 1;
 const global = {
     scale: {
         x: 2,
         y: 2
+    },
+    translation: {
+        x: -canvas.width / 2,
+        y: -canvas.height
     }
 }
 
@@ -51,8 +57,8 @@ const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
 //    bots.push(new Bot(
 //        {
 //            position: {
-//                x: 300 + (col * 75) - player.camerabox.translation.x,
-//                y: 330 + (row * 50) - player.camerabox.translation.y
+//                x: 300 + (col * 75) - global.translation.x,
+//                y: 330 + (row * 50) - global.translation.y
 //            },
 //            color: botsColor[i],
 //            behavior: behavior[i]
@@ -64,8 +70,8 @@ const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
 bots.push(new Bot(
     {
         position: {
-            x: 300 - player.camerabox.translation.x,
-            y: 315 - player.camerabox.translation.y
+            x: 300 - global.translation.x,
+            y: 315 - global.translation.y
         },
         color: "orange",
         behavior: "stabilny"
@@ -74,10 +80,15 @@ bots.push(new Bot(
 
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
-function animate() {
+function animate(currentTime) {
+    deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
+    lastFrame = currentTime;
+
+    if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
+    console.log(deltaTime)
     c.clearRect(0, 0, canvas.width, canvas.height)
     c.save();
-    c.translate(player.camerabox.translation.x, player.camerabox.translation.y);
+    c.translate(global.translation.x, global.translation.y);
     c.scale(global.scale.x, global.scale.y);
     c.drawImage(background, 0, 0);
     c.restore();
@@ -96,9 +107,9 @@ function animate() {
             stage[currentMap].roadTab[i].draw();
         }
     }
-    player.update();
+    player.update(deltaTime);
     for (let i = 0; i < bots.length; i++) {
-        bots[i].update();
+        bots[i].update(deltaTime);
     }
 
     if (!player.isOnRoad) {

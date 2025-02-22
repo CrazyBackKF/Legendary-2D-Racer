@@ -33,7 +33,7 @@ class Bot extends Player {
     //metoda rysuje bota
     draw() {
         c.save();
-        c.translate(player.camerabox.translation.x + (this.position.x + this.width / 2), player.camerabox.translation.y + (this.position.y + this.height / 4));
+        c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);
         c.fillStyle = this.color
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height)
@@ -47,8 +47,8 @@ class Bot extends Player {
     }
     // metoda dodaje szybkosc bota
     accelerate() {
-        this.velocity.y = -(this.speed * Math.cos(this.angle) * this.speedMultiplier - this.friction);
-        this.velocity.x = this.speed * Math.sin(this.angle) * this.speedMultiplier - this.friction;
+        this.velocity.y = -(this.speed * Math.cos(this.angle) * this.speedMultiplier - this.friction) * deltaTime * 120;
+        this.velocity.x = this.speed * Math.sin(this.angle) * this.speedMultiplier - this.friction * deltaTime * 120;
     }
 
     // metoda skręca bota, żeby kierował się na następny checkpoint
@@ -63,12 +63,12 @@ class Bot extends Player {
         }
 
         const checkpointPosition = {
-            x: (checkpoint.position.x * global.scale.x + checkpoint.width / 2 * global.scale.x + player.camerabox.translation.x + this.randomOffset.x),
-            y: (checkpoint.position.y * global.scale.y + checkpoint.height / 2 * global.scale.y + player.camerabox.translation.y + this.randomOffset.y)
+            x: (checkpoint.position.x * global.scale.x + checkpoint.width / 2 * global.scale.x + global.translation.x + this.randomOffset.x),
+            y: (checkpoint.position.y * global.scale.y + checkpoint.height / 2 * global.scale.y + global.translation.y + this.randomOffset.y)
         }
         const direction = {
-            x: checkpointPosition.x - (this.position.x + this.width / 2 + player.camerabox.translation.x),
-            y: checkpointPosition.y - (this.position.y + this.height / 4 + player.camerabox.translation.y)
+            x: checkpointPosition.x - (this.position.x + this.width / 2 + global.translation.x),
+            y: checkpointPosition.y - (this.position.y + this.height / 4 + global.translation.y)
         }
         /////////////////////////////////////////////////////////////////do debugowania
         c.beginPath();
@@ -79,7 +79,7 @@ class Bot extends Player {
         c.beginPath();
 
         c.strokeStyle = "black";
-        c.moveTo(this.position.x + this.width / 2 + player.camerabox.translation.x, this.position.y + this.height / 4 + player.camerabox.translation.y);
+        c.moveTo(this.position.x + this.width / 2 + global.translation.x, this.position.y + this.height / 4 + global.translation.y);
         c.lineTo(checkpointPosition.x, checkpointPosition.y);
         c.stroke();
         //////////////////////////////////////////////////////////////
