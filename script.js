@@ -17,6 +17,7 @@ const global = {
         y: -canvas.height
     }
 }
+let frame;
 
 //wyswietlanie mapy
 const stage = {
@@ -50,10 +51,10 @@ const player = new Player({
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
-//for (let i = 0; i < 4; i++) {
+// for (let i = 0; i < 4; i++) {
 //    let row = Math.floor(i / 2); // Rząd (0 lub 1)
 //    let col = i % 2;             // Kolumna (0 lub 1)
-//
+
 //    bots.push(new Bot(
 //        {
 //            position: {
@@ -64,7 +65,7 @@ const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
 //            behavior: behavior[i]
 //        }
 //    ));
-//}
+// }
 
 // bot do debugowania
 bots.push(new Bot(
@@ -74,18 +75,20 @@ bots.push(new Bot(
             y: 315 - global.translation.y
         },
         color: "orange",
-        behavior: "stabilny"
+        behavior: "sprinter"
     }
 ));
 
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
+    if(!checkIfFullScreen()) {
+        cancelAnimationFrame(frame);
+    }
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
 
     if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
-    console.log(deltaTime)
     c.clearRect(0, 0, canvas.width, canvas.height)
     c.save();
     c.translate(global.translation.x, global.translation.y);
@@ -124,7 +127,7 @@ function animate(currentTime) {
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
 
-    requestAnimationFrame(animate);
+    frame = requestAnimationFrame(animate);
+    
+    console.log(frame);
 }
-
-animate();

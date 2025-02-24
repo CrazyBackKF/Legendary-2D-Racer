@@ -79,6 +79,12 @@ function reorderArray(arr, order) {
     return reordered;
 }
 
+function checkIfFullScreen() {
+    return document.fullscreenElement !== null;
+}
+
+
+
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {
@@ -128,4 +134,9 @@ addEventListener("keyup", (e) => {
             player.key.space = false;
             break;
     }
+})
+
+document.querySelector("#fullscreen").addEventListener("click", () => {
+    canvas.requestFullscreen();
+    animate();
 })
