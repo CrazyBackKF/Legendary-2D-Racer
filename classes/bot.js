@@ -30,6 +30,12 @@ class Bot extends Player {
         this.checkLaps();
     }
 
+    physics() {
+        if (!deltaTime) return;
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+    }
+
     //metoda rysuje bota
     draw() {
         c.save();
@@ -42,8 +48,7 @@ class Bot extends Player {
 
     // metoda przyspiesza bota
     move() {
-        const speedFactor = (this.maxSpeed - this.speed) / this.maxSpeed;
-        this.speed += this.speedValue * speedFactor * this.brakeValue;
+        this.speed += this.speedValue * this.brakeValue;
     }
     // metoda dodaje szybkosc bota
     accelerate() {
@@ -150,8 +155,8 @@ class Bot extends Player {
         }
         // bot jedzie bardzo szybko na prostej i zwalnia na zakręcie
         else if (this.behavior == "sprinter") {
-            if (Math.abs(this.desiredAngle - this.angle) > Math.PI / 6) {
-                if (!this.hasBraked) this.speed /= 2;
+            if (Math.abs(this.desiredAngle - this.angle) > Math.PI / 12) {
+                if (!this.hasBraked) this.speed = 1;
                 console.log("skręcam");
                 this.hasBraked = true;
                 this.maxSpeed = 1;
@@ -162,9 +167,12 @@ class Bot extends Player {
                 console.log("prosta");
                 this.hasBraked = false;
                 this.maxSpeed = 3;
-                this.speedValue = 0.04;
-                if (this.brakeValue < 1) this.brakeValue += 0.01;
-            }
+                this.speedValue = 0.03;
+                if (this.brakeValue < 1) this.brakeValue += 0.1;
+            } 
+        }
+        else if (this.behavior == "agresor") {
+            
         }
     }
 }

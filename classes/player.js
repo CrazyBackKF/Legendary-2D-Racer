@@ -1,4 +1,5 @@
 // Tworzenie klasy Player
+
 class Player {
     constructor({ position, color}) {
         this.position = position; //pozycja pojazdu
@@ -68,7 +69,6 @@ class Player {
     // Metoda która dodaje prędkość pojazdu
     physics() {
         if (!deltaTime) return;
-        console.log(deltaTime)
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
     }
