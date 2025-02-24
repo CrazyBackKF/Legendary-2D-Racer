@@ -83,7 +83,19 @@ function checkIfFullScreen() {
     return document.fullscreenElement !== null;
 }
 
+function getSidePosition(target, offset) {
+    return {
+        x: target.position.x + Math.cos(target.angle + Math.PI / 2) * offset,
+        y: target.position.y + Math.sin(target.angle + Math.PI / 2) * offset
+    };
+}
 
+function returnDirection(obj1, obj2) {
+    if (obj1.hr.x < obj2.hl.x) return "right";
+    if (obj1.hl.x > obj2.hr.x) return "left";
+    if (obj1.hr.y < obj2.hl.y) return "down";
+    if (obj1.hl.y > obj2.hr.y) return "up";
+}
 
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
@@ -136,8 +148,8 @@ addEventListener("keyup", (e) => {
     }
 })
 
-document.querySelector("#fullscreen").addEventListener("click", () => {
-    canvas.requestFullscreen();
-    lastFullScreen = Date.now();
-    animate();
-})
+// document.querySelector("#fullscreen").addEventListener("click", () => {
+//     canvas.requestFullscreen();
+//     lastFullScreen = Date.now();
+//     animate();
+// })

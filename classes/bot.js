@@ -3,12 +3,13 @@ class Bot extends Player {
         super({ position, color })
         this.angle = convertToRadians(270);
         this.currentCheckpoint = 0;
-        this.maxSpeed = 1.5;
+        this.maxSpeed = 2;
         this.desiredAngle = 0;
         this.brakeValue = 1;
-        this.speedValue = 0.2;
+        this.speedValue = 0.03;
         this.previousCheckpoint = 0;
         this.laps = 0;
+        this.lastAttack = 0;
         this.hasBraked = false;
         this.randomOffset = {
             x: 0,
@@ -20,10 +21,10 @@ class Bot extends Player {
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
         this.draw();
+        this.turn();
         this.changeStatsByBehavior();
         this.move();
         this.accelerate();
-        this.turn();
         this.changeAngle();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
         this.checkCheckpoints();
@@ -48,7 +49,7 @@ class Bot extends Player {
 
     // metoda przyspiesza bota
     move() {
-        this.speed += this.speedValue * this.brakeValue;
+        if (this.speed < this.maxSpeed) this.speed += this.speedValue * this.brakeValue;
     }
     // metoda dodaje szybkosc bota
     accelerate() {
@@ -172,7 +173,60 @@ class Bot extends Player {
             } 
         }
         else if (this.behavior == "agresor") {
-            
+            const rotatedRect = {
+                x: this.position.x + global.translation.x,
+                y: this.position.y + global.translation.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle
+            };
+            const playerRotatedRect = {
+                x: player.position.x,
+                y: player.position.y,
+                width: player.width,
+                height: player.height,
+                angle: player.angle
+            };
+            const corners = getPoints(rotatedRect, rotatedRect.angle, global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4), true);
+            const playerCorners = getPoints(playerRotatedRect, playerRotatedRect.angle, player.position.x + player.width / 2, player.position.y + player.height / 4)
+
+            // for (let key in corners) {
+            //     const corner = corners[key];
+            //     c.fillStyle = "black"
+            //     c.beginPath();
+            //     c.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
+            //     c.closePath();
+            //     c.fill();
+            // }
+
+            // for (let key in playerCorners) {
+            //     const corner = playerCorners[key];
+            //     c.fillStyle = "black"
+            //     c.beginPath();
+            //     c.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
+            //     c.closePath();
+            //     c.fill();
+            // }
+            if (Math.abs(this.desiredAngle - this.angle) > Math.PI / 12) {
+                if (!this.hasBraked) this.speed = 1;
+                //console.log("skręcam");
+                this.hasBraked = true;
+                this.maxSpeed = 1;
+                this.speedValue = 0.02;
+                this.brakeValue = 0.01;
+            }
+            else {
+                //console.log("prosta");
+                this.hasBraked = false;
+                this.maxSpeed = 3;
+                this.speedValue = 0.03;
+                if (this.brakeValue < 1) this.brakeValue += 0.1;
+            } 
+            const leftDistance = Math.hypot(corners.hl.x - playerCorners.hl.x, corners.hl.y - playerCorners.hl.y);
+            const rightDistance = Math.hypot(corners.hr.x - playerCorners.hr.x, corners.hr.y - playerCorners.hr.y);
+
+            const distance = Math.min(leftDistance, rightDistance);
+                        
         }
     }
 }
