@@ -138,5 +138,6 @@ addEventListener("keyup", (e) => {
 
 document.querySelector("#fullscreen").addEventListener("click", () => {
     canvas.requestFullscreen();
+    lastFullScreen = Date.now();
     animate();
 })

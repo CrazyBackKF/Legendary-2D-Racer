@@ -157,14 +157,14 @@ class Bot extends Player {
         else if (this.behavior == "sprinter") {
             if (Math.abs(this.desiredAngle - this.angle) > Math.PI / 12) {
                 if (!this.hasBraked) this.speed = 1;
-                console.log("skręcam");
+                //console.log("skręcam");
                 this.hasBraked = true;
                 this.maxSpeed = 1;
                 this.speedValue = 0.02;
                 this.brakeValue = 0.01;
             }
             else {
-                console.log("prosta");
+                //console.log("prosta");
                 this.hasBraked = false;
                 this.maxSpeed = 3;
                 this.speedValue = 0.03;

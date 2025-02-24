@@ -18,6 +18,7 @@ const global = {
     }
 }
 let frame;
+let lastFullScreen;
 
 //wyswietlanie mapy
 const stage = {
@@ -82,8 +83,9 @@ bots.push(new Bot(
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
-    if(!checkIfFullScreen()) {
-        cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(animate);
+    if (!checkIfFullScreen() && Date.now() - lastFullScreen > 500) {
+        cancelAnimationFrame(frame)
     }
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
@@ -126,8 +128,5 @@ function animate(currentTime) {
         c.textBaseline = "middle"
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
-
-    frame = requestAnimationFrame(animate);
-    
-    console.log(frame);
+2
 }
