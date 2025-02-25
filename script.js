@@ -5,20 +5,6 @@ const key = {
     q: false
 }
 let currentMap = 'a';
-let lastFrame = 0;
-let deltaTime = 1;
-const global = {
-    scale: {
-        x: 2,
-        y: 2
-    },
-    translation: {
-        x: -canvas.width / 2,
-        y: -canvas.height
-    }
-}
-let frame;
-let lastFullScreen;
 
 //wyswietlanie mapy
 const stage = {
@@ -46,55 +32,32 @@ const player = new Player({
         x: 300,
         y: 400
     },
-    color: 'red'
+    color:'red'
 })
 
 const bots = [];
-const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
-const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
-// for (let i = 0; i < 4; i++) {
-//    let row = Math.floor(i / 2); // Rząd (0 lub 1)
-//    let col = i % 2;             // Kolumna (0 lub 1)
+const botsColor = ['orange', 'darkGreen', 'pink', 'violet']
+for (let i = 0; i < 4; i++) {
+    let row = Math.floor(i / 2); // Rząd (0 lub 1)
+    let col = i % 2;             // Kolumna (0 lub 1)
 
-//    bots.push(new Bot(
-//        {
-//            position: {
-//                x: 300 + (col * 75) - global.translation.x,
-//                y: 330 + (row * 50) - global.translation.y
-//            },
-//            color: botsColor[i],
-//            behavior: behavior[i]
-//        }
-//    ));
-// }
-
-// bot do debugowania
-bots.push(new Bot(
-    {
-        position: {
-            x: 300 - global.translation.x,
-            y: 315 - global.translation.y
-        },
-        color: "orange",
-        behavior: "agresor"
-    }
-));
+    bots.push(new Bot(
+        {
+            position: {
+                x: 300 + (col * 75) - player.camerabox.translation.x,
+                y: 315 + (row * 50) - player.camerabox.translation.y
+            },
+            color: botsColor[i]
+        }
+    ));
+}
 
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
-function animate(currentTime) {
-    frame = requestAnimationFrame(animate);
-    //if (!checkIfFullScreen() && Date.now() - lastFullScreen > 500) {
-    //    cancelAnimationFrame(frame)
-    //}
-    deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
-    lastFrame = currentTime;
-
-    if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
-    c.clearRect(0, 0, canvas.width, canvas.height)
+function animate() {
     c.save();
-    c.translate(global.translation.x, global.translation.y);
-    c.scale(global.scale.x, global.scale.y);
+    c.translate(player.camerabox.translation.x, player.camerabox.translation.y);
+    c.scale(2, 2);
     c.drawImage(background, 0, 0);
     c.restore();
     if (key.q) {
@@ -108,13 +71,13 @@ function animate(currentTime) {
             stage[currentMap].checkpointsTab[i].draw();
         }
         //rysowanie drogi
-        for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
+        for (let i = 0; i < stage[currentMap].roadTab.length; i++) { 
             stage[currentMap].roadTab[i].draw();
         }
     }
-    player.update(deltaTime);
-    for (let i = 0; i < bots.length; i++) {
-        bots[i].update(deltaTime);
+    player.update();
+    for (let i = 0; i < 4; i++) {
+        bots[i].update();
     }
 
     if (!player.isOnRoad) {
@@ -128,5 +91,8 @@ function animate(currentTime) {
         c.textBaseline = "middle"
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
+
+    requestAnimationFrame(animate);
 }
+
 animate();
