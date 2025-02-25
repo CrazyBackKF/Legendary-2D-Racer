@@ -2,6 +2,7 @@ class Bot extends Player {
     constructor({ position, color, behavior }) {
         super({ position, color })
         this.angle = convertToRadians(270);
+        //zmienne okreslajace bota m. in. szybkosc, kat obrotu, checkpointy
         this.currentCheckpoint = 0;
         this.maxSpeed = 2;
         this.expectedAngle = 0;
@@ -9,6 +10,7 @@ class Bot extends Player {
         this.speedValue = 0.03;
         this.previousCheckpoint = 0;
         this.laps = 0;
+        //zmienne do zachowan botow w zaleznosci od jego typu
         this.shouldAttack = false;
         this.hasBraked = false;
         this.randomOffset = {
@@ -149,6 +151,7 @@ class Bot extends Player {
         }
     }
 
+    // sprawdzamy ilosc okrazen
     checkLaps() {
         if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) this.laps++;
         if (this.laps == 3) {

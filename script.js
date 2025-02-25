@@ -117,6 +117,7 @@ function animate(currentTime) {
         bots[i].update(deltaTime);
     }
 
+    //wyswietlanie komunikatu aby wrocic na tor
     if (!player.isOnRoad) {
         c.fillStyle = "rgba(255, 165, 0, 0.9)"
         c.fillRect((canvas.width - 500) / 2, 50, 500, 100)

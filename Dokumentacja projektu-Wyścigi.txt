@@ -120,13 +120,18 @@
 - dodanie zmiany 'lastCheckpoint'
 - zakodowanie if'a ktory sprawdza czy gracz przekroczyl mete/start (w niej petla, ktora sprawdza pokolei czy 'isPassed' jest ustawiony na false jesli nie sprawdza czy gracz zakonczyl ostatnie okrazenie a na samym koncu dodaje kolo i zmienia wszytkie 'isPassed' na false)
 - dodanie komentarzy 
-- optymalizacja kodu, dodanie większej ilości checkpointów
-- dodanie wracanie do checkpointów gdy na 5 sekund wyjechało się za obszar trasy
+- zmiana mapy w pliku 'kolizje.js'
+- zamiana odbijania sie od sciany na przeteleportowanie do 'lastCheckpoint' za pomoca funkcji 'onRoad()'
+- nie wychodzenie z canvasa
+- dodanie rozszerzenie klasy 'collisionsBlock'
+- optymalizacja i naprawa bledow (lepsze rozwiazania tez w tym sa)
+- dodanie wyswietlania informacji o powrocie na tor
+- kolejna naprawa bledow
 
 21.02.2025
 - naprawa przesuwania mapy
 - optymalizacja kodu
-- początek robienia botów
+- początek kodowania botów
 - optymalizacja prędkości botów
 - dodanie podstawowego skrętu botów
 
@@ -135,8 +140,14 @@
 - sprawdzanie zwycięstwa botów (na razie tylko w konsoli)
 - refaktoryzacja kodu (skalowanie dodane do obiektu global)
 - naprawienie błędu ze złym kątem po powrocie gracza do checkpointa
-- dodanie "sprintera" (bot jedzie bardzo szybko na prostej i mocna zwalnia na zakręcie) oraz "stabilengo" (bot jedzie ze stałą prędkością)
-- dodanie "deltaTime", dzięki czemu gra chodzi z podobną szybkością dla każdej ilości fpsów
+- dodanie 'sprintera' (bot jedzie bardzo szybko na prostej i mocna zwalnia na zakręcie) oraz 'stabilengo' (bot jedzie ze stałą prędkością)
+- dodanie 'deltaTime', dzięki czemu gra chodzi z podobną szybkością dla każdej ilości fpsów
 
 24.02.2025
 - dodanie fullscreena
+- zrobienie bota 'agresora'
+- ogolnie optymalizacja i szukanie bledow
+
+25.02.2025
+- (zakomentowane czesci kodu to rzeczy do przerobki lub nie potrzebne na ten czas)
+- dodanie komentarzy i dokumentacji

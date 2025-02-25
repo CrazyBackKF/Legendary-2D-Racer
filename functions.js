@@ -13,6 +13,8 @@ function checkCollisionsCondition(corners, object) {
     }
 }
 
+//funkcja ktora sprawdza kolizje
+
 function getCollisions(collisions) {
     const checkpointsTab = [];
     const collisionsTab = [];
@@ -73,16 +75,18 @@ function reorderArray(arr, order) {
     let reordered = new Array(arr.length); // Tworzymy nową tablicę o tej samej długości
 
     order.forEach((newPosition, currentIndex) => {
-        reordered[newPosition] = arr[currentIndex]; // Umieszczamy element na poprawnej pozycji
+        reordered[newPosition] = arr[currentIndex]; // Umieszczamy element na poprawnej pozycji zgodnej z kolejnoscia na trasie
     });
 
     return reordered;
 }
 
+//sprawdzamy czy jest fullscreen
 function checkIfFullScreen() {
     return document.fullscreenElement !== null;
 }
 
+//sprawdzamy strone pozycji 
 function getSidePosition(target, offset) {
     return {
         x: target.position.x + Math.cos(target.angle + Math.PI / 2) * offset,
@@ -90,6 +94,7 @@ function getSidePosition(target, offset) {
     };
 }
 
+//zwracamy kierunek
 function returnDirection(obj1, obj2) {
     if (obj1.hr.x < obj2.hl.x) return "right";
     if (obj1.hl.x > obj2.hr.x) return "left";
