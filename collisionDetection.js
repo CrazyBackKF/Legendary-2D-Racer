@@ -1,6 +1,8 @@
 // Funkcja zrobiona by pobrać koodrynaty wierchołków po rotacji
-function getPoints(obj, angle, cx, cy) {
-    let rad = angle * Math.PI / 180; // Zamiana stopni na radiany
+function getPoints(obj, angle, cx, cy, isInRadians = false) {
+    let rad;
+    if (!isInRadians) rad = angle * Math.PI / 180; // Zamiana stopni na radiany
+    else rad = angle;
     let cosA = Math.cos(rad);
     let sinA = Math.sin(rad);
 

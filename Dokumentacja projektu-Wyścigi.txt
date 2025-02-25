@@ -127,3 +127,16 @@
 - naprawa przesuwania mapy
 - optymalizacja kodu
 - początek robienia botów
+- optymalizacja prędkości botów
+- dodanie podstawowego skrętu botów
+
+22.02.2025
+- dodanie płynniejszego skręcanie botów
+- sprawdzanie zwycięstwa botów (na razie tylko w konsoli)
+- refaktoryzacja kodu (skalowanie dodane do obiektu global)
+- naprawienie błędu ze złym kątem po powrocie gracza do checkpointa
+- dodanie "sprintera" (bot jedzie bardzo szybko na prostej i mocna zwalnia na zakręcie) oraz "stabilengo" (bot jedzie ze stałą prędkością)
+- dodanie "deltaTime", dzięki czemu gra chodzi z podobną szybkością dla każdej ilości fpsów
+
+24.02.2025
+- dodanie fullscreena
