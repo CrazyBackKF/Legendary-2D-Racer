@@ -149,5 +149,7 @@
 - ogolnie optymalizacja i szukanie bledow
 
 25.02.2025
+- okreslanie fullscreena w html
+-dodanie 'agresora' finalna wielkosc 
 - (zakomentowane czesci kodu to rzeczy do przerobki lub nie potrzebne na ten czas)
 - dodanie komentarzy i dokumentacji
