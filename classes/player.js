@@ -46,12 +46,21 @@ class Player {
         };
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
         this.laps = 1; //zmienna opisujaca ilosc okrazen
+        this.boxToChase = {
+            position:{
+                x: this.position.x ,
+                y: this.position.y
+            },
+            width: 100,
+            height: this.height + 20
+        }
 
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
     update() {
         this.moveCamerabox();
+        this.moveBoxChased();
         this.moveCameraVertically();
         this.moveCameraHorizontally();
         this.draw();
@@ -113,6 +122,12 @@ class Player {
         if (key.q) {
             c.fillStyle = "rgba(0, 255, 0, 0.5)"
             c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
+            c.save()
+            c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
+            c.rotate(convertToRadians(this.angle));
+            c.fillStyle = "rgba(189, 11, 180, 0.5)"
+            c.fillRect(this.boxToChase.position.x - this.position.x - this.width / 2, this.boxToChase.position.y - this.position.y - this.height / 4, this.boxToChase.width, this.boxToChase.height)
+            c.restore()
         }
     }
 
@@ -350,9 +365,6 @@ class Player {
         }
     }
 
-
-
-
     //metoda reagujaca na kolizje
     reactToCollisions() {
         this.velocity.x = 0;
@@ -367,6 +379,12 @@ class Player {
         //pozycja camery
         this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2;
         this.camerabox.position.y = this.position.y + this.height / 4 - this.camerabox.height / 2;
+    }
+
+    moveBoxChased() {
+        //pozycja boxChased
+        this.boxToChase.position.x = this.position.x + this.width / 2 - (this.boxToChase.width / 4 ) + 30
+        this.boxToChase.position.y = this.position.y + this.height / 4 - this.boxToChase.height / 2;
     }
 
     moveCameraVertically() {

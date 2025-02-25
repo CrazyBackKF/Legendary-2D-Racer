@@ -204,23 +204,23 @@ class Bot extends Player {
             const corners = getPoints(rotatedRect, rotatedRect.angle, global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4), true);
             const playerCorners = getPoints(playerRotatedRect, playerRotatedRect.angle, player.position.x + player.width / 2, player.position.y + player.height / 4)
 
-            for (let key in corners) {
-                const corner = corners[key];
-                c.fillStyle = "black"
-                c.beginPath();
-                c.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
-                c.closePath();
-                c.fill();
-            }
+            // for (let key in corners) {
+            //     const corner = corners[key];
+            //     c.fillStyle = "black"
+            //     c.beginPath();
+            //     c.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
+            //     c.closePath();
+            //     c.fill();
+            // }
 
-            for (let key in playerCorners) {
-                const corner = playerCorners[key];
-                c.fillStyle = "black"
-                c.beginPath();
-                c.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
-                c.closePath();
-                c.fill();
-            }
+            // for (let key in playerCorners) {
+            //     const corner = playerCorners[key];
+            //     c.fillStyle = "black"
+            //     c.beginPath();
+            //     c.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
+            //     c.closePath();
+            //     c.fill();
+            // }
             if (Math.abs(this.expectedAngle - this.angle) > Math.PI / 12) {
                 if (!this.hasBraked) this.speed = 1;
                 //console.log("skręcam");
@@ -247,6 +247,7 @@ class Bot extends Player {
         else if (this.behavior == "taktyk") {
             this.maxSpeed = 2;
             this.speedValue = 0.03;
+
         }
     }
 }
