@@ -1,5 +1,4 @@
 // Tworzenie klasy Player
-
 class Player {
     constructor({ position, color}) {
         this.position = position; //pozycja pojazdu
@@ -42,6 +41,10 @@ class Player {
             position: {
                 x: this.position.x + this.width / 2 - 800 / 2, // Centrowanie w poziomie
                 y: this.position.y + this.height / 4 - 450 / 2  // Centrowanie w pionie
+            },
+            translation: {
+                x: -canvas.width / 2,
+                y: -canvas.height
             }
         };
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
@@ -68,7 +71,6 @@ class Player {
 
     // Metoda która dodaje prędkość pojazdu
     physics() {
-        if (!deltaTime) return;
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
     }
@@ -95,8 +97,8 @@ class Player {
             else this.speed -= (this.speedValue + this.friction);
         }
 
-        this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier) * deltaTime * 120;
-        this.velocity.x = this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier* deltaTime * 120;
+        this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier);
+        this.velocity.x = this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier;
     }
 
     // Metoda która wyświetla pojazd
@@ -165,12 +167,12 @@ class Player {
     // Metoda która zmienia szybkość obrotu w zależności od szybkości auta
     changeTurningSpeed() {
         if (this.speed > 0) {
-            if (this.speed <= 2) return this.speed / 1.7 * this.driftMultiplier * deltaTime * 120;
-            else return ((2 - (this.speed / this.maxSpeed)) * 0.8) * this.driftMultiplier * deltaTime * 120;
+            if (this.speed <= 2) return this.speed / 1.7 * this.driftMultiplier;
+            else return ((2 - (this.speed / this.maxSpeed)) * 0.8) * this.driftMultiplier;
         }
         else if (this.speed < 0) {
-            if (this.speed >= -2) return -this.speed / 1.7 * this.driftMultiplier * deltaTime * 120;
-            else return (2 + (this.speed / this.maxSpeed) * 0.8) * this.driftMultiplier * deltaTime * 120;
+            if (this.speed >= -2) return -this.speed / 1.7 * this.driftMultiplier;
+            else return (2 + (this.speed / this.maxSpeed) * 0.8) * this.driftMultiplier;
         }
     }
 
@@ -226,10 +228,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (stage[currentMap].collisionsTab[i].position.x * global.scale.x + global.translation.x),
-                y: (stage[currentMap].collisionsTab[i].position.y * global.scale.y + global.translation.y),
-                width: stage[currentMap].collisionsTab[i].width * global.scale.x,
-                height: stage[currentMap].collisionsTab[i].height * global.scale.y
+                x: (stage[currentMap].collisionsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage[currentMap].collisionsTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage[currentMap].collisionsTab[i].width * 2,
+                height: stage[currentMap].collisionsTab[i].height * 2
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -257,10 +259,10 @@ class Player {
             };
             const square = {
                 //skalowanie pozycji zgodnie z mapa
-                x: (stage[currentMap].roadTab[i].position.x * global.scale.x + global.translation.x),
-                y: (stage[currentMap].roadTab[i].position.y * global.scale.y + global.translation.y),
-                width: stage[currentMap].roadTab[i].width * global.scale.x,
-                height: stage[currentMap].roadTab[i].height * global.scale.y
+                x: (stage[currentMap].roadTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage[currentMap].roadTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage[currentMap].roadTab[i].width * 2,
+                height: stage[currentMap].roadTab[i].height * 2
             };
 
             if (isColliding(rotatedRect, square)) {
@@ -272,15 +274,14 @@ class Player {
             this.lastRoadTime = 0;
             return;
         }
-        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
+        if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 4) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
                 const element = stage[currentMap].checkpointsTab[i];
                 if (stage[currentMap].checkpointsTab[i].isPassed) {
                     this.position.x = element.position.x
                     this.position.y = element.position.y
-                    global.translation.x = -(element.position.x + element.width);
-                    global.translation.y = -(element.position.y + element.height);
-                    this.angle = element.angle;
+                    this.camerabox.translation.x = -(element.position.x + element.width);
+                    this.camerabox.translation.y = -(element.position.y + element.height);
                     this.speed = 0;
                     break;
                 }
@@ -304,17 +305,14 @@ class Player {
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
             const checkpoint = {
-                x: (stage[currentMap].checkpointsTab[i].position.x * global.scale.x + global.translation.x),
-                y: (stage[currentMap].checkpointsTab[i].position.y * global.scale.y + global.translation.y),
-                width: stage[currentMap].checkpointsTab[i].width * global.scale.x,
-                height: stage[currentMap].checkpointsTab[i].height * global.scale.y,
+                x: (stage[currentMap].checkpointsTab[i].position.x * 2 + this.camerabox.translation.x),
+                y: (stage[currentMap].checkpointsTab[i].position.y * 2 + this.camerabox.translation.y),
+                width: stage[currentMap].checkpointsTab[i].width * 2,
+                height: stage[currentMap].checkpointsTab[i].height * 2,
                 index: stage[currentMap].checkpointsTab[i].index
             }
 
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
-                //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
-                stage[currentMap].checkpointsTab[i].angle = this.angle; 
-                
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
@@ -371,23 +369,22 @@ class Player {
 
     moveCameraVertically() {
         // warunki sprawdzające czy kamera nie wychodzi poza mapę
-        
-        if (global.translation.y - this.velocity.y < -canvas.height || global.translation.y - this.velocity.y > 0) return;
-        
+        if (this.camerabox.translation.y - this.velocity.y < -canvas.height || this.camerabox.translation.y - this.velocity.y > 0) return;
+
         // w przeciwnym wypadku, gdy "camerabox" wyjdzie poza granicę canvasu to przesuń mapę o prędkość z 
         // jaką się poruszamy i zatrzymaj gracza, żeby sprawić iluzję przesuwania się samochodu, mimo że przesuwa się mapa
         else if ((this.camerabox.position.y <= 0 && this.velocity.y < 0) || (this.camerabox.position.y + this.camerabox.height >= canvas.height && this.velocity.y > 0)) {
-            global.translation.y -= this.velocity.y;
+            this.camerabox.translation.y -= this.velocity.y;
             this.position.y -= this.velocity.y
         }
     }
 
     moveCameraHorizontally() {
         // to samo z poziomą orientacją
-        if (global.translation.x - this.velocity.x < -canvas.width || global.translation.x - this.velocity.x > 0) return;
+        if (this.camerabox.translation.x - this.velocity.x < -canvas.width || this.camerabox.translation.x - this.velocity.x > 0) return;
 
         else if ((this.camerabox.position.x <= 0 && this.velocity.x < 0) || (this.camerabox.position.x + this.camerabox.width >= canvas.width && this.velocity.x > 0)) {
-            global.translation.x -= this.velocity.x;
+            this.camerabox.translation.x -= this.velocity.x;
             this.position.x -= this.velocity.x;
         }
     }
