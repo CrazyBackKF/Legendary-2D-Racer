@@ -133,16 +133,16 @@ function animate(currentTime) {
     }
 
     //wyswietlanie komunikatu aby wrocic na tor
-    if (!player.isOnRoad) {
-        c.fillStyle = "rgba(255, 165, 0, 0.9)"
-        c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
-        c.strokeStyle = "black"
-        c.strokeRect((canvas.width - 500) / 2, 50, 500, 100)
-        c.fillStyle = "red";
-        c.font = '30px "Press Start 2P"';
-        c.textAlign = "center";
-        c.textBaseline = "middle"
-        c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
-    }
+    // if (!player.isOnRoad) {
+    //     c.fillStyle = "rgba(255, 165, 0, 0.9)"
+    //     c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
+    //     c.strokeStyle = "black"
+    //     c.strokeRect((canvas.width - 500) / 2, 50, 500, 100)
+    //     c.fillStyle = "red";
+    //     c.font = '30px "Press Start 2P"';
+    //     c.textAlign = "center";
+    //     c.textBaseline = "middle"
+    //     c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
+    // }
 }
 animate();

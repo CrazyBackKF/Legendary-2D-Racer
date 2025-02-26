@@ -150,6 +150,11 @@
 
 25.02.2025
 - okreslanie fullscreena w html
--dodanie 'agresora' finalna wielkosc 
+- dodanie 'agresora' finalna wielkosc 
 - (zakomentowane czesci kodu to rzeczy do przerobki lub nie potrzebne na ten czas)
 - dodanie komentarzy i dokumentacji
+
+26.02.2025
+- ropoczecie tworzenia przeszkod
+- stworzenie nowej klasy 'obstacles' w niej wyswietlanie obiektu a w klasie 'player' sprawdzanie kolizji
+- praca nad olejem (pierwsza wersja odzialywania na kolizje bez poslizgu)

@@ -1,7 +1,7 @@
 // Tworzenie klasy Player
 
 class Player {
-    constructor({ position, color}) {
+    constructor({ position, color }) {
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
         this.width = 20;
@@ -48,13 +48,14 @@ class Player {
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
         this.laps = 1; //zmienna opisujaca ilosc okrazen
         this.boxToChase = {
-            position:{
-                x: this.position.x ,
+            position: {
+                x: this.position.x,
                 y: this.position.y
             },
             width: 100,
             height: this.height + 20
         }
+        this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
 
     }
 
@@ -107,7 +108,7 @@ class Player {
         }
 
         this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier) * deltaTime * 120;
-        this.velocity.x = this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier* deltaTime * 120;
+        this.velocity.x = this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier * deltaTime * 120;
     }
 
     // Metoda która wyświetla pojazd
@@ -182,12 +183,12 @@ class Player {
     // Metoda która zmienia szybkość obrotu w zależności od szybkości auta
     changeTurningSpeed() {
         if (this.speed > 0) {
-            if (this.speed <= 2) return this.speed / 1.7 * this.driftMultiplier * deltaTime * 120;
-            else return ((2 - (this.speed / this.maxSpeed)) * 0.8) * this.driftMultiplier * deltaTime * 120;
+            if (this.speed <= 2) return this.speed / 1.7 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            else return ((2 - (this.speed / this.maxSpeed)) * 0.8) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
         }
         else if (this.speed < 0) {
-            if (this.speed >= -2) return -this.speed / 1.7 * this.driftMultiplier * deltaTime * 120;
-            else return (2 + (this.speed / this.maxSpeed) * 0.8) * this.driftMultiplier * deltaTime * 120;
+            if (this.speed >= -2) return -this.speed / 1.7 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            else return (2 + (this.speed / this.maxSpeed) * 0.8) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
         }
     }
 
@@ -310,7 +311,7 @@ class Player {
 
     checkObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
-    
+
         for (let i = 0; i < obstacles.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
@@ -325,30 +326,39 @@ class Player {
                 width: obstacles[i].width * global.scale.x,
                 height: obstacles[i].height * global.scale.y
             };
-    
+
             if (isColliding(rotatedRect, square)) {
                 currentlyColliding = true;
-    
+
+                let angleTypeTab = [80, -80]
+
                 // Wykrycie wejścia w kolizję po raz pierwszy
                 if (!this.isColliding1) {
                     this.isColliding1 = true;
-                    gsap.to(this, {
-                        angle: this.angle + 360,
-                        duration: 0.5,
-                        ease: "power2.out"
-                    })
-                    this.speed = 0;
+                        gsap.to(this, {
+                            angle: this.angle + angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1],
+                            duration: 1,
+                            speed: this.speed - (0.35 * this.speed),
+                            ease: "power2.out"
+                        })
+
+                    //this.oliedMultiplier = 2.5;
+
+                    setTimeout(() => {
+                        this.oliedMultiplier = 1
+                    }, 5000)
+
+                    break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
                 }
-                break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
             }
         }
-    
+
         // Resetowanie flagi, gdy wyjedziemy z kolizji
         if (!currentlyColliding) {
             this.isColliding1 = false;
         }
     }
-    
+
 
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem
@@ -372,8 +382,8 @@ class Player {
 
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
                 //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
-                stage[currentMap].checkpointsTab[i].angle = this.angle; 
-                
+                stage[currentMap].checkpointsTab[i].angle = this.angle;
+
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
@@ -427,15 +437,15 @@ class Player {
 
     moveBoxChased() {
         //pozycja boxChased
-        this.boxToChase.position.x = this.position.x + this.width / 2 - (this.boxToChase.width / 4 ) + 30
+        this.boxToChase.position.x = this.position.x + this.width / 2 - (this.boxToChase.width / 4) + 30
         this.boxToChase.position.y = this.position.y + this.height / 4 - this.boxToChase.height / 2;
     }
 
     moveCameraVertically() {
         // warunki sprawdzające czy kamera nie wychodzi poza mapę
-        
+
         if (global.translation.y - this.velocity.y < -canvas.height || global.translation.y - this.velocity.y > 0) return;
-        
+
         // w przeciwnym wypadku, gdy "camerabox" wyjdzie poza granicę canvasu to przesuń mapę o prędkość z 
         // jaką się poruszamy i zatrzymaj gracza, żeby sprawić iluzję przesuwania się samochodu, mimo że przesuwa się mapa
         else if ((this.camerabox.position.y <= 0 && this.velocity.y < 0) || (this.camerabox.position.y + this.camerabox.height >= canvas.height && this.velocity.y > 0)) {
