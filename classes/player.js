@@ -20,6 +20,7 @@ class Player {
         this.isColliding = false;
         this.lastRoadTime = 0;
         this.isOnRoad = false;
+        this.isColliding1 = false;
         //this.image = new Image();
         //this.image.src = "img/sport_green.png";
         //prędkość w poziomie x i y
@@ -70,6 +71,7 @@ class Player {
         this.checkIfHitCanvas();
         this.checkCollisions();
         this.checkCheckpoints();
+        this.checkObstacles();
         this.checkRoad();
         this.physics();
         this.turbo();
@@ -120,14 +122,14 @@ class Player {
         c.restore();
 
         if (key.q) {
-            c.fillStyle = "rgba(0, 255, 0, 0.5)"
+            c.fillStyle = "rgba(0, 255, 0, 0.2)"
             c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
-            c.save()
-            c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
-            c.rotate(convertToRadians(this.angle));
-            c.fillStyle = "rgba(189, 11, 180, 0.5)"
-            c.fillRect(this.boxToChase.position.x - this.position.x - this.width / 2, this.boxToChase.position.y - this.position.y - this.height / 4, this.boxToChase.width, this.boxToChase.height)
-            c.restore()
+            // c.save()
+            // c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
+            // c.rotate(convertToRadians(this.angle));
+            // c.fillStyle = "rgba(189, 11, 180, 0.5)"
+            // c.fillRect(this.boxToChase.position.x - this.position.x - this.width / 2, this.boxToChase.position.y - this.position.y - this.height / 4, this.boxToChase.width, this.boxToChase.height)
+            // c.restore()
         }
     }
 
@@ -305,6 +307,48 @@ class Player {
             this.lastRoadTime = Date.now();
         }
     }
+
+    checkObstacles() {
+        let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
+    
+        for (let i = 0; i < obstacles.length; i++) {
+            const rotatedRect = {
+                x: this.position.x,
+                y: this.position.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle
+            };
+            const square = {
+                x: (obstacles[i].position.x * global.scale.x + global.translation.x),
+                y: (obstacles[i].position.y * global.scale.y + global.translation.y),
+                width: obstacles[i].width * global.scale.x,
+                height: obstacles[i].height * global.scale.y
+            };
+    
+            if (isColliding(rotatedRect, square)) {
+                currentlyColliding = true;
+    
+                // Wykrycie wejścia w kolizję po raz pierwszy
+                if (!this.isColliding1) {
+                    this.isColliding1 = true;
+                    gsap.to(this, {
+                        angle: this.angle + 360,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    })
+                    this.speed = 0;
+                }
+                break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
+            }
+        }
+    
+        // Resetowanie flagi, gdy wyjedziemy z kolizji
+        if (!currentlyColliding) {
+            this.isColliding1 = false;
+        }
+    }
+    
 
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem

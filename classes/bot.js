@@ -52,7 +52,6 @@ class Bot extends Player {
     // metoda przyspiesza bota
     move() {
         if (this.speed < this.maxSpeed) this.speed += this.speedValue * this.brakeValue;
-        console.log(this.velocity.x + " " + this.velocity.y)
     }
     // metoda dodaje szybkosc bota
     accelerate() {
