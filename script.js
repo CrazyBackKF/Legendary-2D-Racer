@@ -49,6 +49,7 @@ const player = new Player({
     color: 'red'
 })
 
+const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
@@ -79,6 +80,16 @@ bots.push(new Bot(
         behavior: "agresor"
     }
 ));
+
+for (let i = 0; i < 4; i++) {
+    const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+    obstacles.push(new Obstacle({
+        position,
+        width: 8 * global.scale.x,
+        height: 8 * global.scale.y,
+        type: "oil"
+    }))
+}
 
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
@@ -111,6 +122,10 @@ function animate(currentTime) {
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             stage[currentMap].roadTab[i].draw();
         }
+        //rysowanie przeskód
+        for (let i = 0; i < obstacles.length; i++) {
+            obstacles[i].draw();
+        }
     }
     player.update(deltaTime);
     for (let i = 0; i < bots.length; i++) {
@@ -118,16 +133,16 @@ function animate(currentTime) {
     }
 
     //wyswietlanie komunikatu aby wrocic na tor
-    if (!player.isOnRoad) {
-        c.fillStyle = "rgba(255, 165, 0, 0.9)"
-        c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
-        c.strokeStyle = "black"
-        c.strokeRect((canvas.width - 500) / 2, 50, 500, 100)
-        c.fillStyle = "red";
-        c.font = '30px "Press Start 2P"';
-        c.textAlign = "center";
-        c.textBaseline = "middle"
-        c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
-    }
+    // if (!player.isOnRoad) {
+    //     c.fillStyle = "rgba(255, 165, 0, 0.9)"
+    //     c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
+    //     c.strokeStyle = "black"
+    //     c.strokeRect((canvas.width - 500) / 2, 50, 500, 100)
+    //     c.fillStyle = "red";
+    //     c.font = '30px "Press Start 2P"';
+    //     c.textAlign = "center";
+    //     c.textBaseline = "middle"
+    //     c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
+    // }
 }
 animate();
