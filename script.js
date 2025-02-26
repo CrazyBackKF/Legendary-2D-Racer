@@ -49,6 +49,7 @@ const player = new Player({
     color: 'red'
 })
 
+const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
@@ -80,6 +81,16 @@ bots.push(new Bot(
     }
 ));
 
+for (let i = 0; i < 4; i++) {
+    const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+    obstacles.push(new Obstacle({
+        position,
+        width: 8 * global.scale.x,
+        height: 8 * global.scale.y,
+        type: "oil"
+    }))
+}
+
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
@@ -110,6 +121,10 @@ function animate(currentTime) {
         //rysowanie drogi
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             stage[currentMap].roadTab[i].draw();
+        }
+        //rysowanie przeskód
+        for (let i = 0; i < obstacles.length; i++) {
+            obstacles[i].draw();
         }
     }
     player.update(deltaTime);
