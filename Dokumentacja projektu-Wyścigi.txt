@@ -163,3 +163,9 @@
 1.03.2025
 - ukonczenie zachowania oleju
 - zrobienie usuwania oleju po kolizji
+- dodanie tablicy z obiektami z typem i kolorem obiektu
+- dodanie funkcji sprawdzajacej czy sa wszystkie przeszkody wygenerowane
+- tworzenie obietku po kolizji 
+- dodanie zachowan inny przeszkod
+- proba dodania ich do botow (nieudana i usunieta)
+- zformatowanie kodu

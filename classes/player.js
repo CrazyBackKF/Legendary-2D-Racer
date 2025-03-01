@@ -56,11 +56,14 @@ class Player {
             height: this.height + 20
         }
         this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
+        this.allObstacles = false;
+        this.deletedObstacle = "";
 
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
     update() {
+        this.checkAmountOfObstacles();
         this.moveCamerabox();
         this.moveBoxChased();
         this.moveCameraVertically();
@@ -309,9 +312,10 @@ class Player {
         }
     }
 
+    //funkcja sprawdzajaca czy wystepuje kolizja z przeszkodom
     checkObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
-        let collisionIndex = -1;
+        let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
         for (let i = 0; i < obstacles.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
@@ -330,20 +334,42 @@ class Player {
             if (isColliding(rotatedRect, square)) {
                 currentlyColliding = true;
 
-                let angleTypeTab = [70, -70]
+                let angleTypeTab = [110, -110]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
                 if (!this.isColliding1) {
                     this.isColliding1 = true;
-                    gsap.to(this, {
-                        angle: this.angle + angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1],
-                        duration: 0.7,
-                        speed: this.speed - (0.35 * this.speed),
-                        ease: "power2.out"
-                    })
+                    //reakcja na aprzeszkode 'oil'
+                    if (obstacles[i].type.type == "oil") {
+                        gsap.to(this, {
+                            angle: this.angle + angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1],
+                            duration: 0.5,
+                            speed: this.speed - (0.35 * this.speed),
+                            ease: "power2.out"
+                        })
+                        this.oliedMultiplier = 2.5;
+                    }
+                    //reakcja na przezszkode 'hole'
+                    else if (obstacles[i].type.type == "hole") {
+                        gsap.to(this, {
+                            angle: this.angle + (angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1]) / 2,
+                            duration: 0.4,
+                            speed: this.speed - (0.2 * this.speed),
+                            ease: "power2.out"
+                        })
+                        this.oliedMultiplier = 1.5
+                    }
+                    //reakcja na 'traffic cone'
+                    else {
+                        gsap.to(this, {
+                            duration: 0.7,
+                            speed: this.speed - (0.4 * this.speed),
+                            ease: "power2.out"
+                        })
 
-                    this.oliedMultiplier = 2.5;
+                    }
 
+                    //usuniecie 'oiledMultiplayer' nie ma juz reakcji na to
                     setTimeout(() => {
                         this.oliedMultiplier = 1
                     }, 5000)
@@ -355,14 +381,25 @@ class Player {
             }
         }
 
+        //usuwanie obiektu w momencie kolizji
         if (collisionIndex !== -1) {
+            this.deletedObstacle = obstacles[collisionIndex].type;
             obstacles.splice(collisionIndex, 1);
-            console.log(obstacles);
         }
 
         // Resetowanie flagi, gdy wyjedziemy z kolizji
         if (!currentlyColliding) {
             this.isColliding1 = false;
+        }
+    }
+
+    //metoda sprawdzajaca ilosc przeszkod
+    checkAmountOfObstacles() {
+        if (obstacles.length < stage.a.amountOfObstacles) {
+            this.allObstacles = false;
+        }
+        else {
+            this.allObstacles = true;
         }
     }
 

@@ -53,6 +53,7 @@ class Bot extends Player {
     move() {
         if (this.speed < this.maxSpeed) this.speed += this.speedValue * this.brakeValue;
     }
+
     // metoda dodaje szybkosc bota
     accelerate() {
         this.velocity.y = -(this.speed * Math.cos(this.angle) * this.speedMultiplier - this.friction) * deltaTime * 120;
@@ -75,7 +76,7 @@ class Bot extends Player {
             y: (checkpoint.position.y * global.scale.y + checkpoint.height / 2 * global.scale.y + global.translation.y + this.randomOffset.y)
         }
         let direction;
-        
+
         if (!this.shouldAttack) {
             direction = {
                 x: checkpointPosition.x - (this.position.x + this.width / 2 + global.translation.x),
@@ -86,7 +87,7 @@ class Bot extends Player {
             direction = {
                 x: player.position.x + player.width / 2 - (this.position.x + this.width / 2 + global.translation.x),
                 y: player.position.y + player.height / 4 - (this.position.y + this.height / 4 + global.translation.y)
-            } 
+            }
         }
         /////////////////////////////////////////////////////////////////do debugowania
         c.beginPath();
@@ -183,7 +184,7 @@ class Bot extends Player {
                 this.maxSpeed = 8;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
-            } 
+            }
         }
         else if (this.behavior == "agresor") {
             const rotatedRect = {
@@ -234,7 +235,7 @@ class Bot extends Player {
                 this.maxSpeed = 8;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
-            } 
+            }
             const leftDistance = Math.hypot(corners.hl.x - playerCorners.hl.x, corners.hl.y - playerCorners.hl.y);
             const rightDistance = Math.hypot(corners.hr.x - playerCorners.hr.x, corners.hr.y - playerCorners.hr.y);
 

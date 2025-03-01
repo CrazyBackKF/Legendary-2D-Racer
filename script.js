@@ -27,7 +27,8 @@ const stage = {
         collisionsTab: getCollisions(collisions.background1.parse2d()).collisions,
         checkpointsTab: getCollisions(collisions.background1.parse2d()).checkpoints,
         roadTab: getCollisions(collisions.background1.parse2d()).road,
-        checkpointOrder: [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18] //kolejnosc checkpointow dla mapy a
+        checkpointOrder: [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18], //kolejnosc checkpointow dla mapy a
+        amountOfObstacles: 12
     }
 }
 
@@ -53,6 +54,7 @@ const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
+
 // for (let i = 0; i < 4; i++) {
 //    let row = Math.floor(i / 2); // Rząd (0 lub 1)
 //    let col = i % 2;             // Kolumna (0 lub 1)
@@ -81,16 +83,29 @@ bots.push(new Bot(
     }
 ));
 
-for (let i = 0; i < 4; i++) {
+const obstaclesType = [{
+    type: "oil",
+    color: "black"
+},
+{
+    type: "traffic cone",
+    color: "orange"
+},
+{
+    type: "hole",
+    color: "gray"
+},
+];
+
+for (let i = 0; i < 12; i++) {
     const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
     obstacles.push(new Obstacle({
         position,
         width: 8 * global.scale.x,
         height: 8 * global.scale.y,
-        type: "oil"
+        type: obstaclesType[Math.floor(i / 4)]
     }))
 }
-
 
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
@@ -128,6 +143,17 @@ function animate(currentTime) {
         }
     }
     player.update(deltaTime);
+    
+    //tworzenie obiektu z ktorym byla wykonana kolizja
+    if (!player.allObstacles) {
+        const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+        obstacles.push(new Obstacle({
+            position,
+            width: 8 * global.scale.x,
+            height: 8 * global.scale.y,
+            type: player.deletedObstacle
+        }))
+    }
     for (let i = 0; i < bots.length; i++) {
         bots[i].update(deltaTime);
     }

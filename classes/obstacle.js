@@ -9,12 +9,12 @@ class Obstacle {
     update() {
         this.draw();
     }
-    
+
     draw() {
         c.save();
         c.translate(global.translation.x, global.translation.y);
         c.scale(global.scale.x, global.scale.y)
-        c.fillStyle = "brown";
+        c.fillStyle = this.type.color;
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         c.restore();
     }
