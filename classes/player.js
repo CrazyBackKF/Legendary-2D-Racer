@@ -311,7 +311,7 @@ class Player {
 
     checkObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
-
+        let collisionIndex = -1;
         for (let i = 0; i < obstacles.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
@@ -330,27 +330,34 @@ class Player {
             if (isColliding(rotatedRect, square)) {
                 currentlyColliding = true;
 
-                let angleTypeTab = [80, -80]
+                let angleTypeTab = [70, -70]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
                 if (!this.isColliding1) {
                     this.isColliding1 = true;
-                        gsap.to(this, {
-                            angle: this.angle + angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1],
-                            duration: 1,
-                            speed: this.speed - (0.35 * this.speed),
-                            ease: "power2.out"
-                        })
+                    gsap.to(this, {
+                        angle: this.angle + angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1],
+                        duration: 0.7,
+                        speed: this.speed - (0.35 * this.speed),
+                        ease: "power2.out"
+                    })
 
-                    //this.oliedMultiplier = 2.5;
+                    this.oliedMultiplier = 2.5;
 
                     setTimeout(() => {
                         this.oliedMultiplier = 1
                     }, 5000)
 
+                    collisionIndex = i;
+
                     break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
                 }
             }
+        }
+
+        if (collisionIndex !== -1) {
+            obstacles.splice(collisionIndex, 1);
+            console.log(obstacles);
         }
 
         // Resetowanie flagi, gdy wyjedziemy z kolizji

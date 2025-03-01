@@ -158,3 +158,8 @@
 - ropoczecie tworzenia przeszkod
 - stworzenie nowej klasy 'obstacles' w niej wyswietlanie obiektu a w klasie 'player' sprawdzanie kolizji
 - praca nad olejem (pierwsza wersja odzialywania na kolizje bez poslizgu)
+- dodanie pierwszej wersji menu do gry
+
+1.03.2025
+- ukonczenie zachowania oleju
+- zrobienie usuwania oleju po kolizji
