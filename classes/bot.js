@@ -7,6 +7,7 @@ class Bot extends Player {
         this.maxSpeed = 2;
         this.expectedAngle = 0;
         this.brakeValue = 1;
+        this.isColliding1 = false;
         this.speedValue = 0.03;
         this.previousCheckpoint = 0;
         this.laps = 0;
@@ -28,6 +29,7 @@ class Bot extends Player {
         this.move();
         this.accelerate();
         this.changeAngle();
+        this.checkObstacles();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
         this.checkCheckpoints();
         this.checkLaps();
@@ -248,6 +250,86 @@ class Bot extends Player {
             this.maxSpeed = 2;
             this.speedValue = 0.03;
 
+        }
+    }
+    checkObstacles() {
+        let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
+        let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
+        for (let i = 0; i < obstacles.length; i++) {
+            const rotatedRect = {
+                x: this.position.x + global.translation.x,
+                y: this.position.y + global.translation.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle,
+                isInRadians: true
+            };
+            const square = {
+                x: (obstacles[i].position.x * global.scale.x + global.translation.x),
+                y: (obstacles[i].position.y * global.scale.y + global.translation.y),
+                width: obstacles[i].width * global.scale.x,
+                height: obstacles[i].height * global.scale.y
+            };
+
+            if (isColliding(rotatedRect, square)) {
+                currentlyColliding = true;
+                console.log("kolizja");
+                let angleTypeTab = [110, -110]
+
+                // Wykrycie wejścia w kolizję po raz pierwszy
+                if (!this.isColliding1) {
+                    
+                    this.isColliding1 = true;
+                    //reakcja na aprzeszkode 'oil'
+                    if (obstacles[i].type.type == "oil") {
+                        gsap.to(this, {
+                            angle: this.angle + angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1],
+                            duration: 0.5,
+                            speed: this.speed - (0.35 * this.speed),
+                            ease: "power2.out"
+                        })
+                        this.oliedMultiplier = 2.5;
+                    }
+                    //reakcja na przezszkode 'hole'
+                    else if (obstacles[i].type.type == "hole") {
+                        gsap.to(this, {
+                            angle: this.angle + (angleTypeTab[(Math.floor(Math.random() * 2 + 1)) - 1]) / 2,
+                            duration: 0.4,
+                            speed: this.speed - (0.2 * this.speed),
+                            ease: "power2.out"
+                        })
+                        this.oliedMultiplier = 1.5
+                    }
+                    //reakcja na 'traffic cone'
+                    else {
+                        gsap.to(this, {
+                            duration: 0.7,
+                            speed: this.speed - (0.4 * this.speed),
+                            ease: "power2.out"
+                        })
+
+                    }
+
+                    //usuniecie 'oiledMultiplayer' nie ma juz reakcji na to
+                    setTimeout(() => {
+                        this.oliedMultiplier = 1
+                    }, 5000)
+
+                    collisionIndex = i;
+
+                    break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
+                }
+                
+            }
+        }
+        if (collisionIndex !== -1) {
+            this.deletedObstacle = obstacles[collisionIndex].type;
+            obstacles.splice(collisionIndex, 1);
+        }
+
+        // Resetowanie flagi, gdy wyjedziemy z kolizji
+        if (!currentlyColliding) {
+            this.isColliding1 = false;
         }
     }
 }

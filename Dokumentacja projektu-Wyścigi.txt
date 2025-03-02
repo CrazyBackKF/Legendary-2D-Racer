@@ -169,3 +169,6 @@
 - dodanie zachowan inny przeszkod
 - proba dodania ich do botow (nieudana i usunieta)
 - zformatowanie kodu
+
+2.03.2025
+- dodanie reakcji na przeskody dla botów
