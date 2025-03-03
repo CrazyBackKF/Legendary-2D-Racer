@@ -274,7 +274,7 @@ class Bot extends Player {
             if (isColliding(rotatedRect, square)) {
                 currentlyColliding = true;
                 console.log("kolizja");
-                let angleTypeTab = [110, -110]
+                let angleTypeTab = [convertToRadians(110), convertToRadians(-110)]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
                 if (!this.isColliding1) {
