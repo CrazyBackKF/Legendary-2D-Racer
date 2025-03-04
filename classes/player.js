@@ -233,57 +233,7 @@ class Player {
 
     // Metoda sprawdza kolizję między samochodzem a blokami kolizji
     checkCollisions() {
-        let currentlyColliding = false;
-        let collisionIndex = -1;
-        this.isColliding = false; // Resetuj kolizję przed sprawdzeniem
-        console.log(obstacles)
-
-        //okreslanie wartosci obiektu kolizyjnego z sciana
-        for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
-            const barrier = {
-                x: (stage[currentMap].collisionsTab[i].position.x * global.scale.x + global.translation.x),
-                y: (stage[currentMap].collisionsTab[i].position.y * global.scale.y + global.translation.y),
-                width: stage[currentMap].collisionsTab[i].width * global.scale.x,
-                height: stage[currentMap].collisionsTab[i].height * global.scale.y,
-                angle: 0
-            };
-
-            let obstacle;
-
-            for (let j = 0; j < obstacles.length; j++) {
-                obstacle = {
-                    //skalowanie pozycji zgodnie z mapa
-                    x: (obstacles[j].position.x * global.scale.x + global.translation.x),
-                    y: (obstacles[j].position.y * global.scale.y + global.translation.y),
-                    width: obstacles[j].width * global.scale.x,
-                    height: obstacles[j].height * global.scale.y,
-                    angle: 0
-                };
-
-                if (isColliding(obstacle, barrier)) {
-                    this.isColliding = true;
-
-                    console.log("wystapila kolizja z barriera")
-                    collisionIndex = j;
-
-                    break; // Wystarczy wykryć jedną kolizję
-                }
-            }
-
-            //usuwanie obiektu w momencie kolizji
-            if (collisionIndex !== -1) {
-                console.log(collisionIndex)
-                console.log(obstacles[collisionIndex])
-                console.log(obstacles.splice(collisionIndex, 1))
-                this.deletedObstacle = obstacles[collisionIndex].type;
-                obstacles.splice(collisionIndex, 1);
-            }
-        }
-
-        // Resetowanie flagi, gdy wyjedziemy z kolizji
-        if (!currentlyColliding) {
-            this.isColliding = false;
-        }
+        // funkcja pozostała, ponieważ będzie wykorzystana na kolizje z botami, i obiektami na mapie
     }
 
     //po wyjechaniu z drogi na 5 sekund, samochód wraca do ostatniego checkpointu
