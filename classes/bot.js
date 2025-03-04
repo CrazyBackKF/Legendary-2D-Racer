@@ -167,7 +167,7 @@ class Bot extends Player {
     changeStatsByBehavior() {
         // bot jedzie z tą samą szybkością
         if (this.behavior == "stabilny") {
-            this.maxSpeed = 2;
+            this.maxSpeed = 3;
             this.speedValue = 0.03;
         }
         // bot jedzie bardzo szybko na prostej i zwalnia na zakręcie
@@ -183,7 +183,7 @@ class Bot extends Player {
             else {
                 //console.log("prosta");
                 this.hasBraked = false;
-                this.maxSpeed = 8;
+                this.maxSpeed = 6;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
@@ -196,6 +196,7 @@ class Bot extends Player {
                 height: this.height,
                 angle: this.angle
             };
+
             const playerRotatedRect = {
                 x: player.position.x,
                 y: player.position.y,
@@ -203,6 +204,7 @@ class Bot extends Player {
                 height: player.height,
                 angle: player.angle
             };
+
             const corners = getPoints(rotatedRect, rotatedRect.angle, global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4), true);
             const playerCorners = getPoints(playerRotatedRect, playerRotatedRect.angle, player.position.x + player.width / 2, player.position.y + player.height / 4)
 
@@ -234,10 +236,11 @@ class Bot extends Player {
             else {
                 //console.log("prosta");
                 this.hasBraked = false;
-                this.maxSpeed = 8;
+                this.maxSpeed = 6;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
+            
             const leftDistance = Math.hypot(corners.hl.x - playerCorners.hl.x, corners.hl.y - playerCorners.hl.y);
             const rightDistance = Math.hypot(corners.hr.x - playerCorners.hr.x, corners.hr.y - playerCorners.hr.y);
 
@@ -247,16 +250,17 @@ class Bot extends Player {
             else this.shouldAttack = false;
         }
         else if (this.behavior == "taktyk") {
-            this.maxSpeed = 2;
+            this.maxSpeed = 3;
             this.speedValue = 0.03;
 
         }
     }
+
     checkObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
         let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
         for (let i = 0; i < obstacles.length; i++) {
-            const rotatedRect = {
+            const obstacle = {
                 x: this.position.x + global.translation.x,
                 y: this.position.y + global.translation.y,
                 width: this.width,
@@ -264,6 +268,7 @@ class Bot extends Player {
                 angle: this.angle,
                 isInRadians: true
             };
+
             const square = {
                 x: (obstacles[i].position.x * global.scale.x + global.translation.x),
                 y: (obstacles[i].position.y * global.scale.y + global.translation.y),
@@ -271,14 +276,13 @@ class Bot extends Player {
                 height: obstacles[i].height * global.scale.y
             };
 
-            if (isColliding(rotatedRect, square)) {
+            if (isColliding(obstacle, square)) {
                 currentlyColliding = true;
-                console.log("kolizja");
                 let angleTypeTab = [convertToRadians(110), convertToRadians(-110)]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
                 if (!this.isColliding1) {
-                    
+
                     this.isColliding1 = true;
                     //reakcja na aprzeszkode 'oil'
                     if (obstacles[i].type.type == "oil") {
@@ -319,11 +323,12 @@ class Bot extends Player {
 
                     break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
                 }
-                
+
             }
         }
+
         if (collisionIndex !== -1) {
-            this.deletedObstacle = obstacles[collisionIndex].type;
+            player.deletedObstacle = obstacles[collisionIndex].type;
             obstacles.splice(collisionIndex, 1);
         }
 

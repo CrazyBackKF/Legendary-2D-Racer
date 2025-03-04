@@ -17,10 +17,9 @@ class Player {
         this.maxSpeed = 2; //maksymalna prędkość z jaką może jechać pojazd
         this.turboAmount = 5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
-        this.isColliding = false;
-        this.lastRoadTime = 0;
-        this.isOnRoad = false;
-        this.isColliding1 = false;
+        this.isColliding = false;//bool do okreslania wystepowania kolizji
+        this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
+        this.isOnRoad = false; //bool czy gracz jest na drodze
         //this.image = new Image();
         //this.image.src = "img/sport_green.png";
         //prędkość w poziomie x i y
@@ -202,6 +201,7 @@ class Player {
             this.turboAmount += 0.004;
             if (this.turboAmount > 5) this.turboAmount = 5;
         }
+
         if (!this.key.t && this.speedMultiplier > 1) this.speedMultiplier -= 0.005; // Dzięki tej lini zmiana prędkości jest płynniejsza;
 
         if (this.key.t && this.turboAmount > 0) // Gdy wciśnięty klawisz t to prędkość zwiększa się 1.5 razy
@@ -233,35 +233,56 @@ class Player {
 
     // Metoda sprawdza kolizję między samochodzem a blokami kolizji
     checkCollisions() {
-        let wasColliding = this.isColliding; // Zapamiętaj poprzedni stan kolizji
+        let currentlyColliding = false;
+        let collisionIndex = -1;
         this.isColliding = false; // Resetuj kolizję przed sprawdzeniem
+        console.log(obstacles)
 
         //okreslanie wartosci obiektu kolizyjnego z sciana
         for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
-            const rotatedRect = {
-                x: this.position.x,
-                y: this.position.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
-            const square = {
-                //skalowanie pozycji zgodnie z mapa
+            const barrier = {
                 x: (stage[currentMap].collisionsTab[i].position.x * global.scale.x + global.translation.x),
                 y: (stage[currentMap].collisionsTab[i].position.y * global.scale.y + global.translation.y),
                 width: stage[currentMap].collisionsTab[i].width * global.scale.x,
-                height: stage[currentMap].collisionsTab[i].height * global.scale.y
+                height: stage[currentMap].collisionsTab[i].height * global.scale.y,
+                angle: 0
             };
 
-            if (isColliding(rotatedRect, square)) {
-                this.isColliding = true;
-                break; // Wystarczy wykryć jedną kolizję
+            let obstacle;
+
+            for (let j = 0; j < obstacles.length; j++) {
+                obstacle = {
+                    //skalowanie pozycji zgodnie z mapa
+                    x: (obstacles[j].position.x * global.scale.x + global.translation.x),
+                    y: (obstacles[j].position.y * global.scale.y + global.translation.y),
+                    width: obstacles[j].width * global.scale.x,
+                    height: obstacles[j].height * global.scale.y,
+                    angle: 0
+                };
+
+                if (isColliding(obstacle, barrier)) {
+                    this.isColliding = true;
+
+                    console.log("wystapila kolizja z barriera")
+                    collisionIndex = j;
+
+                    break; // Wystarczy wykryć jedną kolizję
+                }
             }
 
-            if (this.isColliding && !wasColliding) {
-                //this.reactToCollisions();
+            //usuwanie obiektu w momencie kolizji
+            if (collisionIndex !== -1) {
+                console.log(collisionIndex)
+                console.log(obstacles[collisionIndex])
+                console.log(obstacles.splice(collisionIndex, 1))
+                this.deletedObstacle = obstacles[collisionIndex].type;
+                obstacles.splice(collisionIndex, 1);
             }
+        }
 
+        // Resetowanie flagi, gdy wyjedziemy z kolizji
+        if (!currentlyColliding) {
+            this.isColliding = false;
         }
     }
 
@@ -269,14 +290,14 @@ class Player {
     checkRoad() {
         this.isOnRoad = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
-            const rotatedRect = {
+            const road = {
                 x: this.position.x,
                 y: this.position.y,
                 width: this.width,
                 height: this.height,
                 angle: this.angle
             };
-            const square = {
+            const car = {
                 //skalowanie pozycji zgodnie z mapa
                 x: (stage[currentMap].roadTab[i].position.x * global.scale.x + global.translation.x),
                 y: (stage[currentMap].roadTab[i].position.y * global.scale.y + global.translation.y),
@@ -284,7 +305,7 @@ class Player {
                 height: stage[currentMap].roadTab[i].height * global.scale.y
             };
 
-            if (isColliding(rotatedRect, square)) {
+            if (isColliding(road, car)) {
                 this.isOnRoad = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
@@ -307,6 +328,7 @@ class Player {
                 }
             }
         }
+
         if (this.lastRoadTime == 0) {
             this.lastRoadTime = Date.now();
         }
@@ -316,6 +338,8 @@ class Player {
     checkObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
         let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
+        this.isColliding = false;
+
         for (let i = 0; i < obstacles.length; i++) {
             const rotatedRect = {
                 x: this.position.x,
@@ -324,21 +348,25 @@ class Player {
                 height: this.height,
                 angle: this.angle
             };
+
             const square = {
                 x: (obstacles[i].position.x * global.scale.x + global.translation.x),
                 y: (obstacles[i].position.y * global.scale.y + global.translation.y),
                 width: obstacles[i].width * global.scale.x,
-                height: obstacles[i].height * global.scale.y
+                height: obstacles[i].height * global.scale.y,
+                angle: 0
             };
 
             if (isColliding(rotatedRect, square)) {
+                console.log("przeszkoda!")
                 currentlyColliding = true;
 
                 let angleTypeTab = [110, -110]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
-                if (!this.isColliding1) {
-                    this.isColliding1 = true;
+                if (!this.isColliding) {
+                    this.isColliding = true;
+
                     //reakcja na aprzeszkode 'oil'
                     if (obstacles[i].type.type == "oil") {
                         gsap.to(this, {
@@ -389,7 +417,7 @@ class Player {
 
         // Resetowanie flagi, gdy wyjedziemy z kolizji
         if (!currentlyColliding) {
-            this.isColliding1 = false;
+            this.isColliding = false;
         }
     }
 
@@ -398,11 +426,10 @@ class Player {
         if (obstacles.length < stage.a.amountOfObstacles) {
             this.allObstacles = false;
         }
-        else {
+        else if (obstacles.length == stage.a.amountOfObstacles) {
             this.allObstacles = true;
         }
     }
-
 
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem

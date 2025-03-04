@@ -1,7 +1,6 @@
 class Road extends collisionBlock {
-    constructor({position, width, height ,color})
-    {
-        super({position, width, height , color})
+    constructor({ position, width, height, color }) {
+        super({ position, width, height, color })
     }
 
     draw() {

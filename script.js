@@ -137,13 +137,15 @@ function animate(currentTime) {
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             stage[currentMap].roadTab[i].draw();
         }
+
         //rysowanie przeskód
         for (let i = 0; i < obstacles.length; i++) {
             obstacles[i].draw();
+            obstacles[i].update();
         }
     }
     player.update(deltaTime);
-    
+
     //tworzenie obiektu z ktorym byla wykonana kolizja
     if (!player.allObstacles) {
         const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
@@ -154,6 +156,7 @@ function animate(currentTime) {
             type: player.deletedObstacle
         }))
     }
+
     for (let i = 0; i < bots.length; i++) {
         bots[i].update(deltaTime);
     }

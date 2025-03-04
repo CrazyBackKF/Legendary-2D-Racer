@@ -63,12 +63,12 @@ function getCollisions(collisions) {
                         y: i * 8
                     },
                     width: 8,
-                    height: 8,color: 'rgba(255, 255, 255, 0.5)'
+                    height: 8, color: 'rgba(255, 255, 255, 0.5)'
                 }))
             }
         }
     }
-    return {collisions: collisionsTab, checkpoints: checkpointsTab, road: roadTab};
+    return { collisions: collisionsTab, checkpoints: checkpointsTab, road: roadTab };
 }
 
 function reorderArray(arr, order) {

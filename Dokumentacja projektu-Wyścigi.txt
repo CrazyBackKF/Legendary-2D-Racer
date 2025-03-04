@@ -172,3 +172,13 @@
 
 2.03.2025
 - dodanie reakcji na przeskody dla botów
+
+4.03.205
+- pracowanie nad menu
+- zmienie wartości 'maxSpeed' w botach na bardziej grywalny w 'bot.js'
+- zmiana nazw na bardziej optymalne, optymalizacja kodu, mniejsze zmainy w 'player.js'
+- dodanei metody sprawdzajacej czy przeszkody pojawiaja sie na sobie
+- dodanie 'obstacles.update' w 'script.js'
+- stworzenie pierwszej czesci na sprawdzanie czy przeszkoda pojawia sie na 'barrier' (jezeli gracz jedzi po 'barrier' to przeszkoda sie nie wykonuje) - funckja 'checkCollisions()'
+- proba naprawienia bledu wystepujacego w wyzej wymienionej funkcji
+- dodanie dokumentacji i komentarzy + formatowanie kodu
