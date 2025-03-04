@@ -177,6 +177,7 @@
 - pracowanie nad menu
 - zmienie wartości 'maxSpeed' w botach na bardziej grywalny w 'bot.js'
 - zmiana nazw na bardziej optymalne, optymalizacja kodu, mniejsze zmainy w 'player.js'
+- poprawka w 'collisionDetected' (usuniecie nie potrzebnych rogow i dodanie sprawdzenia kolizji dla drugiego obiektu)
 - dodanei metody sprawdzajacej czy przeszkody pojawiaja sie na sobie
 - dodanie 'obstacles.update' w 'script.js'
 - stworzenie pierwszej czesci na sprawdzanie czy przeszkoda pojawia sie na 'barrier' (jezeli gracz jedzi po 'barrier' to przeszkoda sie nie wykonuje) - funckja 'checkCollisions()'
