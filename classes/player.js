@@ -78,6 +78,7 @@ class Player {
         this.checkRoad();
         this.physics();
         this.turbo();
+        //this.checkCollisionWithBots()
     }
 
     // Metoda która dodaje prędkość pojazdu
@@ -221,7 +222,7 @@ class Player {
     // Metoda która dodaje drift po wciśnięciu spacji
     drift() {
         if (this.key.space && this.speed > 2) {
-            this.driftMultiplier = 0.7 * this.speed;
+            this.driftMultiplier = 1.1 * this.speed;
             if (this.key.w) return;
             if (this.speed > 0) this.speed -= 0.02;
             else this.speed = 0;
@@ -240,14 +241,15 @@ class Player {
     checkRoad() {
         this.isOnRoad = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
-            const road = {
+            const car = {
                 x: this.position.x,
                 y: this.position.y,
                 width: this.width,
                 height: this.height,
                 angle: this.angle
             };
-            const car = {
+
+            const road = {
                 //skalowanie pozycji zgodnie z mapa
                 x: (stage[currentMap].roadTab[i].position.x * global.scale.x + global.translation.x),
                 y: (stage[currentMap].roadTab[i].position.y * global.scale.y + global.translation.y),
@@ -260,10 +262,12 @@ class Player {
                 break; // Wystarczy wykryć jedną kolizję
             }
         }
+
         if (this.isOnRoad) {
             this.lastRoadTime = 0;
             return;
         }
+
         if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
                 const element = stage[currentMap].checkpointsTab[i];
@@ -381,6 +385,41 @@ class Player {
         }
     }
 
+    checkCollisionWithBots() {
+        this.isColliding = false;
+        let currentlyColliding = false;
+
+        for (let i = 0; i < bots.length; i++) {
+            const car = {
+                x: this.position.x,
+                y: this.position.y,
+                width: this.width,
+                height: this.height,
+                angle: this.angle
+            };
+
+            const bot = {
+                x: bots[i].position.x + global.translation.x,
+                y: bots[i].position.y + global.translation.y,
+                width: bots[i].width,
+                height: bots[i].height,
+                angle: bots[i].angle
+            };
+
+            if (isColliding(car, bot)) {
+                console.log("ala")
+                currentlyColliding = true
+                this.reactToCollisions()
+                break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
+            }
+        }
+
+        // Resetowanie flagi, gdy wyjedziemy z kolizji
+        if (!currentlyColliding) {
+            this.isColliding = false;
+        }
+    }
+
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
@@ -444,9 +483,8 @@ class Player {
     reactToCollisions() {
         this.velocity.x = 0;
         this.velocity.y = 0;
-        if (this.speed < 1.5 && this.speed > 0) this.speed = -1
-        else if (this.speed > -1.5 && this.speed <= 0) this.speed = 1
-        else this.speed *= -0.3; // Odwróć prędkość JEDEN raz przy wejściu w kolizję
+        if (this.speed < this.maxSpeed && this.speed > 0) this.speed = -2
+        else if (this.speed > -this.maxSpeed && this.speed <= 0) this.speed = 2
     }
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)
