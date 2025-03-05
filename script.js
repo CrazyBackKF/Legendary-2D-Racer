@@ -79,7 +79,8 @@ bots.push(new Bot(
             y: 315 - global.translation.y
         },
         color: "orange",
-        behavior: "stabilny"
+        behavior: "agresor",
+        index: 0
     }
 ));
 

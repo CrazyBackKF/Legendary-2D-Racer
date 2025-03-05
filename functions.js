@@ -102,6 +102,29 @@ function returnDirection(obj1, obj2) {
     if (obj1.hl.y > obj2.hr.y) return "up";
 }
 
+// isDifferent dodałem, ponieważ czasem trochę inaczej zapisuje obiekty a nie chce mi się tego zmieniać
+function getObjectsToCollisions(obj, isDifferent = false , angle = 0, isInRadians = false, scale = {x: 1, y: 1}, translation = {x: 0, y: 0}) {
+    if (!isInRadians) angle = convertToRadians(angle);
+    if (!isDifferent) {
+        return {
+            x: obj.position.x * scale.x + translation.x,
+            y: obj.position.y * scale.y + translation.y,
+            width: obj.width * scale.x,
+            height: obj.height * scale.y,
+            angle: angle
+        }
+    }
+    return {
+        position: {
+            x: obj.position.x * scale.x + translation.x,
+            y: obj.position.y * scale.y + translation.y,
+        },
+        width: obj.width * scale.x,
+        height: obj.height * scale.y,
+        angle: angle
+    }
+}
+
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {

@@ -78,7 +78,7 @@ class Player {
         this.checkRoad();
         this.physics();
         this.turbo();
-        //this.checkCollisionWithBots()
+        this.checkCollisionWithBots()
     }
 
     // Metoda która dodaje prędkość pojazdu
@@ -241,21 +241,8 @@ class Player {
     checkRoad() {
         this.isOnRoad = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
-            const car = {
-                x: this.position.x,
-                y: this.position.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
-
-            const road = {
-                //skalowanie pozycji zgodnie z mapa
-                x: (stage[currentMap].roadTab[i].position.x * global.scale.x + global.translation.x),
-                y: (stage[currentMap].roadTab[i].position.y * global.scale.y + global.translation.y),
-                width: stage[currentMap].roadTab[i].width * global.scale.x,
-                height: stage[currentMap].roadTab[i].height * global.scale.y
-            };
+            const car = getObjectsToCollisions(this, false, this.angle, false)
+            const road = getObjectsToCollisions(stage[currentMap].roadTab[i]) //skalowanie pozycji zgodnie z mapa
 
             if (isColliding(road, car)) {
                 this.isOnRoad = true;
@@ -295,21 +282,9 @@ class Player {
         this.isColliding = false;
 
         for (let i = 0; i < obstacles.length; i++) {
-            const rotatedRect = {
-                x: this.position.x,
-                y: this.position.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
+            const rotatedRect = getObjectsToCollisions(this, false, this.angle);
 
-            const square = {
-                x: (obstacles[i].position.x * global.scale.x + global.translation.x),
-                y: (obstacles[i].position.y * global.scale.y + global.translation.y),
-                width: obstacles[i].width * global.scale.x,
-                height: obstacles[i].height * global.scale.y,
-                angle: 0
-            };
+            const square = getObjectsToCollisions(obstacles[i], false,  0, false, global.scale, global.translation);
 
             if (isColliding(rotatedRect, square)) {
                 console.log("przeszkoda!")
@@ -386,30 +361,18 @@ class Player {
     }
 
     checkCollisionWithBots() {
-        this.isColliding = false;
         let currentlyColliding = false;
 
         for (let i = 0; i < bots.length; i++) {
-            const car = {
-                x: this.position.x,
-                y: this.position.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
+            const car = getObjectsToCollisions(this, true, this.angle, false)
 
-            const bot = {
-                x: bots[i].position.x + global.translation.x,
-                y: bots[i].position.y + global.translation.y,
-                width: bots[i].width,
-                height: bots[i].height,
-                angle: bots[i].angle
-            };
-
-            if (isColliding(car, bot)) {
-                console.log("ala")
-                currentlyColliding = true
-                this.reactToCollisions()
+            const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, {x: 1, y: 1}, global.translation)
+            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+                if (!this.isColliding) {
+                    //console.log("chuj")
+                    this.reactToCollisions(this.speed - bots[i].speed);
+                    currentlyColliding = true
+                }
                 break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
             }
         }
@@ -423,22 +386,10 @@ class Player {
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
-            const rotatedRect = {
-                x: this.position.x,
-                y: this.position.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
+            const rotatedRect = getObjectsToCollisions(this, false, this.angle, false)
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
-            const checkpoint = {
-                x: (stage[currentMap].checkpointsTab[i].position.x * global.scale.x + global.translation.x),
-                y: (stage[currentMap].checkpointsTab[i].position.y * global.scale.y + global.translation.y),
-                width: stage[currentMap].checkpointsTab[i].width * global.scale.x,
-                height: stage[currentMap].checkpointsTab[i].height * global.scale.y,
-                index: stage[currentMap].checkpointsTab[i].index
-            }
+            const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], false, 0, false, global.scale, global.translation);
 
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
                 //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
@@ -480,11 +431,10 @@ class Player {
     }
 
     //metoda reagujaca na kolizje
-    reactToCollisions() {
+    reactToCollisions(speed) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
         this.velocity.x = 0;
         this.velocity.y = 0;
-        if (this.speed < this.maxSpeed && this.speed > 0) this.speed = -2
-        else if (this.speed > -this.maxSpeed && this.speed <= 0) this.speed = 2
+        this.speed = speed * 0.5;
     }
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)

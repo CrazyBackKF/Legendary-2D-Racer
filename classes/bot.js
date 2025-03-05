@@ -1,5 +1,5 @@
 class Bot extends Player {
-    constructor({ position, color, behavior }) {
+    constructor({ position, color, behavior, index }) {
         super({ position, color })
         this.angle = convertToRadians(270);
         //zmienne okreslajace bota m. in. szybkosc, kat obrotu, checkpointy
@@ -19,6 +19,7 @@ class Bot extends Player {
             y: 0
         }
         this.behavior = behavior;
+        this.index = index;
     }
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
@@ -32,6 +33,8 @@ class Bot extends Player {
         this.checkObstacles();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
         this.checkCheckpoints();
+        this.checkCollisionsWithPlayer();
+        //this.checkCollisionsWithOtherBotsAndPlayer();
         this.checkLaps();
     }
 
@@ -241,10 +244,7 @@ class Bot extends Player {
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
             
-            const leftDistance = Math.hypot(corners.hl.x - playerCorners.hl.x, corners.hl.y - playerCorners.hl.y);
-            const rightDistance = Math.hypot(corners.hr.x - playerCorners.hr.x, corners.hr.y - playerCorners.hr.y);
-
-            const distance = Math.min(leftDistance, rightDistance);
+            const distance = Math.hypot(corners.mid.x - playerCorners.mid.x, corners.mid.y - playerCorners.mid.y);
 
             if (distance < 70) this.shouldAttack = true;
             else this.shouldAttack = false;
@@ -336,5 +336,82 @@ class Bot extends Player {
         if (!currentlyColliding) {
             this.isColliding1 = false;
         }
+    }
+
+    checkCollisionsWithPlayer() {
+        const car = {
+            position: {
+                x: this.position.x,
+                y: this.position.y,
+            },
+            width: this.width,
+            height: this.height,
+            angle: this.angle
+        };
+
+        const bot = {
+            position: {
+                x:player.position.x - global.translation.x,
+                y:player.position.y - global.translation.y
+            },
+            width:player.width,
+            height:player.height,
+            angle: convertToRadians(player.angle)
+        };
+        if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+            if (!this.isColliding) {
+                console.log("chuj")
+                this.reactToCollisions(this.speed - player.speed);
+                currentlyColliding = true
+            }
+        }
+    }
+
+    checkCollisionsWithOtherBotsAndPlayer() {
+        for (let i = 0; i < bots.length; i++) {
+            if (i != this.index) enemiesTab.push(bots[i]) // do tablicy wsadzamy playera i każdego bota, oprócz bota który sprawdza
+        }
+
+        let currentlyColliding = false;
+        for (let i = 0; i < enemiesTab.length; i++) {
+            const car = {
+                position: {
+                    x: this.position.x,
+                    y: this.position.y,
+                },
+                width: this.width,
+                height: this.height,
+                angle: this.angle
+            };
+
+            const bot = {
+                position: {
+                    x: enemiesTab[i].position.x - global.translation.x,
+                    y: enemiesTab[i].position.y - global.translation.y
+                },
+                width: enemiesTab[i].width,
+                height: enemiesTab[i].height,
+                angle: convertToRadians(enemiesTab[i].angle)
+            };
+            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+                if (!this.isColliding) {
+                    console.log("chuj")
+                    this.reactToCollisions(this.speed - enemiesTab[i].speed);
+                    currentlyColliding = true
+                }
+                break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
+            }
+        }
+
+        // Resetowanie flagi, gdy wyjedziemy z kolizji
+        if (!currentlyColliding) {
+            this.isColliding = false;
+        }
+    }
+
+    reactToCollisions(speed) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        this.speed = speed * 0.5;
     }
 }
