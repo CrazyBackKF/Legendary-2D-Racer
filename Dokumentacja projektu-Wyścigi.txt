@@ -184,3 +184,11 @@
 - proba naprawienia bledu wystepujacego w wyzej wymienionej funkcji
 - dodanie dokumentacji i komentarzy + formatowanie kodu
 - usunięcie zawartości 'checkCollisions()' aby naprawić błąd z przeszkodami 
+
+5.03.2025
+- praca nad kolizjami z botami
+- stworzenie 'checkCollisionsWithBots()' sprawdzajacej czy jest kolizja miedzy botem a player'em
+- proba zrobienia reakcji
+- odkrycie ze nie szczytuje pozycji poprawnie
+- zaimplementowanie algorytmu SAT(rozsne sposoby aby dzialalo)
+- usuniecie SAT, zostawienie na pozniej
