@@ -44,6 +44,10 @@ class Player {
                 y: this.position.y + this.height / 4 - 450 / 2  // Centrowanie w pionie
             }
         };
+        this.knockback = {
+            x: 0,
+            y: 0
+        }
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
         this.laps = 1; //zmienna opisujaca ilosc okrazen
         this.boxToChase = {
@@ -74,7 +78,7 @@ class Player {
         this.checkIfHitCanvas();
         this.checkCollisions();
         this.checkCheckpoints();
-        this.checkObstacles();
+        //this.checkObstacles();
         this.checkRoad();
         this.physics();
         this.turbo();
@@ -110,8 +114,8 @@ class Player {
             else this.speed -= (this.speedValue + this.friction);
         }
 
-        this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier) * deltaTime * 120;
-        this.velocity.x = this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier * deltaTime * 120;
+        this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.x) * deltaTime * 120;
+        this.velocity.x = (this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.y) * deltaTime * 120;
     }
 
     // Metoda która wyświetla pojazd
@@ -370,8 +374,8 @@ class Player {
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, {x: 1, y: 1}, global.translation)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
-                    //console.log("chuj")
-                    this.reactToCollisions(this.speed - bots[i].speed, bots[i].angle);
+                    this.isColliding = true;
+                    this.reactToCollisions(bots[i].velocity, bots[i].angle);
                     currentlyColliding = true
                 }
                 break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
@@ -381,6 +385,8 @@ class Player {
         // Resetowanie flagi, gdy wyjedziemy z kolizji
         if (!currentlyColliding) {
             this.isColliding = false;
+            this.knockback.x *= 0.95;
+            this.knockback.y *= 0.95;
         }
     }
 
@@ -432,19 +438,12 @@ class Player {
     }
 
     //metoda reagujaca na kolizje
-    reactToCollisions(speed, angle) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
-        this.speed /= 2;
-        gsap.to(this, {
-            alpha: 0,
-            yoyo: true,
-            duration: 0.5,
-            repeat: 8,
-            repeatDelay: 0.2,
-            onProgress: () => {
-                console.log(this.alpha);
-            }
-        })
+    reactToCollisions(enemyVelocity) {
+        const force = 0.5
+        this.knockback.x = (this.velocity.x - enemyVelocity.x) * force;
+        this.knockback.y = (this.velocity.y - enemyVelocity.y) * force
     }
+    
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)
     moveCamerabox() {

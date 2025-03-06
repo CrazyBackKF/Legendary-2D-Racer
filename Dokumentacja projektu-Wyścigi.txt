@@ -192,3 +192,7 @@
 - odkrycie ze nie szczytuje pozycji poprawnie
 - zaimplementowanie algorytmu SAT(rozsne sposoby aby dzialalo)
 - usuniecie SAT, zostawienie na pozniej
+- refaktoryzacja kodu, dodanie funkcji, która zwraca obrócony, skalowany i translatowany obiekt, potrzebna do sprawdzania kolizji
+
+6.03.2025
+- dodanie reakcji na kolizje między playerem, a botami i między botami

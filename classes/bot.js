@@ -20,6 +20,7 @@ class Bot extends Player {
         }
         this.behavior = behavior;
         this.index = index;
+        this.lastCheckpointTime = Date.now();
     }
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
@@ -34,8 +35,10 @@ class Bot extends Player {
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
         this.checkCheckpoints();
         this.checkCollisionsWithPlayer();
-        //this.checkCollisionsWithOtherBotsAndPlayer();
+        this.checkCollisionWithBots();
         this.checkLaps();
+        // this.deaccelerate();
+        // console.log(this.speed)
     }
 
     physics() {
@@ -62,8 +65,8 @@ class Bot extends Player {
 
     // metoda dodaje szybkosc bota
     accelerate() {
-        this.velocity.y = -(this.speed * Math.cos(this.angle) * this.speedMultiplier - this.friction) * deltaTime * 120;
-        this.velocity.x = this.speed * Math.sin(this.angle) * this.speedMultiplier - this.friction * deltaTime * 120;
+        this.velocity.y = -(this.speed * Math.cos(this.angle) * this.speedMultiplier - this.friction + this.knockback.x) * deltaTime * 120;
+        this.velocity.x = (this.speed * Math.sin(this.angle) * this.speedMultiplier - this.friction + this.knockback.y) * deltaTime * 120;
     }
 
     // metoda skręca bota, żeby kierował się na następny checkpoint
@@ -115,26 +118,16 @@ class Bot extends Player {
     //metoda zmienia na następny checkpoint, po kolizji bota z checkpointem
     checkCheckpoints() {
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
-            const rotatedRect = {
-                x: this.position.x,
-                y: this.position.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
+            const rotatedRect = getObjectsToCollisions(this, false, this.angle, true)
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
-            const checkpoint = {
-                x: (stage[currentMap].checkpointsTab[i].position.x * global.scale.x),
-                y: (stage[currentMap].checkpointsTab[i].position.y * global.scale.y),
-                width: stage[currentMap].checkpointsTab[i].width * global.scale.x,
-                height: stage[currentMap].checkpointsTab[i].height * global.scale.y,
-                index: stage[currentMap].checkpointsTab[i].index
-            }
+            const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], false, 0, false, global.scale)
+            checkpoint.index = stage[currentMap].checkpointsTab[i].index;
 
             if (isColliding(rotatedRect, checkpoint) && this.currentCheckpoint - i == 0) {
                 if (this.currentCheckpoint < stage[currentMap].checkpointsTab.length - 1) this.currentCheckpoint++;
                 else this.currentCheckpoint = 0;
+                this.lastCheckpointTime = Date.now();
                 this.randomOffset.x = 0;
                 this.randomOffset.y = 0;
                 break;
@@ -193,21 +186,9 @@ class Bot extends Player {
             }
         }
         else if (this.behavior == "agresor") {
-            const rotatedRect = {
-                x: this.position.x + global.translation.x,
-                y: this.position.y + global.translation.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
+            const rotatedRect = getObjectsToCollisions(this, false, this.angle, true, { x: 1, y: 1 }, global.translation);
 
-            const playerRotatedRect = {
-                x: player.position.x,
-                y: player.position.y,
-                width: player.width,
-                height: player.height,
-                angle: player.angle
-            };
+            const playerRotatedRect = getObjectsToCollisions(player, false, player.angle, false);
 
             const corners = getPoints(rotatedRect, rotatedRect.angle, global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4), true);
             const playerCorners = getPoints(playerRotatedRect, playerRotatedRect.angle, player.position.x + player.width / 2, player.position.y + player.height / 4)
@@ -244,7 +225,7 @@ class Bot extends Player {
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
-            
+
             const distance = Math.hypot(corners.mid.x - playerCorners.mid.x, corners.mid.y - playerCorners.mid.y);
 
             if (distance < 70) this.shouldAttack = true;
@@ -261,21 +242,9 @@ class Bot extends Player {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
         let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
         for (let i = 0; i < obstacles.length; i++) {
-            const obstacle = {
-                x: this.position.x + global.translation.x,
-                y: this.position.y + global.translation.y,
-                width: this.width,
-                height: this.height,
-                angle: this.angle,
-                isInRadians: true
-            };
+            const obstacle = getObjectsToCollisions(this, false, this.angle, true, { x: 1, y: 1 }, global.translation);
 
-            const square = {
-                x: (obstacles[i].position.x * global.scale.x + global.translation.x),
-                y: (obstacles[i].position.y * global.scale.y + global.translation.y),
-                width: obstacles[i].width * global.scale.x,
-                height: obstacles[i].height * global.scale.y
-            };
+            const square = getObjectsToCollisions(obstacles[i], false, 0, true, global.scale, global.translation);
 
             if (isColliding(obstacle, square)) {
                 currentlyColliding = true;
@@ -340,63 +309,39 @@ class Bot extends Player {
     }
 
     checkCollisionsWithPlayer() {
-        const car = {
-            position: {
-                x: this.position.x,
-                y: this.position.y,
-            },
-            width: this.width,
-            height: this.height,
-            angle: this.angle
-        };
 
-        const bot = {
-            position: {
-                x:player.position.x - global.translation.x,
-                y:player.position.y - global.translation.y
-            },
-            width:player.width,
-            height:player.height,
-            angle: convertToRadians(player.angle)
-        };
-        if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+
+        const car = getObjectsToCollisions(this, true, this.angle, true);
+
+        const enemy = getObjectsToCollisions(player, true, player.angle, false, { x: 1, y: 1 }, { x: -global.translation.x, y: -global.translation.y });
+
+        if (satCollisionWithVertices(car, enemy).colliding) { // napisz do tego kod SAT
             if (!this.isColliding) {
                 console.log("chuj")
-                this.reactToCollisions(this.speed - player.speed, convertToRadians(player.angle));
+                this.reactToCollisions(player.velocity);
             }
+        }
+        else {
+            this.knockback.x *= 0.8;
+            this.knockback.y *= 0.8;
         }
     }
 
-    checkCollisionsWithOtherBotsAndPlayer() {
+    checkCollisionWithBots() {
+        let currentlyColliding = false;
+        const enemies = [];
+
         for (let i = 0; i < bots.length; i++) {
-            if (i != this.index) enemiesTab.push(bots[i]) // do tablicy wsadzamy playera i każdego bota, oprócz bota który sprawdza
+            if (i != this.index) enemies.push(bots[i]);
         }
 
-        let currentlyColliding = false;
-        for (let i = 0; i < enemiesTab.length; i++) {
-            const car = {
-                position: {
-                    x: this.position.x,
-                    y: this.position.y,
-                },
-                width: this.width,
-                height: this.height,
-                angle: this.angle
-            };
-
-            const bot = {
-                position: {
-                    x: enemiesTab[i].position.x - global.translation.x,
-                    y: enemiesTab[i].position.y - global.translation.y
-                },
-                width: enemiesTab[i].width,
-                height: enemiesTab[i].height,
-                angle: convertToRadians(enemiesTab[i].angle)
-            };
+        for (let i = 0; i < enemies.length; i++) {
+            const car = getObjectsToCollisions(this, true, this.angle, true)
+            const bot = getObjectsToCollisions(enemies[i], true, enemies[i].angle, true)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
-                    console.log("chuj")
-                    this.reactToCollisions(this.speed - enemiesTab[i].speed);
+                    this.isColliding = true;
+                    this.reactToCollisions(enemies[i].velocity); // metoda znajduje się w klasie Player, od której klasa Bot dziedziczy
                     currentlyColliding = true
                 }
                 break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
@@ -406,13 +351,16 @@ class Bot extends Player {
         // Resetowanie flagi, gdy wyjedziemy z kolizji
         if (!currentlyColliding) {
             this.isColliding = false;
+            this.knockback.x *= 0.95;
+            this.knockback.y *= 0.95;
         }
     }
 
-    reactToCollisions(speed, angle) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
-        this.velocity.x = 0;
-        this.velocity.y = 0;
-        this.position.x += Math.cos(angle) * Math.max(speed, 1);
-        this.position.y += Math.sin(angle) * Math.max(speed, 1);
+    deaccelerate() {
+        // jeżeli przez ileś sekund nie zaliczył checkpointa, zaczyna hamować, żeby pomóc mu wjechać w checkpoint
+        if (Date.now() - this.lastCheckpointTime > 5000) {
+            if (this.speed > 0 && this.speed < 1) this.speed -= 0.1;
+            else if (this.speed < 0 && this.speed > -1) this.speed += 0.1;
+        }
     }
 }

@@ -19,6 +19,7 @@ const global = {
 }
 let frame;
 let lastFullScreen;
+let time = Date.now();
 
 //wyswietlanie mapy
 const stage = {
@@ -44,7 +45,7 @@ background.src = stage[currentMap].imgSrc;
 // Tworzenie nowej instancji klasy Player dla gracza
 const player = new Player({
     position: {
-        x: 300,
+        x: 550,
         y: 400
     },
     color: 'red'
@@ -55,18 +56,20 @@ const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
 
-// for (let i = 0; i < 4; i++) {
-//    let row = Math.floor(i / 2); // Rząd (0 lub 1)
-//    let col = i % 2;             // Kolumna (0 lub 1)
+//  for (let i = 0; i < 4; i++) {
+//     let row = Math.floor(i / 2); // Rząd (0 lub 1)
+//     let col = i % 2;             // Kolumna (0 lub 1)
 
 //    bots.push(new Bot(
 //        {
 //            position: {
-//                x: 300 + (col * 75) - global.translation.x,
-//                y: 330 + (row * 50) - global.translation.y
+//                x: 300 + (col * 150) - global.translation.x,
+//                y: 330 + (row * 75) - global.translation.y
 //            },
 //            color: botsColor[i],
-//            behavior: behavior[i]
+//            behavior: behavior[i],
+//            index: i
+
 //        }
 //    ));
 // }
@@ -145,7 +148,6 @@ function animate(currentTime) {
             obstacles[i].update();
         }
     }
-    player.update(deltaTime);
 
     //tworzenie obiektu z ktorym byla wykonana kolizja
     if (!player.allObstacles) {
@@ -158,9 +160,11 @@ function animate(currentTime) {
         }))
     }
 
+    player.update(deltaTime);
     for (let i = 0; i < bots.length; i++) {
         bots[i].update(deltaTime);
     }
+
 
     //wyswietlanie komunikatu aby wrocic na tor
     if (!player.isOnRoad) {
