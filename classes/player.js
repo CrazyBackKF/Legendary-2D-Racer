@@ -57,7 +57,7 @@ class Player {
         this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
         this.allObstacles = false;
         this.deletedObstacle = "";
-
+        this.alpha = 1;
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
@@ -122,6 +122,7 @@ class Player {
         //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
 
         c.fillStyle = this.color;
+        c.globalAlpha = this.alpha;
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
         c.restore();
 
@@ -242,7 +243,7 @@ class Player {
         this.isOnRoad = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             const car = getObjectsToCollisions(this, false, this.angle, false)
-            const road = getObjectsToCollisions(stage[currentMap].roadTab[i]) //skalowanie pozycji zgodnie z mapa
+            const road = getObjectsToCollisions(stage[currentMap].roadTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
             if (isColliding(road, car)) {
                 this.isOnRoad = true;
@@ -370,7 +371,7 @@ class Player {
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     //console.log("chuj")
-                    this.reactToCollisions(this.speed - bots[i].speed);
+                    this.reactToCollisions(this.speed - bots[i].speed, bots[i].angle);
                     currentlyColliding = true
                 }
                 break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
@@ -431,10 +432,18 @@ class Player {
     }
 
     //metoda reagujaca na kolizje
-    reactToCollisions(speed) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
-        this.velocity.x = 0;
-        this.velocity.y = 0;
-        this.speed = speed * 0.5;
+    reactToCollisions(speed, angle) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
+        this.speed /= 2;
+        gsap.to(this, {
+            alpha: 0,
+            yoyo: true,
+            duration: 0.5,
+            repeat: 8,
+            repeatDelay: 0.2,
+            onProgress: () => {
+                console.log(this.alpha);
+            }
+        })
     }
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)

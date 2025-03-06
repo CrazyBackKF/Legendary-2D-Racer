@@ -49,6 +49,7 @@ class Bot extends Player {
         c.save();
         c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);
+        c.globalAlpha = this.alpha;
         c.fillStyle = this.color
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height)
         c.restore();
@@ -361,8 +362,7 @@ class Bot extends Player {
         if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
             if (!this.isColliding) {
                 console.log("chuj")
-                this.reactToCollisions(this.speed - player.speed);
-                currentlyColliding = true
+                this.reactToCollisions(this.speed - player.speed, convertToRadians(player.angle));
             }
         }
     }
@@ -409,9 +409,10 @@ class Bot extends Player {
         }
     }
 
-    reactToCollisions(speed) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
+    reactToCollisions(speed, angle) { // (mtv - minimal translation vector, czyli o ile mam odbić samochód)
         this.velocity.x = 0;
         this.velocity.y = 0;
-        this.speed = speed * 0.5;
+        this.position.x += Math.cos(angle) * Math.max(speed, 1);
+        this.position.y += Math.sin(angle) * Math.max(speed, 1);
     }
 }
