@@ -78,7 +78,7 @@ class Player {
         this.checkIfHitCanvas();
         this.checkCollisions();
         this.checkCheckpoints();
-        //this.checkObstacles();
+        this.checkObstacles();
         this.checkRoad();
         this.physics();
         this.turbo();
@@ -374,6 +374,7 @@ class Player {
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, {x: 1, y: 1}, global.translation)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
+                    console.log("kolizja");
                     this.isColliding = true;
                     this.reactToCollisions(bots[i].velocity, bots[i].angle);
                     currentlyColliding = true
@@ -385,8 +386,8 @@ class Player {
         // Resetowanie flagi, gdy wyjedziemy z kolizji
         if (!currentlyColliding) {
             this.isColliding = false;
-            this.knockback.x *= 0.95;
-            this.knockback.y *= 0.95;
+            this.knockback.x *= 0.8;
+            this.knockback.y *= 0.8;
         }
     }
 
@@ -439,7 +440,7 @@ class Player {
 
     //metoda reagujaca na kolizje
     reactToCollisions(enemyVelocity) {
-        const force = 0.5
+        const force = 0.4
         this.knockback.x = (this.velocity.x - enemyVelocity.x) * force;
         this.knockback.y = (this.velocity.y - enemyVelocity.y) * force
     }

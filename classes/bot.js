@@ -317,7 +317,7 @@ class Bot extends Player {
 
         if (satCollisionWithVertices(car, enemy).colliding) { // napisz do tego kod SAT
             if (!this.isColliding) {
-                console.log("chuj")
+                //console.log("chuj")
                 this.reactToCollisions(player.velocity);
             }
         }
