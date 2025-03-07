@@ -148,7 +148,7 @@ function animate(currentTime) {
             obstacles[i].update();
         }
     }
-
+    player.update(deltaTime);
     //tworzenie obiektu z ktorym byla wykonana kolizja
     if (!player.allObstacles) {
         const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
@@ -160,7 +160,7 @@ function animate(currentTime) {
         }))
     }
 
-    player.update(deltaTime);
+    
     for (let i = 0; i < bots.length; i++) {
         bots[i].update(deltaTime);
     }
