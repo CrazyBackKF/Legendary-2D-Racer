@@ -196,3 +196,6 @@
 
 6.03.2025
 - dodanie reakcji na kolizje między playerem, a botami i między botami
+
+8.03.2025
+- dodanie aspektów graficznych: strzałek do wyznaczania kierunku, ilości okrążeń, czasu i samochodu gracza, który może pójść do zmiany

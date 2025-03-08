@@ -1,11 +1,12 @@
 // Tworzenie klasy Player
 
-class Player {
-    constructor({ position, color }) {
+class Player extends Sprite {
+    constructor({ position, color, imageSrc }) {
+        super({imageSrc, position});
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
-        this.width = 20;
-        this.height = 50;
+        this.width = 31;
+        this.height = 71;
         this.color = color
         this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
@@ -61,7 +62,16 @@ class Player {
         this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
         this.allObstacles = false;
         this.deletedObstacle = "";
-        this.alpha = 1;
+        this.translation = {
+            x: this.position.x + this.width / 2,
+            y: this.position.y + this.height / 4
+        }
+        this.scale = {
+            x: 1,
+            y: 1
+        }
+        this.isMovingWithTranslation = true;
+        this.startTime = Date.now();
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
@@ -71,7 +81,9 @@ class Player {
         this.moveBoxChased();
         this.moveCameraVertically();
         this.moveCameraHorizontally();
+        this.changeSpriteProperties();
         this.draw();
+        this.drawHitbox();
         this.accelerate();
         this.drift();
         this.turn();
@@ -83,6 +95,14 @@ class Player {
         this.physics();
         this.turbo();
         this.checkCollisionWithBots()
+    }
+
+    changeSpriteProperties() {
+        this.rotation = convertToRadians(this.angle);
+        this.translation = {
+            x: this.position.x + this.width / 2,
+            y: this.position.y + this.height / 4
+        }
     }
 
     // Metoda która dodaje prędkość pojazdu
@@ -119,20 +139,18 @@ class Player {
     }
 
     // Metoda która wyświetla pojazd
-    draw() {
-        c.save();
-        c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
-        c.rotate(convertToRadians(this.angle));
-        //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
-
-        c.fillStyle = this.color;
-        c.globalAlpha = this.alpha;
-        c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
-        c.restore();
-
+    drawHitbox() {
         if (key.q) {
             c.fillStyle = "rgba(0, 255, 0, 0.2)"
             c.fillRect(this.camerabox.position.x, this.camerabox.position.y, this.camerabox.width, this.camerabox.height);
+            c.save();
+            c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
+            c.rotate(convertToRadians(this.angle));
+            //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
+    
+            c.fillStyle = "rgba(255, 0, 0, 0.5)";
+            c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
+            c.restore();
             // c.save()
             // c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
             // c.rotate(convertToRadians(this.angle));
@@ -259,7 +277,6 @@ class Player {
             this.lastRoadTime = 0;
             return;
         }
-
         if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
                 const element = stage[currentMap].checkpointsTab[i];

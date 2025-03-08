@@ -25,7 +25,7 @@ class Bot extends Player {
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
-        this.draw();
+        this.drawHitbox();
         this.turn();
         this.changeStatsByBehavior();
         this.move();
@@ -48,7 +48,7 @@ class Bot extends Player {
     }
 
     //metoda rysuje bota
-    draw() {
+    drawHitbox() {
         c.save();
         c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);

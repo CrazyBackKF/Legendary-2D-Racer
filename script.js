@@ -24,18 +24,21 @@ let time = Date.now();
 //wyswietlanie mapy
 const stage = {
     a: {
+        arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
         imgSrc: "img/tlo1.png",
-        collisionsTab: getCollisions(collisions.background1.parse2d()).collisions,
+        collisionsTab: getCollisions(collisions.background1.parse2d(), this.arrowRotations).collisions,
         checkpointsTab: getCollisions(collisions.background1.parse2d()).checkpoints,
         roadTab: getCollisions(collisions.background1.parse2d()).road,
         checkpointOrder: [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18], //kolejnosc checkpointow dla mapy a
         amountOfObstacles: 12
+
     }
 }
 
 stage[currentMap].checkpointsTab = reorderArray(stage[currentMap].checkpointsTab, stage[currentMap].checkpointOrder);
 for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
     stage[currentMap].checkpointsTab[i].index = i;
+    stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
 }
 
 //ustawienie mapy jako tlo
@@ -48,13 +51,14 @@ const player = new Player({
         x: 550,
         y: 400
     },
-    color: 'red'
+    color: 'red',
+    imageSrc: "assets/img/player1.png"
 })
 
 const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
-const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk']
+const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk'];
 
 //  for (let i = 0; i < 4; i++) {
 //     let row = Math.floor(i / 2); // Rząd (0 lub 1)
@@ -119,7 +123,6 @@ function animate(currentTime) {
     //}
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
-
     if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
     c.clearRect(0, 0, canvas.width, canvas.height)
     c.save();
@@ -160,11 +163,14 @@ function animate(currentTime) {
         }))
     }
 
-    
+
     for (let i = 0; i < bots.length; i++) {
         bots[i].update(deltaTime);
     }
 
+    for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
+        if (i == player.lastCheckpoint + 1) stage[currentMap].checkpointsTab[i].drawArrow();
+    }
 
     //wyswietlanie komunikatu aby wrocic na tor
     if (!player.isOnRoad) {
@@ -178,5 +184,19 @@ function animate(currentTime) {
         c.textBaseline = "middle"
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
+
+    c.fillStyle = "rgba(0, 0, 0, 0.7)";
+    c.fillRect(0, 10, 150, 100);
+    
+    
+    c.fillStyle = "white";
+    c.font = '30px "Press Start 2P"';
+    c.textAlign = "center";
+    c.textBaseline = "middle"
+    c.fillText(`${player.laps}/3`, 50, 50);
+    const minutes = parseInt((Date.now() - player.startTime) / 60000);
+    const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
+    c.font = '20px "Press Start 2P"';
+    c.fillText(`${minutes}:${seconds}`, 80, 80)
 }
 animate();
