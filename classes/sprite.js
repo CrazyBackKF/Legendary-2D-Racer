@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({position, imageSrc, scale = {x: 1, y: 1}, rotation = 0, translation = {x: 0, y: 0}, maxFrames = 1, frameBuffer = 0, isMovingWithTranslation = false,}) {
+    constructor({position, imageSrc, scale = {x: 1, y: 1}, rotation = 0, translation = {x: 0, y: 0}, maxFrames = 1, frameBuffer = 0, isMovingWithTranslation = true,}) {
         this.position = position;
         this.image = new Image();
         this.image.src = imageSrc;
@@ -23,8 +23,8 @@ class Sprite {
     draw() {
         if (this.isMovingWithTranslation) {
             this.newPosition = {
-                x: this.position.x - this.translation.x,
-                y: this.position.y - this.translation.y
+                x: this.position.x - this.translation.x / this.scale.x,
+                y: this.position.y - this.translation.y / this.scale.y
             }
         }
         else {

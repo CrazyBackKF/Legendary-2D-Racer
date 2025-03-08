@@ -200,3 +200,4 @@
 8.03.2025
 - dodanie aspektów graficznych: strzałek do wyznaczania kierunku, ilości okrążeń, czasu i samochodu gracza, który może pójść do zmiany
 - dodanie wskaźnika turbo
+- dodanie prędkościomierza
