@@ -197,6 +197,11 @@ function animate(currentTime) {
     const minutes = parseInt((Date.now() - player.startTime) / 60000);
     const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
     c.font = '20px "Press Start 2P"';
-    c.fillText(`${minutes}:${seconds}`, 80, 80)
+    c.fillText(`${minutes}:${seconds}`, 80, 80);
+
+    c.fillStyle = "black";
+    c.fillRect(10, 500, 300, 50);
+    c.fillStyle = "blue";
+    c.fillRect(15, 505, 290 * (player.turboAmount / 2), 40)
 }
 animate();

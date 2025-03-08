@@ -16,7 +16,7 @@ class Player extends Sprite {
         this.speedValue = 0.03;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 2; //maksymalna prędkość z jaką może jechać pojazd
-        this.turboAmount = 5; //maksymalna ilość turbo
+        this.turboAmount = 2; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;//bool do okreslania wystepowania kolizji
         this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
@@ -220,7 +220,7 @@ class Player extends Sprite {
 
     // Metoda która dodaje turbo gdy wciśnie się t
     turbo() {
-        if (Date.now() - this.lastTurbo >= 500 && this.turboAmount < 5) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
+        if (Date.now() - this.lastTurbo >= 500 && this.turboAmount < 2) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
         {
             this.turboAmount += 0.004;
             if (this.turboAmount > 5) this.turboAmount = 5;
