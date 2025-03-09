@@ -21,6 +21,8 @@ class Bot extends Player {
         this.behavior = behavior;
         this.index = index;
         this.lastCheckpointTime = Date.now();
+        this.distance = 0;
+        this.distanceFromLastCheckpoint = 0;
     }
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
@@ -31,12 +33,13 @@ class Bot extends Player {
         this.move();
         this.accelerate();
         this.changeAngle();
-        this.checkObstacles();
+        //this.checkObstacles();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
         this.checkCheckpoints();
         this.checkCollisionsWithPlayer();
         this.checkCollisionWithBots();
         this.checkLaps();
+        this.updateDistance();
         // this.deaccelerate();
         // console.log(this.speed)
     }
@@ -99,17 +102,17 @@ class Bot extends Player {
             }
         }
         /////////////////////////////////////////////////////////////////do debugowania
-        c.beginPath();
-        c.fillStyle = "black";
-        c.arc(checkpointPosition.x, checkpointPosition.y, 5, 0, 2 * Math.PI);
-        c.closePath();
-        c.fill();
-        c.beginPath();
+        // c.beginPath();
+        // c.fillStyle = "black";
+        // c.arc(checkpointPosition.x, checkpointPosition.y, 5, 0, 2 * Math.PI);
+        // c.closePath();
+        // c.fill();
+        // c.beginPath();
 
-        c.strokeStyle = "black";
-        c.moveTo(this.position.x + this.width / 2 + global.translation.x, this.position.y + this.height / 4 + global.translation.y);
-        c.lineTo(checkpointPosition.x, checkpointPosition.y);
-        c.stroke();
+        // c.strokeStyle = "black";
+        // c.moveTo(this.position.x + this.width / 2 + global.translation.x, this.position.y + this.height / 4 + global.translation.y);
+        // c.lineTo(checkpointPosition.x, checkpointPosition.y);
+        // c.stroke();
         //////////////////////////////////////////////////////////////
 
         this.expectedAngle = Math.atan2(direction.y, direction.x) + Math.PI / 2; //obliczanie kąta między botem o checkpointem za pomocą funkcji cyklometrzycnzej arcus tangens
@@ -130,6 +133,7 @@ class Bot extends Player {
                 this.lastCheckpointTime = Date.now();
                 this.randomOffset.x = 0;
                 this.randomOffset.y = 0;
+                this.distance += this.distanceFromLastCheckpoint;
                 break;
             }
         }
@@ -142,7 +146,7 @@ class Bot extends Player {
         angleDifference = Math.atan2(Math.sin(angleDifference), Math.cos(angleDifference));
 
         // Ograniczamy maksymalną prędkość skrętu
-        const turnSpeed = 0.025; // Możesz dostosować wartość
+        const turnSpeed = 0.05; // Możesz dostosować wartość
 
         if (Math.abs(angleDifference) < turnSpeed) {
             this.angle = this.expectedAngle; // Drobna korekta, jeśli jest już prawie wyrównane
@@ -164,8 +168,8 @@ class Bot extends Player {
     changeStatsByBehavior() {
         // bot jedzie z tą samą szybkością
         if (this.behavior == "stabilny") {
-            this.maxSpeed = 3;
-            this.speedValue = 0.03;
+            this.maxSpeed = 2;
+            this.speedValue = 0.01;
         }
         // bot jedzie bardzo szybko na prostej i zwalnia na zakręcie
         else if (this.behavior == "sprinter") {
@@ -362,5 +366,22 @@ class Bot extends Player {
             if (this.speed > 0 && this.speed < 1) this.speed -= 0.1;
             else if (this.speed < 0 && this.speed > -1) this.speed += 0.1;
         }
+    }
+
+    updateDistance() {
+        if (this.previousCheckpoint == 0) return;
+        const checkpoint = stage[currentMap].checkpointsTab[this.previousCheckpoint - 1];
+        const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
+        const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
+        const botX = this.position.x + this.width / 2 + global.translation.x;
+        const botY = this.position.y + this.height / 4 + global.translation.y;
+        this.distanceFromLastCheckpoint = Math.hypot(checkpointX - botX, checkpointY - botY);
+        ////////////////////////////// do debugowania
+        // c.strokeStyle = "black";
+        // c.beginPath();
+        // c.moveTo(botX, botY); 
+        // c.lineTo(checkpointX, checkpointY);
+        // c.stroke();
+        // console.log(this.distance);
     }
 }

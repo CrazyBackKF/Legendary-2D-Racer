@@ -86,7 +86,7 @@ bots.push(new Bot(
             y: 315 - global.translation.y
         },
         color: "orange",
-        behavior: "agresor",
+        behavior: "stabilny",
         index: 0
     }
 ));
@@ -127,7 +127,7 @@ const speedometer = new Sprite({
     }
 })
 
-const pointer = new Sprite({     // Po angielsku to chyba pointer xd
+const pointer = new Sprite({     // Po angielsku to chyba pointer xd (chodzi o wskazówke do prędkościomierza)
     position: {
         x: 1690,
         y: 725
@@ -143,6 +143,10 @@ const pointer = new Sprite({     // Po angielsku to chyba pointer xd
     },
     isMovingWithTranslation: true
 })
+
+const allCars = [player, ...bots];
+
+const offset = 3; // offset do tworzenia cieni
 
 let rotation = 0;
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
@@ -216,17 +220,24 @@ function animate(currentTime) {
     }
 
     // Timer i liczba okrążeń
-    c.fillStyle = "rgba(0, 0, 0, 0.7)";
-    c.fillRect(0, 10, 150, 100);
-    c.fillStyle = "white";
+    // c.fillStyle = "rgba(0, 0, 0, 0.7)";
+    // c.fillRect(0, 10, 150, 100);
+    const minutes = parseInt((Date.now() - player.startTime) / 60000);
+    const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
     c.font = '30px "Press Start 2P"';
     c.textAlign = "center";
     c.textBaseline = "middle"
-    c.fillText(`${player.laps}/3`, 50, 50);
-    const minutes = parseInt((Date.now() - player.startTime) / 60000);
-    const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
+    c.fillStyle = "black";
+    c.fillText(`${player.laps}/3`, 60 + offset, 70 + offset);
     c.font = '20px "Press Start 2P"';
-    c.fillText(`${minutes}:${seconds}`, 80, 80);
+    c.fillText(`${minutes}:${seconds}`, 75 + offset, 100 + offset);
+    c.fillText("LAPS", 50 + offset, 40 + offset);
+    c.fillStyle = "white";
+    c.font = '30px "Press Start 2P"';
+    c.fillText(`${player.laps}/3`, 60, 70);
+    c.font = '20px "Press Start 2P"';
+    c.fillText(`${minutes}:${seconds}`, 75, 100);
+    c.fillText("LAPS", 50, 40);
 
     // Wskaźnik turbo
     c.fillStyle = "black";
@@ -243,5 +254,25 @@ function animate(currentTime) {
     else if (rotation > 0) rotation -= 0.025
     pointer.draw();
     c.restore();
+    
+    // Sortowanie tablicy po dystansie każdego z samochodu, żeby przypisać im ich miejsca
+    allCars.sort((a, b) => (b.distance + b.distanceFromLastCheckpoint) - (a.distance + a.distanceFromLastCheckpoint));
+    allCars.forEach((car, i) => car.place = i + 1);
+
+    // Wypisywanie pozycji gracza
+    // c.fillStyle = "rgba(0, 0, 0, 0.7)";
+    // c.fillRect(canvas.width - 150, 10, 150, 100)
+    c.fillStyle = "black";
+    c.font = '30px "Press Start 2P"';
+    c.fillText(`${player.place}/${allCars.length}`, canvas.width - 80 + offset, 80 + offset);
+    c.font = '20px "Press Start 2P"';
+    c.fillText("POS", canvas.width - 100 + offset, 40 + offset);
+    c.fillStyle = "white"
+    c.font = '30px "Press Start 2P"';
+    c.textAlign = "center";
+    c.textBaseline = "middle"
+    c.fillText(`${player.place}/${allCars.length}`, canvas.width - 80, 80);
+    c.font = '20px "Press Start 2P"';
+    c.fillText("POS", canvas.width - 100, 40);
 }
 animate();

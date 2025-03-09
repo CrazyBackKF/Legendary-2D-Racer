@@ -72,6 +72,9 @@ class Player extends Sprite {
         }
         this.isMovingWithTranslation = true;
         this.startTime = Date.now();
+        this.distance = 0;
+        this.distanceFromLastCheckpoint = 0;
+        this.place = 0;
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
@@ -90,11 +93,12 @@ class Player extends Sprite {
         this.checkIfHitCanvas();
         this.checkCollisions();
         this.checkCheckpoints();
-        this.checkObstacles();
+        //this.checkObstacles();
         this.checkRoad();
         this.physics();
         this.turbo();
-        this.checkCollisionWithBots()
+        this.checkCollisionWithBots();
+        this.updateDistance();
     }
 
     changeSpriteProperties() {
@@ -446,6 +450,7 @@ class Player extends Sprite {
                 stage[currentMap].checkpointsTab[i].isPassed = true;
                 //zmieniamy lastCheckpoint poniewaz przekraczamy nowy
                 this.lastCheckpoint = i
+                this.distance += this.distanceFromLastCheckpoint;
                 //sprawdzanie czy zaliczylismy ostatni checkpoint 
                 if (this.lastCheckpoint == stage[currentMap].checkpointsTab.length - 1) {
                     this.lastCheckpoint = -1
@@ -497,6 +502,23 @@ class Player extends Sprite {
             global.translation.x -= this.velocity.x;
             this.position.x -= this.velocity.x;
         }
+    }
+
+    updateDistance() {
+        if (this.lastCheckpoint == -1) return;
+        const checkpoint = stage[currentMap].checkpointsTab[this.lastCheckpoint];
+        const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
+        const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
+        const playerX = this.position.x + this.width / 2;
+        const playerY = this.position.y + this.height / 4;
+        this.distanceFromLastCheckpoint = Math.hypot(checkpointX - playerX, checkpointY - playerY);
+        ////////////////////////////////////////// do debugowania
+        // c.strokeStyle = "black";
+        // c.beginPath();
+        // c.moveTo(this.position.x + this.width / 2, this.position.y + this.height / 4); 
+        // c.lineTo((checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x, (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y);
+        // c.stroke();
+        //////////////////////////////////////////
     }
 
 }
