@@ -23,11 +23,13 @@ class Bot extends Player {
         this.lastCheckpointTime = Date.now();
         this.distance = 0;
         this.distanceFromLastCheckpoint = 0;
+        this.botPlaying = true;
     }
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
         this.drawHitbox();
+        if(!this.botPlaying) return;
         this.turn();
         this.changeStatsByBehavior();
         this.move();
@@ -158,8 +160,9 @@ class Bot extends Player {
     // sprawdzamy ilosc okrazen
     checkLaps() {
         if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) this.laps++;
-        if (this.laps == 3) {
-            console.log("Bot wygrał")
+        if (this.laps == 1) {
+            console.log("Bot wygrał");
+            this.botPlaying = false;
         }
         this.previousCheckpoint = this.currentCheckpoint;
     }

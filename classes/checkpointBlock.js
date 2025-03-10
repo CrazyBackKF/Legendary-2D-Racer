@@ -6,7 +6,8 @@ class CheckpointBlock extends collisionBlock {
         this.index = index //index chekpointa
         this.angle = 0;
         this.image = new Image();
-        this.image.src = "assets/img/arrow/File1.png";
+        this.imageSrc = "File1.png"
+        this.image.src = "assets/img/arrow/" + this.imageSrc;
         this.allFrames = 0;
         this.frameBuffer = 2;
         this.frameCounter = 1;
@@ -27,11 +28,13 @@ class CheckpointBlock extends collisionBlock {
         c.fillText(this.index, this.position.x, this.position.y)
         c.restore();
     }
+    
     animate() {
         if (this.allFrames % this.frameBuffer == 0) {
             this.frameCounter++;
             this.lastFrame++;
-            this.image.src = this.image.src.replace(this.lastFrame, this.frameCounter);
+            this.imageSrc = this.imageSrc.replace(this.lastFrame, this.frameCounter);
+            this.image.src = "assets/img/arrow/" + this.imageSrc;
             if (this.frameCounter == this.maxFrames) {
                 this.frameCounter = 1;
             }

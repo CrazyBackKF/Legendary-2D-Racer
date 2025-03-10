@@ -50,7 +50,7 @@ class Player extends Sprite {
             y: 0
         }
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
-        this.laps = 1; //zmienna opisujaca ilosc okrazen
+        this.laps = 0; //zmienna opisujaca ilosc okrazen
         this.boxToChase = {
             position: {
                 x: this.position.x,
@@ -75,18 +75,20 @@ class Player extends Sprite {
         this.distance = 0;
         this.distanceFromLastCheckpoint = 0;
         this.place = 0;
+        this.isPlaying = true;
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
     update() {
+        this.changeSpriteProperties();
+        this.draw();
+        this.drawHitbox();
+        if (!this.isPlaying) return;
         this.checkAmountOfObstacles();
         this.moveCamerabox();
         this.moveBoxChased();
         this.moveCameraVertically();
         this.moveCameraHorizontally();
-        this.changeSpriteProperties();
-        this.draw();
-        this.drawHitbox();
         this.accelerate();
         this.drift();
         this.turn();
@@ -431,9 +433,10 @@ class Player extends Sprite {
                     for (let j = 0; j < stage[currentMap].checkpointsTab.length; j++) {
                         //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
                         if (!stage[currentMap].checkpointsTab[j].isPassed) break;
-                        else if (this.laps == 3) //jezli sa 3 okrazenia to koniec
+                        else if (this.laps == 1) //jezli sa 3 okrazenia to koniec
                         {
                             console.log('wygrales')
+                            this.isPlaying = false;
                             break;
                         }
                         else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
