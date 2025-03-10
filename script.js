@@ -1,6 +1,7 @@
 //Pobieranie elementu canvas z pliku index.html i tworzenie kontekstu
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
+// znajduje się w "drawFunctions.js", ponieważ tamtejszy addEventListener potrzebował dostępu do canvas
+// const canvas = document.querySelector("canvas");
+// const c = canvas.getContext("2d");
 const key = {
     q: false
 }
@@ -25,7 +26,7 @@ let time = Date.now();
 const stage = {
     a: {
         arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
-        imgSrc: "img/tlo1.png",
+        imgSrc: "assets/img/tlo1.png",
         collisionsTab: getCollisions(collisions.background1.parse2d(), this.arrowRotations).collisions,
         checkpointsTab: getCollisions(collisions.background1.parse2d()).checkpoints,
         roadTab: getCollisions(collisions.background1.parse2d()).road,
@@ -59,37 +60,40 @@ const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk'];
+const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer']
 
-//  for (let i = 0; i < 4; i++) {
-//     let row = Math.floor(i / 2); // Rząd (0 lub 1)
-//     let col = i % 2;             // Kolumna (0 lub 1)
+ for (let i = 0; i < 4; i++) {
+    let row = Math.floor(i / 2); // Rząd (0 lub 1)
+    let col = i % 2;             // Kolumna (0 lub 1)
 
-//    bots.push(new Bot(
-//        {
-//            position: {
-//                x: 300 + (col * 150) - global.translation.x,
-//                y: 330 + (row * 75) - global.translation.y
-//            },
-//            color: botsColor[i],
-//            behavior: behavior[i],
-//            index: i
+   bots.push(new Bot(
+       {
+           position: {
+               x: 300 + (col * 150) - global.translation.x,
+               y: 330 + (row * 75) - global.translation.y
+           },
+           color: botsColor[i],
+           behavior: behavior[i],
+           index: i,
+           name: names[i]
 
-//        }
-//    ));
-// }
+       }
+   ));
+}
 
 // bot do debugowania
-bots.push(new Bot(
-    {
-        position: {
-            x: 300 - global.translation.x,
-            y: 315 - global.translation.y
-        },
-        color: "orange",
-        behavior: "stabilny",
-        index: 0
-    }
-));
+// bots.push(new Bot(
+//     {
+//         position: {
+//             x: 300 - global.translation.x,
+//             y: 315 - global.translation.y
+//         },
+//         color: "orange",
+//         behavior: "stabilny",
+//         index: 0,
+//         name: names[i]
+//     }
+// ));
 
 const obstaclesType = [{
     type: "oil",
@@ -115,34 +119,7 @@ for (let i = 0; i < 12; i++) {
     }))
 }
 
-const speedometer = new Sprite({
-    position: {
-        x: 1500,
-        y: 550
-    },
-    imageSrc: "assets/img/speedometer/speedometer.png",
-    scale: {
-        x: 0.5,
-        y: 0.5
-    }
-})
 
-const pointer = new Sprite({     // Po angielsku to chyba pointer xd (chodzi o wskazówke do prędkościomierza)
-    position: {
-        x: 1690,
-        y: 725
-    },
-    imageSrc: "assets/img/speedometer/wskaznik.png",
-    scale: {
-        x: 0.5,
-        y: 0.5
-    },
-    translation: {
-        x: 857.5,
-        y: 375
-    },
-    isMovingWithTranslation: true
-})
 
 const allCars = [player, ...bots];
 
@@ -219,60 +196,7 @@ function animate(currentTime) {
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
 
-    // Timer i liczba okrążeń
-    // c.fillStyle = "rgba(0, 0, 0, 0.7)";
-    // c.fillRect(0, 10, 150, 100);
-    const minutes = parseInt((Date.now() - player.startTime) / 60000);
-    const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
-    c.font = '30px "Press Start 2P"';
-    c.textAlign = "center";
-    c.textBaseline = "middle"
-    c.fillStyle = "black";
-    c.fillText(`${player.laps}/3`, 60 + offset, 70 + offset);
-    c.font = '20px "Press Start 2P"';
-    c.fillText(`${minutes}:${seconds}`, 75 + offset, 100 + offset);
-    c.fillText("LAPS", 50 + offset, 40 + offset);
-    c.fillStyle = "white";
-    c.font = '30px "Press Start 2P"';
-    c.fillText(`${player.laps}/3`, 60, 70);
-    c.font = '20px "Press Start 2P"';
-    c.fillText(`${minutes}:${seconds}`, 75, 100);
-    c.fillText("LAPS", 50, 40);
-
-    // Wskaźnik turbo
-    c.fillStyle = "black";
-    c.fillRect(714, 515, 300, 25);
-    c.fillStyle = "blue";
-    c.fillRect(719 + 290 * ((2 - player.turboAmount) / 2), 520, 290 - (290 * ((2 - player.turboAmount) / 2)), 15);
-
-    // Prędkościomierz
-    c.save();
-    c.globalAlpha = 0.7;
-    speedometer.draw();
-    pointer.rotation = (1.2 * Math.PI * Math.abs(player.speed) / player.maxSpeed) + rotation;
-    if (Math.abs(player.maxSpeed - player.speed) < 0.1 && pointer.rotation <= 1.5 * Math.PI) rotation += 0.005;
-    else if (rotation > 0) rotation -= 0.025
-    pointer.draw();
-    c.restore();
-    
-    // Sortowanie tablicy po dystansie każdego z samochodu, żeby przypisać im ich miejsca
-    allCars.sort((a, b) => (b.distance + b.distanceFromLastCheckpoint) - (a.distance + a.distanceFromLastCheckpoint));
-    allCars.forEach((car, i) => car.place = i + 1);
-
-    // Wypisywanie pozycji gracza
-    // c.fillStyle = "rgba(0, 0, 0, 0.7)";
-    // c.fillRect(canvas.width - 150, 10, 150, 100)
-    c.fillStyle = "black";
-    c.font = '30px "Press Start 2P"';
-    c.fillText(`${player.place}/${allCars.length}`, canvas.width - 80 + offset, 80 + offset);
-    c.font = '20px "Press Start 2P"';
-    c.fillText("POS", canvas.width - 100 + offset, 40 + offset);
-    c.fillStyle = "white"
-    c.font = '30px "Press Start 2P"';
-    c.textAlign = "center";
-    c.textBaseline = "middle"
-    c.fillText(`${player.place}/${allCars.length}`, canvas.width - 80, 80);
-    c.font = '20px "Press Start 2P"';
-    c.fillText("POS", canvas.width - 100, 40);
+    if (player.isPlaying) UI();
+    else endOfMatch();
 }
 animate();

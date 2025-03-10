@@ -1,7 +1,7 @@
 // Tworzenie klasy Player
 
 class Player extends Sprite {
-    constructor({ position, color, imageSrc }) {
+    constructor({ position, color, imageSrc}) {
         super({imageSrc, position});
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
@@ -76,6 +76,9 @@ class Player extends Sprite {
         this.distanceFromLastCheckpoint = 0;
         this.place = 0;
         this.isPlaying = true;
+        this.alpha = 1;
+        this.name = "Player";
+        this.correctPlace;
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
@@ -425,17 +428,24 @@ class Player extends Sprite {
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
                 //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
                 stage[currentMap].checkpointsTab[i].angle = this.angle;
-
+                
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
                 if (i == 0) {
                     for (let j = 0; j < stage[currentMap].checkpointsTab.length; j++) {
                         //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
-                        if (!stage[currentMap].checkpointsTab[j].isPassed) break;
-                        else if (this.laps == 1) //jezli sa 3 okrazenia to koniec
+                        // odkomentować
+                        //if (!stage[currentMap].checkpointsTab[j].isPassed) break;
+                        if (this.laps == 3) //jezli sa 3 okrazenia to koniec
                         {
-                            console.log('wygrales')
+                            gsap.to(this, {
+                                alpha: 0,
+                                repeat: 4,
+                                yoyo: true,
+                                duration: 0.2
+                            })
+                            this.correctPlace = this.place;
                             this.isPlaying = false;
                             break;
                         }
@@ -465,7 +475,7 @@ class Player extends Sprite {
 
     //metoda reagujaca na kolizje
     reactToCollisions(enemyVelocity) {
-        const force = 0.4
+        const force = 1
         this.knockback.x = (this.velocity.x - enemyVelocity.x) * force;
         this.knockback.y = (this.velocity.y - enemyVelocity.y) * force
     }

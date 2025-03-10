@@ -125,6 +125,24 @@ function getObjectsToCollisions(obj, isDifferent = false , angle = 0, isInRadian
     }
 }
 
+function isCollidingButtons(mouse, button) {
+    const scaledWidth = button.width * button.scale.x;
+    const scaledHeight = button.height * button.scale.y;
+
+    const offsetX = (scaledWidth - button.width) / 2;
+    const offsetY = (scaledHeight - button.height) / 2;
+
+    const scaledX = button.position.x - offsetX;
+    const scaledY = button.position.y - offsetY;
+
+    return (
+        mouse.x > scaledX &&
+        mouse.x < scaledX + scaledWidth &&
+        mouse.y > scaledY &&
+        mouse.y < scaledY + scaledHeight
+    );
+}
+
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {

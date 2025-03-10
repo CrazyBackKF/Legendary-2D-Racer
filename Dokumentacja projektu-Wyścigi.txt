@@ -206,5 +206,7 @@
 - dodanie pozycji na wyscigu
 
 10.03.2025
--naprawa bledu z animacja strzałki 
+- naprawa bledu z animacja strzałki 
 - zatrzymanie gry po 3 okrazeniach gracza 
+- dodanie End Screena
+- refaktoryzacja kodu

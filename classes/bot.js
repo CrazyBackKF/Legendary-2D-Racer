@@ -1,5 +1,5 @@
 class Bot extends Player {
-    constructor({ position, color, behavior, index }) {
+    constructor({ position, color, behavior, index, name }) {
         super({ position, color })
         this.angle = convertToRadians(270);
         //zmienne okreslajace bota m. in. szybkosc, kat obrotu, checkpointy
@@ -24,6 +24,8 @@ class Bot extends Player {
         this.distance = 0;
         this.distanceFromLastCheckpoint = 0;
         this.botPlaying = true;
+        this.name = name;
+        this.correctPlace;
     }
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
@@ -160,8 +162,9 @@ class Bot extends Player {
     // sprawdzamy ilosc okrazen
     checkLaps() {
         if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) this.laps++;
-        if (this.laps == 1) {
+        if (this.laps == 3) {
             console.log("Bot wygrał");
+            this.correctPlace = this.place;
             this.botPlaying = false;
         }
         this.previousCheckpoint = this.currentCheckpoint;
