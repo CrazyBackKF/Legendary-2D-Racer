@@ -40,7 +40,15 @@ function UI() {
 
     // Sortowanie tablicy po dystansie każdego z samochodu, żeby przypisać im ich miejsca
     allCars.sort((a, b) => (b.distance + b.distanceFromLastCheckpoint) - (a.distance + a.distanceFromLastCheckpoint));
-    allCars.forEach((car, i) => car.place = i + 1);
+    allCars.forEach((car, i) => {
+        car.place = i + 1
+        c.font = "20px Arial";
+        c.fillStyle = "black";
+        c.save();
+        if (car.name != "Player") c.translate(global.translation.x, global.translation.y);
+        c.fillText(parseInt(car.distance + car.distanceFromLastCheckpoint), car.position.x, car.position.y);
+        c.restore();
+    });
 
     // Wypisywanie pozycji gracza
     // c.fillStyle = "rgba(0, 0, 0, 0.7)";
@@ -65,9 +73,9 @@ function endOfMatch() {
     endScreen.draw();
     c.font = '40px "Press Start 2P"';
     c.fillStyle = "black";
-    c.fillText(`POS ${player.currentPlace}`, canvas.width / 2 + offset, 140 + offset);
+    c.fillText(`POS ${player.correctPlace}`, canvas.width / 2 + offset, 140 + offset);
     c.fillStyle = "white";
-    c.fillText(`POS ${player.currentPlace}`, canvas.width / 2, 140);
+    c.fillText(`POS ${player.correctPlace}`, canvas.width / 2, 140);
     allCars.forEach((car, i) => {
         c.font = '25px "Press Start 2P"';
         c.fillStyle = "black";

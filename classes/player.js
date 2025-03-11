@@ -13,7 +13,7 @@ class Player extends Sprite {
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
         this.speedMultiplier = 1; //służy do zwiększania prędkości po naciśnięciu turbo
         this.driftMultiplier = 1;
-        this.speedValue = 0.03;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
+        this.speedValue = 0.005;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
         this.turboAmount = 2; //maksymalna ilość turbo
@@ -536,8 +536,9 @@ class Player extends Sprite {
     }
 
     updateDistance() {
-        if (this.lastCheckpoint == -1) return;
-        const checkpoint = stage[currentMap].checkpointsTab[this.lastCheckpoint];
+        let lastCheckpoint = this.lastCheckpoint;
+        if (this.lastCheckpoint == -1) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
+        const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
         const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
         const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
         const playerX = this.position.x + this.width / 2;

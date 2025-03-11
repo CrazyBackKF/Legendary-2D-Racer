@@ -217,3 +217,4 @@
 - blansowanie botow 
 - zmiana zachowania podczas driftu i skrecania (mniejsze wartosci) (podczas driftu 'oliedMultipler' jest mniejszy bo bylo to a grywalne)
 - dodania buffer'ow tzn. coinow i nitra na trasie (osobna petla for i dodanie kolejnej zmiennej do obiektu 'stage')
+- naprawa błędu związanego z liczeniem dystansu

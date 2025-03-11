@@ -378,8 +378,9 @@ class Bot extends Player {
     }
 
     updateDistance() {
-        if (this.previousCheckpoint == 0) return;
-        const checkpoint = stage[currentMap].checkpointsTab[this.previousCheckpoint - 1];
+        let lastCheckpoint = this.previousCheckpoint - 1;
+        if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1; 
+        const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
         const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
         const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
         const botX = this.position.x + this.width / 2 + global.translation.x;
