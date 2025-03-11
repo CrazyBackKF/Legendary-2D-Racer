@@ -14,7 +14,6 @@ function checkCollisionsCondition(corners, object) {
 }
 
 //funkcja ktora sprawdza kolizje
-
 function getCollisions(collisions) {
     const checkpointsTab = [];
     const collisionsTab = [];
@@ -86,7 +85,7 @@ function checkIfFullScreen() {
     return document.fullscreenElement !== null;
 }
 
-//sprawdzamy strone pozycji 
+//sprawdzamy strone pozycji z
 function getSidePosition(target, offset) {
     return {
         x: target.position.x + Math.cos(target.angle + Math.PI / 2) * offset,

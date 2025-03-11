@@ -38,9 +38,6 @@ const endScreen = new Sprite({
     alpha: 0.98
 })
 
-
-
-
 const menuButtons = [
     new Button({
         position: {

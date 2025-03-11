@@ -210,3 +210,10 @@
 - zatrzymanie gry po 3 okrazeniach gracza 
 - dodanie End Screena
 - refaktoryzacja kodu
+
+11.03.2025
+- dodanie nowej przeszkody 'spikes'
+- naprawa bledu z iloscia okrazeniach
+- blansowanie botow 
+- zmiana zachowania podczas driftu i skrecania (mniejsze wartosci) (podczas driftu 'oliedMultipler' jest mniejszy bo bylo to a grywalne)
+- dodania buffer'ow tzn. coinow i nitra na trasie (osobna petla for i dodanie kolejnej zmiennej do obiektu 'stage')

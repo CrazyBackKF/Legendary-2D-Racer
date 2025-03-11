@@ -5,9 +5,44 @@
 const key = {
     q: false
 }
+
 let currentMap = 'a';
 let lastFrame = 0;
 let deltaTime = 1;
+
+const obstaclesType = [{
+    type: "oil",
+    color: "black"
+},
+{
+    type: "traffic cone",
+    color: "orange"
+},
+{
+    type: "hole",
+    color: "gray"
+},
+{
+    type: "spikes",
+    color: "purple"
+}
+];
+
+// coiny inne takie przeszkody beda zawarte w tej samej tablicy co przeszkody
+//jest to wygodniejsze i dziala tak samo tylko inne jest zachowanie
+const buffersType = [
+    {
+        type: "nitro",
+        color: "lightblue"
+    },
+    {
+        type: "coin",
+        color: "green"
+    }
+];
+
+let index = 0;
+
 const global = {
     scale: {
         x: 2,
@@ -18,6 +53,7 @@ const global = {
         y: -canvas.height
     }
 }
+
 let frame;
 let lastFullScreen;
 let time = Date.now();
@@ -31,12 +67,14 @@ const stage = {
         checkpointsTab: getCollisions(collisions.background1.parse2d()).checkpoints,
         roadTab: getCollisions(collisions.background1.parse2d()).road,
         checkpointOrder: [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18], //kolejnosc checkpointow dla mapy a
-        amountOfObstacles: 12
+        amountOfObstacles: obstaclesType.length,
+        amountOfBuffers: 6
 
     }
 }
 
 stage[currentMap].checkpointsTab = reorderArray(stage[currentMap].checkpointsTab, stage[currentMap].checkpointOrder);
+
 for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
     stage[currentMap].checkpointsTab[i].index = i;
     stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
@@ -62,23 +100,23 @@ const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk'];
 const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer']
 
- for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 4; i++) {
     let row = Math.floor(i / 2); // Rząd (0 lub 1)
     let col = i % 2;             // Kolumna (0 lub 1)
 
-   bots.push(new Bot(
-       {
-           position: {
-               x: 300 + (col * 150) - global.translation.x,
-               y: 330 + (row * 75) - global.translation.y
-           },
-           color: botsColor[i],
-           behavior: behavior[i],
-           index: i,
-           name: names[i]
+    bots.push(new Bot(
+        {
+            position: {
+                x: 300 + (col * 150) - global.translation.x,
+                y: 330 + (row * 75) - global.translation.y
+            },
+            color: botsColor[i],
+            behavior: behavior[i],
+            index: i,
+            name: names[i]
 
-       }
-   ));
+        }
+    ));
 }
 
 // bot do debugowania
@@ -95,31 +133,43 @@ const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer']
 //     }
 // ));
 
-const obstaclesType = [{
-    type: "oil",
-    color: "black"
-},
-{
-    type: "traffic cone",
-    color: "orange"
-},
-{
-    type: "hole",
-    color: "gray"
-},
-];
-
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < stage[currentMap].amountOfObstacles; i++) {
     const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
     obstacles.push(new Obstacle({
         position,
         width: 8 * global.scale.x,
         height: 8 * global.scale.y,
-        type: obstaclesType[Math.floor(i / 4)]
+        type: obstaclesType[index]
     }))
+
+    if (index == obstaclesType.length - 1) {
+        index = 0;
+    } else {
+        index++;
+    }
 }
 
+index = 0;
 
+for (let i = 0; i < stage[currentMap].amountOfBuffers; i++) {
+    const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+    obstacles.push(new Obstacle({
+        position,
+        width: 8 * global.scale.x,
+        height: 8 * global.scale.y,
+        type: buffersType[index]
+    }))
+
+    console.log(index)
+
+    if (index == buffersType.length - 1) {
+        index = 0;
+    } else {
+        index++;
+    }
+}
+
+console.log(obstacles)
 
 const allCars = [player, ...bots];
 
@@ -147,10 +197,12 @@ function animate(currentTime) {
             stage[currentMap].collisionsTab[i].draw();
             stage[currentMap].collisionsTab[i].angle += 0.01;
         }
+
         //rysowanie checkpointow
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
             stage[currentMap].checkpointsTab[i].draw();
         }
+
         //rysowanie drogi
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             stage[currentMap].roadTab[i].draw();
@@ -199,4 +251,5 @@ function animate(currentTime) {
     if (player.isPlaying) UI();
     else endOfMatch();
 }
+
 animate();

@@ -10,7 +10,7 @@ class Bot extends Player {
         this.isColliding1 = false;
         this.speedValue = 0.03;
         this.previousCheckpoint = 0;
-        this.laps = 0;
+        this.laps = -1;
         //zmienne do zachowan botow w zaleznosci od jego typu
         this.shouldAttack = false;
         this.hasBraked = false;
@@ -44,7 +44,7 @@ class Bot extends Player {
         this.checkCollisionWithBots();
         this.checkLaps();
         this.updateDistance();
-        // this.deaccelerate();
+        this.deaccelerate();
         // console.log(this.speed)
     }
 
@@ -161,7 +161,10 @@ class Bot extends Player {
 
     // sprawdzamy ilosc okrazen
     checkLaps() {
-        if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) this.laps++;
+        if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) {
+            this.laps++
+            console.log(this.laps)
+        };
         if (this.laps == 3) {
             console.log("Bot wygrał");
             this.correctPlace = this.place;
@@ -190,7 +193,7 @@ class Bot extends Player {
             else {
                 //console.log("prosta");
                 this.hasBraked = false;
-                this.maxSpeed = 6;
+                this.maxSpeed = 4;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
@@ -231,7 +234,7 @@ class Bot extends Player {
             else {
                 //console.log("prosta");
                 this.hasBraked = false;
-                this.maxSpeed = 6;
+                this.maxSpeed = 3;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }

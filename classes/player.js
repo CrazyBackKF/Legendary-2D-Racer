@@ -1,8 +1,8 @@
 // Tworzenie klasy Player
 
 class Player extends Sprite {
-    constructor({ position, color, imageSrc}) {
-        super({imageSrc, position});
+    constructor({ position, color, imageSrc }) {
+        super({ imageSrc, position });
         this.position = position; //pozycja pojazdu
         //wymiary hitboxa pojazdu
         this.width = 31;
@@ -15,14 +15,12 @@ class Player extends Sprite {
         this.driftMultiplier = 1;
         this.speedValue = 0.03;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
-        this.maxSpeed = 2; //maksymalna prędkość z jaką może jechać pojazd
+        this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
         this.turboAmount = 2; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;//bool do okreslania wystepowania kolizji
         this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
         this.isOnRoad = false; //bool czy gracz jest na drodze
-        //this.image = new Image();
-        //this.image.src = "img/sport_green.png";
         //prędkość w poziomie x i y
         this.velocity = {
             x: 0,
@@ -79,6 +77,7 @@ class Player extends Sprite {
         this.alpha = 1;
         this.name = "Player";
         this.correctPlace;
+        this.playerMoney = 100;
     }
 
     // Metoda która aktualizuje parametry i grafikę instancji klasy
@@ -102,7 +101,7 @@ class Player extends Sprite {
         this.checkRoad();
         this.physics();
         this.turbo();
-        this.checkCollisionWithBots();
+        //this.checkCollisionWithBots();
         this.updateDistance();
     }
 
@@ -156,7 +155,7 @@ class Player extends Sprite {
             c.translate(this.position.x + this.width / 2, this.position.y + this.height / 4);
             c.rotate(convertToRadians(this.angle));
             //c.drawImage(this.image, -this.width / 2, -this.height / 4,);
-    
+
             c.fillStyle = "rgba(255, 0, 0, 0.5)";
             c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
             c.restore();
@@ -218,12 +217,12 @@ class Player extends Sprite {
     // Metoda która zmienia szybkość obrotu w zależności od szybkości auta
     changeTurningSpeed() {
         if (this.speed > 0) {
-            if (this.speed <= 2) return this.speed / 1.7 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
-            else return ((2 - (this.speed / this.maxSpeed)) * 0.8) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            if (this.speed <= 2) return this.speed / 1.5 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            else return ((2 - (this.speed / this.maxSpeed))) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
         }
         else if (this.speed < 0) {
-            if (this.speed >= -2) return -this.speed / 1.7 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
-            else return (2 + (this.speed / this.maxSpeed) * 0.8) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            if (this.speed >= -2) return -this.speed / 1.5 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            else return (2 + (this.speed / this.maxSpeed) ) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
         }
     }
 
@@ -254,10 +253,13 @@ class Player extends Sprite {
     // Metoda która dodaje drift po wciśnięciu spacji
     drift() {
         if (this.key.space && this.speed > 2) {
-            this.driftMultiplier = 1.1 * this.speed;
+            this.driftMultiplier = 0.9 * this.speed;
             if (this.key.w) return;
             if (this.speed > 0) this.speed -= 0.02;
             else this.speed = 0;
+            if (this.oliedMultiplier == 2.5) {
+                this.oliedMultiplier /= 2;
+            }
         }
         else {
             this.driftMultiplier = 1;
@@ -315,7 +317,7 @@ class Player extends Sprite {
         for (let i = 0; i < obstacles.length; i++) {
             const rotatedRect = getObjectsToCollisions(this, false, this.angle);
 
-            const square = getObjectsToCollisions(obstacles[i], false,  0, false, global.scale, global.translation);
+            const square = getObjectsToCollisions(obstacles[i], false, 0, false, global.scale, global.translation);
 
             if (isColliding(rotatedRect, square)) {
                 console.log("przeszkoda!")
@@ -348,14 +350,30 @@ class Player extends Sprite {
                         this.oliedMultiplier = 1.5
                     }
                     //reakcja na 'traffic cone'
-                    else {
+                    else if (obstacles[i].type.type == "traffic cone") {
                         gsap.to(this, {
                             duration: 0.7,
                             speed: this.speed - (0.4 * this.speed),
                             ease: "power2.out"
                         })
-
                     }
+                    else if (obstacles[i].type.type == "spikes") {
+                        gsap.to(this, {
+                            duration: 0.7,
+                            speed: this.speed - this.speed,
+                        })
+                    }
+                    else if (obstacles[i].type.type == "coin") {
+                        this.money += 20;
+                    }
+                    else if (obstacles[i].type.type == "nitro") {
+                        this.turboAmount += 0.5;
+                        if(this.turboAmount > 2)
+                        {
+                            this.turboAmount = 2
+                        }
+                    }
+
 
                     //usuniecie 'oiledMultiplayer' nie ma juz reakcji na to
                     setTimeout(() => {
@@ -383,10 +401,10 @@ class Player extends Sprite {
 
     //metoda sprawdzajaca ilosc przeszkod
     checkAmountOfObstacles() {
-        if (obstacles.length < stage.a.amountOfObstacles) {
+        if (obstacles.length < stage[currentMap].amountOfObstacles + stage[currentMap].amountOfBuffers) {
             this.allObstacles = false;
         }
-        else if (obstacles.length == stage.a.amountOfObstacles) {
+        else if (obstacles.length == stage[currentMap].amountOfObstacles + stage[currentMap].amountOfBuffers) {
             this.allObstacles = true;
         }
     }
@@ -397,7 +415,7 @@ class Player extends Sprite {
         for (let i = 0; i < bots.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, false)
 
-            const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, {x: 1, y: 1}, global.translation)
+            const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     console.log("kolizja");
@@ -428,7 +446,7 @@ class Player extends Sprite {
             if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
                 //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
                 stage[currentMap].checkpointsTab[i].angle = this.angle;
-                
+
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
                 //sprawdzamy czy gracz pejechal mete/start
@@ -451,6 +469,7 @@ class Player extends Sprite {
                         }
                         else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
                         {
+                            console.log(this.laps)
                             stage[currentMap].checkpointsTab.forEach(checkpoint => {
                                 checkpoint.isPassed = false;
                             });
@@ -479,7 +498,6 @@ class Player extends Sprite {
         this.knockback.x = (this.velocity.x - enemyVelocity.x) * force;
         this.knockback.y = (this.velocity.y - enemyVelocity.y) * force
     }
-    
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)
     moveCamerabox() {

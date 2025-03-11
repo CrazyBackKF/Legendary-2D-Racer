@@ -37,7 +37,7 @@ function UI() {
     else if (rotation > 0) rotation -= 0.025
     pointer.draw();
     c.restore();
-    
+
     // Sortowanie tablicy po dystansie każdego z samochodu, żeby przypisać im ich miejsca
     allCars.sort((a, b) => (b.distance + b.distanceFromLastCheckpoint) - (a.distance + a.distanceFromLastCheckpoint));
     allCars.forEach((car, i) => car.place = i + 1);
@@ -95,7 +95,7 @@ canvas.addEventListener("mousemove", (e) => {
     const mouseY = e.offsetY;
     let isHovering = false;
     endScreenButtons.forEach(button => {
-        if (isCollidingButtons({x: mouseX, y: mouseY}, button)) {
+        if (isCollidingButtons({ x: mouseX, y: mouseY }, button)) {
             canvas.style.cursor = "pointer";
             isHovering = true;
             button.isHovering = true;
@@ -124,7 +124,7 @@ canvas.addEventListener("click", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     endScreenButtons.forEach(button => {
-        if (isCollidingButtons({x: mouseX, y: mouseY}, button)) {
+        if (isCollidingButtons({ x: mouseX, y: mouseY }, button)) {
             button.click();
         }
     })
