@@ -49,14 +49,6 @@ class Player extends Sprite {
         }
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
         this.laps = 0; //zmienna opisujaca ilosc okrazen
-        this.boxToChase = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            width: 100,
-            height: this.height + 20
-        }
         this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
         this.allObstacles = false;
         this.deletedObstacle = "";
@@ -80,6 +72,7 @@ class Player extends Sprite {
         this.playerMoney = 100;
     }
 
+
     // Metoda która aktualizuje parametry i grafikę instancji klasy
     update() {
         this.changeSpriteProperties();
@@ -88,7 +81,6 @@ class Player extends Sprite {
         if (!this.isPlaying) return;
         this.checkAmountOfObstacles();
         this.moveCamerabox();
-        this.moveBoxChased();
         this.moveCameraVertically();
         this.moveCameraHorizontally();
         this.accelerate();
@@ -320,7 +312,6 @@ class Player extends Sprite {
             const square = getObjectsToCollisions(obstacles[i], false, 0, false, global.scale, global.translation);
 
             if (isColliding(rotatedRect, square)) {
-                console.log("przeszkoda!")
                 currentlyColliding = true;
 
                 let angleTypeTab = [110, -110]
@@ -418,7 +409,6 @@ class Player extends Sprite {
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
-                    console.log("kolizja");
                     this.isColliding = true;
                     this.reactToCollisions(bots[i].velocity, bots[i].angle);
                     currentlyColliding = true
@@ -469,7 +459,6 @@ class Player extends Sprite {
                         }
                         else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
                         {
-                            console.log(this.laps)
                             stage[currentMap].checkpointsTab.forEach(checkpoint => {
                                 checkpoint.isPassed = false;
                             });
@@ -504,12 +493,6 @@ class Player extends Sprite {
         //pozycja camery
         this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2;
         this.camerabox.position.y = this.position.y + this.height / 4 - this.camerabox.height / 2;
-    }
-
-    moveBoxChased() {
-        //pozycja boxChased
-        this.boxToChase.position.x = this.position.x + this.width / 2 - (this.boxToChase.width / 4) + 30
-        this.boxToChase.position.y = this.position.y + this.height / 4 - this.boxToChase.height / 2;
     }
 
     moveCameraVertically() {
@@ -553,4 +536,71 @@ class Player extends Sprite {
         //////////////////////////////////////////
     }
 
+
+
+
+
+    reset() {
+        this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu
+        //zmienne predkosci pojazd
+        this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
+        this.speedMultiplier = 1; //służy do zwiększania prędkości po naciśnięciu turbo
+        this.driftMultiplier = 1;
+        this.speedValue = 0.005;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
+        this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
+        this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
+        this.turboAmount = 2; //maksymalna ilość turbo
+        this.lastTurbo = 0; //ostatnie kliknięcie turbo
+        this.isColliding = false;//bool do okreslania wystepowania kolizji
+        this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
+        this.isOnRoad = false; //bool czy gracz jest na drodze
+        //prędkość w poziomie x i y
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+        //lista klawiszy którymi można sterować, pobrana z addEventListenerów
+        this.key = {
+            a: false,
+            d: false,
+            w: false,
+            s: false,
+            t: false,
+            space: false
+        }
+        this.camerabox = {
+            width: 800,
+            height: 450,
+            position: {
+                x: this.position.x + this.width / 2 - 800 / 2, // Centrowanie w poziomie
+                y: this.position.y + this.height / 4 - 450 / 2  // Centrowanie w pionie
+            }
+        };
+        this.knockback = {
+            x: 0,
+            y: 0
+        }
+        this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
+        this.laps = 0; //zmienna opisujaca ilosc okrazen
+        this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
+        this.allObstacles = false;
+        this.deletedObstacle = "";
+        this.translation = {
+            x: this.position.x + this.width / 2,
+            y: this.position.y + this.height / 4
+        }
+        this.scale = {
+            x: 1,
+            y: 1
+        }
+        this.isMovingWithTranslation = true;
+        this.startTime = Date.now();
+        this.distance = 0;
+        this.distanceFromLastCheckpoint = 0;
+        this.place = 0;
+        this.isPlaying = true;
+        this.alpha = 1;
+        this.correctPlace;
+        this.playerMoney = 100;
+    }
 }

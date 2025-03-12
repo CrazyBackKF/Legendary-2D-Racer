@@ -1,26 +1,13 @@
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
-
 function UI() {
     // Timer i liczba okrążeń
     // c.fillStyle = "rgba(0, 0, 0, 0.7)";
     // c.fillRect(0, 10, 150, 100);
     const minutes = parseInt((Date.now() - player.startTime) / 60000);
     const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
-    c.font = '30px "Press Start 2P"';
-    c.textAlign = "center";
-    c.textBaseline = "middle"
-    c.fillStyle = "black";
-    c.fillText(`${player.laps}/3`, 60 + offset, 70 + offset);
-    c.font = '20px "Press Start 2P"';
-    c.fillText(`${minutes}:${seconds}`, 75 + offset, 100 + offset);
-    c.fillText("LAPS", 50 + offset, 40 + offset);
-    c.fillStyle = "white";
-    c.font = '30px "Press Start 2P"';
-    c.fillText(`${player.laps}/3`, 60, 70);
-    c.font = '20px "Press Start 2P"';
-    c.fillText(`${minutes}:${seconds}`, 75, 100);
-    c.fillText("LAPS", 50, 40);
+
+    shadowText(`${player.laps}/3`, {x: 60, y: 70}, offset, 30);
+    shadowText(`${minutes}:${seconds}`, {x: 75, y: 100}, offset, 20);
+    shadowText("LAPS", {x: 50, y: 40}, offset, 20);
 
     // Wskaźnik turbo
     c.fillStyle = "black";
@@ -47,93 +34,33 @@ function UI() {
         c.save();
         if (car.name != "Player") c.translate(global.translation.x, global.translation.y);
         c.fillText(parseInt(car.distance + car.distanceFromLastCheckpoint), car.position.x, car.position.y);
+        c.fillText(car.speed, car.position.x + car.width, car.position.y + car.height);
         c.restore();
     });
 
     // Wypisywanie pozycji gracza
     // c.fillStyle = "rgba(0, 0, 0, 0.7)";
     // c.fillRect(canvas.width - 150, 10, 150, 100)
-    c.fillStyle = "black";
-    c.font = '30px "Press Start 2P"';
-    c.fillText(`${player.place}/${allCars.length}`, canvas.width - 80 + offset, 80 + offset);
-    c.font = '20px "Press Start 2P"';
-    c.fillText("POS", canvas.width - 100 + offset, 40 + offset);
-    c.fillStyle = "white"
-    c.font = '30px "Press Start 2P"';
-    c.textAlign = "center";
-    c.textBaseline = "middle"
-    c.fillText(`${player.place}/${allCars.length}`, canvas.width - 80, 80);
-    c.font = '20px "Press Start 2P"';
-    c.fillText("POS", canvas.width - 100, 40);
+    shadowText(`${player.place}/${allCars.length}`, {x: canvas.width - 80, y: 80}, offset, 30);
+    shadowText("POS", {x: canvas.width - 100, y: 40}, offset, 20);
 }
 
 function endOfMatch() {
+    endScreenButtons.forEach(button => button.isClickable = true);
     c.save();
     c.translate(0, -30); // Chce to dać troche do góry, a nie chce mi się już przerabiać obrazu i wszystkich pozycji
     endScreen.draw();
-    c.font = '40px "Press Start 2P"';
-    c.fillStyle = "black";
-    c.fillText(`POS ${player.correctPlace}`, canvas.width / 2 + offset, 140 + offset);
-    c.fillStyle = "white";
-    c.fillText(`POS ${player.correctPlace}`, canvas.width / 2, 140);
+    shadowText(`POS ${player.correctPlace}`, {x: canvas.width / 2, y: 140}, offset, 40);
     allCars.forEach((car, i) => {
-        c.font = '25px "Press Start 2P"';
-        c.fillStyle = "black";
         // sprawdzam, żeby nie było sytuacji, że ktoś skończy wyścig i się mu zmieni pozycja, bo bot wyjedzie trochę bardziej za metę
         let place = car.correctPlace;
         if (!place) place = car.place;
-        c.fillText(place, 250 + offset, 250 + i * 50 + offset);
-        c.fillStyle = "white";
-        c.fillText(place, 250, 250 + i * 50);
-        c.fillStyle = "black";
-        c.fillText(car.name, 600 + offset, 250 + i * 50 + offset);
-        c.fillStyle = "white";
-        c.fillText(car.name, 600, 250 + i * 50);
+
+        shadowText(place, {x: 250, y: 250 + i * 50}, offset, 25);
+        shadowText(car.name, {x: 600, y: 250 + i * 50}, offset, 25);
     })
     c.restore();
 
     endScreenButtons.forEach(button => button.draw());
 }
 
-// event listenery do sprawdzania czy gracz najechał lub kliknął na przycisk gdy jest na "End Screenie". Na razie jest tylko jeden, ale może w przysłości będzie
-// trzeba więcej
-canvas.addEventListener("mousemove", (e) => {
-    if (player.isPlaying) return;
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    let isHovering = false;
-    endScreenButtons.forEach(button => {
-        if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
-            canvas.style.cursor = "pointer";
-            isHovering = true;
-            button.isHovering = true;
-            gsap.to(button.scale, {
-                x: button.hoverScale.x,
-                y: button.hoverScale.y,
-                duration: 0.5,
-                ease: "power2.out"
-            })
-        }
-        else {
-            button.isHovering = false;
-            gsap.to(button.scale, {
-                x: button.startScale.x,
-                y: button.startScale.y,
-                duration: 0.5,
-                ease: "power2.out"
-            })
-        }
-    })
-    if (!isHovering) canvas.style.cursor = "default";
-})
-
-canvas.addEventListener("click", (e) => {
-    if (player.isPlaying) return;
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    endScreenButtons.forEach(button => {
-        if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
-            button.click();
-        }
-    })
-})

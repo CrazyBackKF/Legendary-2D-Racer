@@ -71,8 +71,7 @@ const menuButtons = [
             y: 470
         },
         click: function() {
-            console.log("graj") // tu wjebiemy funkcję na przejście do gry
-            for (let button of menuButtons) button.isClickable = false;
+            for (let button of menuButtons) {button.isClickable = false;}
             const tl = gsap.timeline();
             tl.to(global, {
                 alpha: 1,
@@ -80,8 +79,11 @@ const menuButtons = [
                 onComplete: () => {
                     cancelAnimationFrame(frame);
                     currentMap = mainMenu.translation.currentLvl;
+                    for (let button of endScreenButtons) {button.isClickable = false;}
+                    lastCounterTime = Date.now();
+                    player.isPlaying = true;
                     changeLevelProperties();
-                    animate();
+                    startAnimation();
                 }
             })
             tl.to(global, {
@@ -117,9 +119,24 @@ const endScreenButtons = [
             y: 480
         },
         click: function() {
-            console.log("dalej")
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    endScreenButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    animateMainMenu();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
         },
         imageSrc: "assets/img/endScreenPlayButton/Default.png",
-        hoverImageSrc: "assets/img/endScreenPlayButton/Hover.png"
+        hoverImageSrc: "assets/img/endScreenPlayButton/Hover.png",
+        isClickable: false
     })
 ]

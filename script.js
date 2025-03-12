@@ -65,9 +65,8 @@ const stage = {
         arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
         imgSrc: "assets/img/tlo1.png",
         collisionsTab: getCollisions(collisions.background1.parse2d(), this.arrowRotations).collisions,
-        checkpointsTab: getCollisions(collisions.background1.parse2d()).checkpoints,
+        checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d()).checkpoints, [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18]), // checkpoint order
         roadTab: getCollisions(collisions.background1.parse2d()).road,
-        checkpointOrder: [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18], //kolejnosc checkpointow dla mapy a
         amountOfObstacles: obstaclesType.length,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 400},
@@ -127,7 +126,6 @@ for (let i = 0; i < 4; i++) {
 const allCars = [player, ...bots];
 
 const offset = 3; // offset do tworzenia cieni
-
 let rotation = 0;
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
@@ -138,6 +136,7 @@ function animate(currentTime) {
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
     if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
+    c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
     c.translate(global.translation.x, global.translation.y);
     c.scale(global.scale.x, global.scale.y);
@@ -178,7 +177,6 @@ function animate(currentTime) {
         }))
     }
 
-
     for (let i = 0; i < bots.length; i++) {
         bots[i].update(deltaTime);
     }
@@ -203,6 +201,35 @@ function animate(currentTime) {
     if (player.isPlaying) UI();
     else endOfMatch();
 
+    c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
+    c.fillRect(0, 0, canvas.width, canvas.height)
+}
+
+let counter = 3;
+let lastCounterTime;
+
+function startAnimation() {
+    frame = requestAnimationFrame(startAnimation);
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    c.save();
+    c.translate(global.translation.x, global.translation.y);
+    c.scale(global.scale.x, global.scale.y);
+    c.drawImage(background, 0, 0);
+    c.restore();
+    player.drawHitbox();
+    player.changeSpriteProperties();
+    player.draw();
+    bots.forEach(bot => bot.drawHitbox());
+    shadowText(counter, {x: canvas.width / 2 - 20, y: 100}, offset, 40);
+
+    if (Date.now() - lastCounterTime >= 1000) {
+        counter--;
+        lastCounterTime = Date.now();
+    }
+    if (counter == 0) {
+        cancelAnimationFrame(frame);
+        animate();
+    }
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
     c.fillRect(0, 0, canvas.width, canvas.height)
 }

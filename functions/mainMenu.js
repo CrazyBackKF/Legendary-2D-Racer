@@ -73,6 +73,8 @@ function animateMainMenu() {
 
     c.font = '30px "Press Start 2P"';
     c.fillStyle = "white";
+    c.textAlign = "start";
+    c.textBaseline = "bottom";
     c.fillText("123456789", 100, 65);
     
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`;
@@ -82,43 +84,4 @@ function animateMainMenu() {
 }
 animateMainMenu();
 
-
-canvas.addEventListener("mousemove", (e) => {
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    let isHovering = false;
-    menuButtons.forEach(button => {
-        if (isCollidingButtons({x: mouseX, y: mouseY}, button) && button.isClickable) {
-            canvas.style.cursor = "pointer";
-            isHovering = true;
-            button.isHovering = true;
-            gsap.to(button.scale, {
-                x: button.hoverScale.x,
-                y: button.hoverScale.y,
-                duration: 0.5,
-                ease: "power2.out"
-            })
-        }
-        else {
-            button.isHovering = false;
-            gsap.to(button.scale, {
-                x: button.startScale.x,
-                y: button.startScale.y,
-                duration: 0.5,
-                ease: "power2.out"
-            })
-        }
-    })
-    if (!isHovering) canvas.style.cursor = "default";
-})
-
-canvas.addEventListener("click", (e) => {
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    menuButtons.forEach(button => {
-        if (isCollidingButtons({x: mouseX, y: mouseY}, button) && button.isClickable) {
-            button.click();
-        }
-    })
-})
 

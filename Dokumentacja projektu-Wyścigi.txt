@@ -221,3 +221,4 @@
 
 12.03.2025
 - dodanie mainMenu do głównego projektu i dostosowanie gry pod zmiany mapy
+- naprawa błędow

@@ -28,6 +28,7 @@ class Bot extends Player {
         this.correctPlace;
     }
 
+
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
         this.drawHitbox();
@@ -44,7 +45,7 @@ class Bot extends Player {
         this.checkCollisionWithBots();
         this.checkLaps();
         this.updateDistance();
-        this.deaccelerate();
+        //this.deaccelerate();
         // console.log(this.speed)
     }
 
@@ -163,10 +164,8 @@ class Bot extends Player {
     checkLaps() {
         if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) {
             this.laps++
-            console.log(this.laps)
         };
         if (this.laps == 3) {
-            console.log("Bot wygrał");
             this.correctPlace = this.place;
             this.botPlaying = false;
         }
@@ -184,14 +183,12 @@ class Bot extends Player {
         else if (this.behavior == "sprinter") {
             if (Math.abs(this.expectedAngle - this.angle) > Math.PI / 12) {
                 if (!this.hasBraked) this.speed = 1;
-                //console.log("skręcam");
                 this.hasBraked = true;
                 this.maxSpeed = 1;
                 this.speedValue = 0.02;
                 this.brakeValue = 0.01;
             }
             else {
-                //console.log("prosta");
                 this.hasBraked = false;
                 this.maxSpeed = 4;
                 this.speedValue = 0.05;
@@ -225,14 +222,12 @@ class Bot extends Player {
             // }
             if (Math.abs(this.expectedAngle - this.angle) > Math.PI / 12) {
                 if (!this.hasBraked) this.speed = 1;
-                //console.log("skręcam");
                 this.hasBraked = true;
                 this.maxSpeed = 1;
                 this.speedValue = 0.02;
                 this.brakeValue = 0.01;
             }
             else {
-                //console.log("prosta");
                 this.hasBraked = false;
                 this.maxSpeed = 3;
                 this.speedValue = 0.05;
@@ -330,7 +325,6 @@ class Bot extends Player {
 
         if (satCollisionWithVertices(car, enemy).colliding) { // napisz do tego kod SAT
             if (!this.isColliding) {
-                //console.log("chuj")
                 this.reactToCollisions(player.velocity);
             }
         }
@@ -392,6 +386,26 @@ class Bot extends Player {
         // c.moveTo(botX, botY); 
         // c.lineTo(checkpointX, checkpointY);
         // c.stroke();
-        // console.log(this.distance);
+    }
+
+    reset() {
+        this.angle = convertToRadians(270);
+        this.currentCheckpoint = 0;
+        this.maxSpeed = 2;
+        this.expectedAngle = 0;
+        this.brakeValue = 1;
+        this.isColliding1 = false;
+        this.speedValue = 0.03;
+        this.previousCheckpoint = 0;
+        this.laps = -1;
+        this.shouldAttack = false;
+        this.hasBraked = false;
+        this.randomOffset = {
+            x: 0,
+            y: 0
+        }
+        this.distance = 0;
+        this.distanceFromLastCheckpoint = 0;
+        this.botPlaying = true;
     }
 }

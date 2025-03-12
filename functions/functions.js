@@ -1,3 +1,6 @@
+const canvas = document.querySelector("canvas");
+const c = canvas.getContext("2d");
+
 // Funkcja odpowiada za zamianę stopni na radiany używane w rotacjach na canvas
 function convertToRadians(angle) {
     return (angle * Math.PI / 180);
@@ -72,7 +75,6 @@ function getCollisions(collisions) {
 
 function reorderArray(arr, order) {
     let reordered = new Array(arr.length); // Tworzymy nową tablicę o tej samej długości
-
     order.forEach((newPosition, currentIndex) => {
         reordered[newPosition] = arr[currentIndex]; // Umieszczamy element na poprawnej pozycji zgodnej z kolejnoscia na trasie
     });
@@ -142,12 +144,25 @@ function isCollidingButtons(mouse, button) {
     );
 }
 
+function shadowText(text, position, offset, size, font = "Press Start 2P") { 
+    c.font = `${size}px "${font}"`;
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    c.fillStyle = "black";
+    c.fillText(text, position.x + offset, position.y + offset);
+    c.fillStyle = "white";
+    c.fillText(text, position.x, position.y);
+}
+
 function changeLevelProperties() {
-    stage[currentMap].checkpointsTab = reorderArray(stage[currentMap].checkpointsTab, stage[currentMap].checkpointOrder);
+    counter = 3;
+    global.translation.x = -canvas.width / 2;
+    global.translation.y = -canvas.height;
 
     for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
         stage[currentMap].checkpointsTab[i].index = i;
         stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
+        stage[currentMap].checkpointsTab[i].isPassed = false;
     }
 
     background.src = stage[currentMap].imgSrc;
@@ -169,13 +184,15 @@ function changeLevelProperties() {
             index++;
         }
     }
+    player.reset();
     player.position.x = stage[currentMap].playerPos.x;
     player.position.y = stage[currentMap].playerPos.y;
     bots.forEach((bot, i) => {
         let row = Math.floor(i / 2); // Rząd (0 lub 1)
         let col = i % 2;             // Kolumna (0 lub 1)
-        bot.position.x = stage[currentMap].botPos.x + (col * 150) - global.translation.x,
-        bot.position.y = stage[currentMap].botPos.y + (row * 75) - global.translation.y
+        bot.reset();
+        bot.position.x = stage[currentMap].botPos.x + (col * 150) - global.translation.x;
+        bot.position.y = stage[currentMap].botPos.y + (row * 75) - global.translation.y;
     })
     
     index = 0;
@@ -189,7 +206,6 @@ function changeLevelProperties() {
             type: buffersType[index]
         }))
     
-        console.log(index)
     
         if (index == buffersType.length - 1) {
             index = 0;
@@ -256,3 +272,46 @@ addEventListener("keyup", (e) => {
 //     lastFullScreen = Date.now();
 //     animate();
 // })
+
+// event listenery do sprawdzania czy gracz najechał lub kliknął na przycisk gdy jest na "End Screenie". Na razie jest tylko jeden, ale może w przysłości będzie
+// trzeba więcej
+canvas.addEventListener("mousemove", (e) => {
+    const mouseX = e.offsetX;
+    const mouseY = e.offsetY;
+    let isHovering = false;
+    const buttons = [...endScreenButtons, ...menuButtons];
+    buttons.forEach(button => {
+        if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
+            canvas.style.cursor = "pointer";
+            isHovering = true;
+            button.isHovering = true;
+            gsap.to(button.scale, {
+                x: button.hoverScale.x,
+                y: button.hoverScale.y,
+                duration: 0.5,
+                ease: "power2.out"
+            })
+        }
+        else {
+            button.isHovering = false;
+            gsap.to(button.scale, {
+                x: button.startScale.x,
+                y: button.startScale.y,
+                duration: 0.5,
+                ease: "power2.out"
+            })
+        }
+    })
+    if (!isHovering) canvas.style.cursor = "default";
+})
+
+canvas.addEventListener("click", (e) => {
+    const mouseX = e.offsetX;
+    const mouseY = e.offsetY;
+    const buttons = [...endScreenButtons, ...menuButtons];
+    buttons.forEach(button => {
+        if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
+            button.click();
+        }
+    })
+})
