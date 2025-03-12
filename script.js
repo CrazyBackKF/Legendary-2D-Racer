@@ -6,7 +6,7 @@ const key = {
     q: false
 }
 
-let currentMap = 'a';
+let currentMap = 1;
 let lastFrame = 0;
 let deltaTime = 1;
 
@@ -43,24 +43,25 @@ const buffersType = [
 
 let index = 0;
 
-const global = {
-    scale: {
-        x: 2,
-        y: 2
-    },
-    translation: {
-        x: -canvas.width / 2,
-        y: -canvas.height
-    }
-}
+// const global = {
+//     scale: {
+//         x: 2,
+//         y: 2
+//     },
+//     translation: {
+//         x: -canvas.width / 2,
+//         y: -canvas.height
+//     },
+//     alpha: 0
+// }
 
-let frame;
+frame;
 let lastFullScreen;
 let time = Date.now();
 
 //wyswietlanie mapy
 const stage = {
-    a: {
+    1: {
         arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
         imgSrc: "assets/img/tlo1.png",
         collisionsTab: getCollisions(collisions.background1.parse2d(), this.arrowRotations).collisions,
@@ -68,27 +69,20 @@ const stage = {
         roadTab: getCollisions(collisions.background1.parse2d()).road,
         checkpointOrder: [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18], //kolejnosc checkpointow dla mapy a
         amountOfObstacles: obstaclesType.length,
-        amountOfBuffers: 6
+        amountOfBuffers: 6,
+        playerPos: {x: 550, y: 400},
+        botPos: {x: 300, y: 330}
 
     }
 }
 
-stage[currentMap].checkpointsTab = reorderArray(stage[currentMap].checkpointsTab, stage[currentMap].checkpointOrder);
-
-for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
-    stage[currentMap].checkpointsTab[i].index = i;
-    stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
-}
-
-//ustawienie mapy jako tlo
 const background = new Image();
-background.src = stage[currentMap].imgSrc;
 
 // Tworzenie nowej instancji klasy Player dla gracza
 const player = new Player({
     position: {
-        x: 550,
-        y: 400
+        x: 0,
+        y: 0
     },
     color: 'red',
     imageSrc: "assets/img/player1.png"
@@ -101,14 +95,11 @@ const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk'];
 const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer']
 
 for (let i = 0; i < 4; i++) {
-    let row = Math.floor(i / 2); // Rząd (0 lub 1)
-    let col = i % 2;             // Kolumna (0 lub 1)
-
     bots.push(new Bot(
         {
             position: {
-                x: 300 + (col * 150) - global.translation.x,
-                y: 330 + (row * 75) - global.translation.y
+                x: 0,
+                y: 0
             },
             color: botsColor[i],
             behavior: behavior[i],
@@ -133,44 +124,6 @@ for (let i = 0; i < 4; i++) {
 //     }
 // ));
 
-for (let i = 0; i < stage[currentMap].amountOfObstacles; i++) {
-    const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
-    obstacles.push(new Obstacle({
-        position,
-        width: 8 * global.scale.x,
-        height: 8 * global.scale.y,
-        type: obstaclesType[index]
-    }))
-
-    if (index == obstaclesType.length - 1) {
-        index = 0;
-    } else {
-        index++;
-    }
-}
-
-index = 0;
-
-for (let i = 0; i < stage[currentMap].amountOfBuffers; i++) {
-    const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
-    obstacles.push(new Obstacle({
-        position,
-        width: 8 * global.scale.x,
-        height: 8 * global.scale.y,
-        type: buffersType[index]
-    }))
-
-    console.log(index)
-
-    if (index == buffersType.length - 1) {
-        index = 0;
-    } else {
-        index++;
-    }
-}
-
-console.log(obstacles)
-
 const allCars = [player, ...bots];
 
 const offset = 3; // offset do tworzenia cieni
@@ -185,7 +138,6 @@ function animate(currentTime) {
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
     if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
-    c.clearRect(0, 0, canvas.width, canvas.height)
     c.save();
     c.translate(global.translation.x, global.translation.y);
     c.scale(global.scale.x, global.scale.y);
@@ -250,6 +202,7 @@ function animate(currentTime) {
 
     if (player.isPlaying) UI();
     else endOfMatch();
-}
 
-animate();
+    c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
+    c.fillRect(0, 0, canvas.width, canvas.height)
+}

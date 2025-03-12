@@ -20,6 +20,7 @@ class Button {
             x: scale.x * 1.2,
             y: scale.y * 1.2
         }
+        this.isClickable = true;
     }
 
     draw() {

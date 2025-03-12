@@ -142,6 +142,64 @@ function isCollidingButtons(mouse, button) {
     );
 }
 
+function changeLevelProperties() {
+    stage[currentMap].checkpointsTab = reorderArray(stage[currentMap].checkpointsTab, stage[currentMap].checkpointOrder);
+
+    for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
+        stage[currentMap].checkpointsTab[i].index = i;
+        stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
+    }
+
+    background.src = stage[currentMap].imgSrc;
+    
+    obstacles.length = 0;
+
+    for (let i = 0; i < stage[currentMap].amountOfObstacles; i++) {
+        const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+        obstacles.push(new Obstacle({
+            position,
+            width: 8 * global.scale.x,
+            height: 8 * global.scale.y,
+            type: obstaclesType[index]
+        }))
+    
+        if (index == obstaclesType.length - 1) {
+            index = 0;
+        } else {
+            index++;
+        }
+    }
+    player.position.x = stage[currentMap].playerPos.x;
+    player.position.y = stage[currentMap].playerPos.y;
+    bots.forEach((bot, i) => {
+        let row = Math.floor(i / 2); // Rząd (0 lub 1)
+        let col = i % 2;             // Kolumna (0 lub 1)
+        bot.position.x = stage[currentMap].botPos.x + (col * 150) - global.translation.x,
+        bot.position.y = stage[currentMap].botPos.y + (row * 75) - global.translation.y
+    })
+    
+    index = 0;
+    
+    for (let i = 0; i < stage[currentMap].amountOfBuffers; i++) {
+        const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+        obstacles.push(new Obstacle({
+            position,
+            width: 8 * global.scale.x,
+            height: 8 * global.scale.y,
+            type: buffersType[index]
+        }))
+    
+        console.log(index)
+    
+        if (index == buffersType.length - 1) {
+            index = 0;
+        } else {
+            index++;
+        }
+    }
+
+}
+
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
     switch (e.key.toLowerCase()) {

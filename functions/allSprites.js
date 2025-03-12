@@ -44,48 +44,65 @@ const menuButtons = [
             x: 225,
             y: 450
         },
-        click: () => {
+        click: function() {
             if (mainMenu.translation.currentLvl == 1) return;
             else mainMenu.translation.currentLvl--;
             changeLvl();
         },
-        imageSrc: "img/ArrowLeft/Default.png",
-        hoverImageSrc: "img/ArrowLeft/Hover.png"
+        imageSrc: "assets/img/ArrowLeft/Default.png",
+        hoverImageSrc: "assets/img/ArrowLeft/Hover.png"
     }),
     new Button({
         position: {
             x: 700,
             y: 450
         },
-        click: () => {
+        click: function() {
             if (mainMenu.translation.currentLvl == 3) return;
             else mainMenu.translation.currentLvl++;
             changeLvl();
         },
-        imageSrc: "img/ArrowRight/Default.png",
-        hoverImageSrc: "img/ArrowRight/Hover.png"
+        imageSrc: "assets/img/ArrowRight/Default.png",
+        hoverImageSrc: "assets/img/ArrowRight/Hover.png"
     }),
     new Button({
         position: {
             x: 825,
             y: 470
         },
-        click: () => {
+        click: function() {
             console.log("graj") // tu wjebiemy funkcję na przejście do gry
+            for (let button of menuButtons) button.isClickable = false;
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    currentMap = mainMenu.translation.currentLvl;
+                    changeLevelProperties();
+                    animate();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+                
+            })
         },
-        imageSrc: "img/Play/Default.png",
-        hoverImageSrc: "img/Play/Hover.png"
+        imageSrc: "assets/img/Play/Default.png",
+        hoverImageSrc: "assets/img/Play/Hover.png"
     }),
     new Button({
         position: {
             x: 900,
             y: 5
         },
-        click: () => {
+        click: function() {
             console.log("tuning") // tu przejscie do tuningu
         },
-        imageSrc: "img/Tuning/Default.png",
-        hoverImageSrc: "img/Tuning/Hover.png",
+        imageSrc: "assets/img/Tuning/Default.png",
+        hoverImageSrc: "assets/img/Tuning/Hover.png",
         scale: {
             x: 0.7,
             y: 0.7
@@ -99,7 +116,9 @@ const endScreenButtons = [
             x: 820,
             y: 480
         },
-        click: () => console.log("dalej"),
+        click: function() {
+            console.log("dalej")
+        },
         imageSrc: "assets/img/endScreenPlayButton/Default.png",
         hoverImageSrc: "assets/img/endScreenPlayButton/Hover.png"
     })
