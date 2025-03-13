@@ -102,6 +102,21 @@ const menuButtons = [
         },
         click: function() {
             console.log("tuning") // tu przejscie do tuningu
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    menuButtons.forEach(button => button.isClickable = false);
+                    tuningButtons.forEach(button => button.isClickable = true);
+                    animateTuning();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
         },
         imageSrc: "assets/img/Tuning/Default.png",
         hoverImageSrc: "assets/img/Tuning/Hover.png",
@@ -140,3 +155,64 @@ const endScreenButtons = [
         isClickable: false
     })
 ]
+
+const tuningButtons = [
+    // Hamulce
+    new Button({
+        position: {
+            x: 420,
+            y: 215
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    }),
+
+    // Silnik
+    new Button({
+        position: {
+            x: 420,
+            y: 335
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    }),
+
+    // Koła
+    new Button({
+        position: {
+            x: 420,
+            y: 455
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    }),
+
+    // Spojler
+    new Button({
+        position: {
+            x: 925,
+            y: 215
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    }),
+
+    // Turbo
+    new Button({
+        position: {
+            x: 925,
+            y: 335
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    }) 
+]
+
+menuButtons.forEach(button => button.type = "menu");
+endScreenButtons.forEach(button => button.type = "endScreen");
+tuningButtons.forEach(button => button.type = "tuning");

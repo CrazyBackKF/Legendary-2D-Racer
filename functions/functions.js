@@ -279,7 +279,7 @@ canvas.addEventListener("mousemove", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     let isHovering = false;
-    const buttons = [...endScreenButtons, ...menuButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             canvas.style.cursor = "pointer";
