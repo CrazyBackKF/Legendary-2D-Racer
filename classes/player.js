@@ -11,12 +11,16 @@ class Player extends Sprite {
         this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu
         //zmienne predkosci pojazd
         this.speed = 0; //zmienna służąca do stopniowej zmiany prędkości
+        this.brakeValue = 0.1;
+        this.bonusSpeed = 0;
+        this.notOnRoadFriction = 0.02; // nie wiem jak to nazwać lol, służy do zwalniania, jeżeli nie znajdujesz się na drodze, im lepsze koła tym mniej zwalnia
         this.speedMultiplier = 1; //służy do zwiększania prędkości po naciśnięciu turbo
         this.driftMultiplier = 1;
         this.speedValue = 0.005;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
-        this.turboAmount = 2; //maksymalna ilość turbo
+        this.maxTurbo = 1.5;
+        this.turboAmount = 1.5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;//bool do okreslania wystepowania kolizji
         this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
@@ -69,7 +73,7 @@ class Player extends Sprite {
         this.alpha = 1;
         this.name = "Player";
         this.correctPlace;
-        this.playerMoney = 100;
+        this.money = JSON.parse(localStorage.getItem("money")) || 1000000;
     }
 
 
@@ -95,6 +99,7 @@ class Player extends Sprite {
         this.turbo();
         //this.checkCollisionWithBots();
         this.updateDistance();
+        this.changeStats();
     }
 
     changeSpriteProperties() {
@@ -125,15 +130,15 @@ class Player extends Sprite {
             }
         }
         if (this.key.w && this.speed <= this.maxSpeed) {
-            if (this.speed < 0) this.speed += this.speedValue;
-            else this.speed += this.speedValue + this.friction;
+            if (this.speed < 0) this.speed += (this.speedValue + this.brakeValue);
+            else this.speed += (this.speedValue - this.friction + this.bonusSpeed);
 
         }
         else if (this.key.s && this.speed >= -this.maxSpeed) {
-            if (this.speed > 0) this.speed -= this.speedValue;
-            else this.speed -= (this.speedValue + this.friction);
+            if (this.speed > 0) this.speed -= (this.speedValue + this.brakeValue);
+            else this.speed -= (this.speedValue - this.friction + this.bonusSpeed);
         }
-
+        if (!deltaTime) deltaTime = 1 / 120;
         this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.x) * deltaTime * 120;
         this.velocity.x = (this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.y) * deltaTime * 120;
     }
@@ -220,10 +225,10 @@ class Player extends Sprite {
 
     // Metoda która dodaje turbo gdy wciśnie się t
     turbo() {
-        if (Date.now() - this.lastTurbo >= 500 && this.turboAmount < 2) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
+        if (this.turboAmount > this.maxTurbo) this.turboAmount = this.maxTurbo;
+        if (Date.now() - this.lastTurbo >= 500 && this.turboAmount < this.maxTurbo) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
         {
             this.turboAmount += 0.004;
-            if (this.turboAmount > 5) this.turboAmount = 5;
         }
 
         if (!this.key.t && this.speedMultiplier > 1) this.speedMultiplier -= 0.005; // Dzięki tej lini zmiana prędkości jest płynniejsza;
@@ -245,7 +250,7 @@ class Player extends Sprite {
     // Metoda która dodaje drift po wciśnięciu spacji
     drift() {
         if (this.key.space && this.speed > 2) {
-            this.driftMultiplier = 0.9 * this.speed;
+            this.driftMultiplier = 0.9 * this.speed * (this.speedValue / 0.01);
             if (this.key.w) return;
             if (this.speed > 0) this.speed -= 0.02;
             else this.speed = 0;
@@ -279,6 +284,10 @@ class Player extends Sprite {
         if (this.isOnRoad) {
             this.lastRoadTime = 0;
             return;
+        }
+        else {
+            if (this.speed > 0) this.speed -= (this.notOnRoadFriction * this.speed);
+            else if (this.speed < 0) this.speed += (this.notOnRoadFriction * this.speed);
         }
         if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
@@ -407,7 +416,7 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false)
 
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
-            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+            if (satCollision(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     this.isColliding = true;
                     this.reactToCollisions(bots[i].velocity, bots[i].angle);
@@ -536,7 +545,13 @@ class Player extends Sprite {
         //////////////////////////////////////////
     }
 
-
+    changeStats() {
+        this.brakeValue = tuning.brakes.stats[tuning.brakes.level];
+        this.maxSpeed = tuning.engine.stats[tuning.engine.level];
+        this.notOnRoadFriction = tuning.wheels.stats[tuning.wheels.level];
+        this.bonusSpeed = tuning.spoiler.stats[tuning.spoiler.level];
+        this.maxTurbo = tuning.turbo.stats[tuning.turbo.level];
+    }
 
 
 

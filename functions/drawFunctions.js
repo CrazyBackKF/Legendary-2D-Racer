@@ -13,8 +13,7 @@ function UI() {
     c.fillStyle = "black";
     c.fillRect(714, 515, 300, 25);
     c.fillStyle = "blue";
-    c.fillRect(719 + 290 * ((2 - player.turboAmount) / 2), 520, 290 - (290 * ((2 - player.turboAmount) / 2)), 15);
-
+    c.fillRect(719 + 290 * ((player.maxTurbo - player.turboAmount) / player.maxTurbo), 520, 290 - (290 * ((player.maxTurbo - player.turboAmount) / player.maxTurbo)), 15);
     // Prędkościomierz
     c.save();
     c.globalAlpha = 0.7;

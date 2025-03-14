@@ -323,7 +323,7 @@ class Bot extends Player {
 
         const enemy = getObjectsToCollisions(player, true, player.angle, false, { x: 1, y: 1 }, { x: -global.translation.x, y: -global.translation.y });
 
-        if (satCollisionWithVertices(car, enemy).colliding) { // napisz do tego kod SAT
+        if (satCollision(car, enemy).colliding) { // napisz do tego kod SAT
             if (!this.isColliding) {
                 this.reactToCollisions(player.velocity);
             }
@@ -345,7 +345,7 @@ class Bot extends Player {
         for (let i = 0; i < enemies.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, true)
             const bot = getObjectsToCollisions(enemies[i], true, enemies[i].angle, true)
-            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+            if (satCollision(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     this.isColliding = true;
                     this.reactToCollisions(enemies[i].velocity); // metoda znajduje się w klasie Player, od której klasa Bot dziedziczy

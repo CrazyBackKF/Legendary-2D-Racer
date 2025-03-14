@@ -76,17 +76,6 @@ const stage = {
 }
 
 const background = new Image();
-
-// Tworzenie nowej instancji klasy Player dla gracza
-const player = new Player({
-    position: {
-        x: 0,
-        y: 0
-    },
-    color: 'red',
-    imageSrc: "assets/img/player1.png"
-})
-
 const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
@@ -125,7 +114,6 @@ for (let i = 0; i < 4; i++) {
 
 const allCars = [player, ...bots];
 
-const offset = 3; // offset do tworzenia cieni
 let rotation = 0;
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {

@@ -1,5 +1,4 @@
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
+
 
 // Funkcja odpowiada za zamianę stopni na radiany używane w rotacjach na canvas
 function convertToRadians(angle) {
@@ -144,10 +143,10 @@ function isCollidingButtons(mouse, button) {
     );
 }
 
-function shadowText(text, position, offset, size, font = "Press Start 2P") { 
+function shadowText(text, position, offset, size, textAllign = "center", textBaseline = "middle" ,font = "Press Start 2P") { 
     c.font = `${size}px "${font}"`;
-    c.textAlign = "center";
-    c.textBaseline = "middle";
+    c.textAlign = textAllign;
+    c.textBaseline = textBaseline;
     c.fillStyle = "black";
     c.fillText(text, position.x + offset, position.y + offset);
     c.fillStyle = "white";
@@ -308,7 +307,7 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("click", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
-    const buttons = [...endScreenButtons, ...menuButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             button.click();

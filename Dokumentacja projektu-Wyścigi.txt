@@ -225,3 +225,8 @@
 
 13.03.2025
 - dodanie menu tuningu
+
+14.03.2025
+- modyfikacja wyglądu menu tuningu
+- dodanie zmiany zachowania ze względu na tuning
+- usprawnienie zachowań

@@ -71,11 +71,7 @@ function animateMainMenu() {
         }
     })
 
-    c.font = '30px "Press Start 2P"';
-    c.fillStyle = "white";
-    c.textAlign = "start";
-    c.textBaseline = "bottom";
-    c.fillText("123456789", 100, 65);
+    shadowText(player.money, {x: 100, y: 65}, offset, 30, "start", "bottom");
     
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`;
     c.fillRect(0, 0, canvas.width, canvas.height);

@@ -156,6 +156,21 @@ const endScreenButtons = [
     })
 ]
 
+function tuningOnClick() {
+    const upgrade = tuning[this.name];
+    if (upgrade.cost[upgrade.level] > player.money) return;
+    player.money -= upgrade.cost[upgrade.level]
+    if (upgrade.level < 3) {
+        upgrade.level++;
+    }
+    if (upgrade.level == 3) {
+        this.isClickable = false;
+    }
+    gsap.to(tuning[this.name], {
+        width: upgrade.level * upgrade.widthOffset + 10
+    })
+}
+
 const tuningButtons = [
     // Hamulce
     new Button({
@@ -165,7 +180,9 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
+        isClickable: false,
+        name: "brakes",
+        click: tuningOnClick
     }),
 
     // Silnik
@@ -176,7 +193,9 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
+        isClickable: false,
+        name: "engine",
+        click: tuningOnClick
     }),
 
     // Koła
@@ -187,7 +206,9 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
+        isClickable: false,
+        name: "wheels",
+        click: tuningOnClick
     }),
 
     // Spojler
@@ -198,7 +219,9 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
+        isClickable: false,
+        name: "spoiler",
+        click: tuningOnClick
     }),
 
     // Turbo
@@ -209,8 +232,39 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
-    }) 
+        isClickable: false,
+        name: "turbo",
+        click: tuningOnClick
+    }),
+
+    // Powrót
+    new Button({
+        position: {
+            x: 900,
+            y: 30
+        },
+        imageSrc: "assets/img/Home/Default.png",
+        hoverImageSrc: "assets/img/Home/Hover.png",
+        isClickable: false,
+        name: "return",
+        click: function() {
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    tuningButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    animateMainMenu();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
+        }
+    })
 ]
 
 menuButtons.forEach(button => button.type = "menu");
