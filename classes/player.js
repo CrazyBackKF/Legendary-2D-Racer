@@ -82,7 +82,6 @@ class Player extends Sprite {
         this.changeSpriteProperties();
         this.draw();
         this.drawHitbox();
-        if (!this.isPlaying) return;
         this.checkAmountOfObstacles();
         this.moveCamerabox();
         this.moveCameraVertically();
@@ -95,11 +94,12 @@ class Player extends Sprite {
         this.checkCheckpoints();
         //this.checkObstacles();
         this.checkRoad();
-        this.physics();
         this.turbo();
         //this.checkCollisionWithBots();
         this.updateDistance();
         this.changeStats();
+        if (!this.isPlaying) return;
+        this.physics();
     }
 
     changeSpriteProperties() {
@@ -250,7 +250,7 @@ class Player extends Sprite {
     // Metoda która dodaje drift po wciśnięciu spacji
     drift() {
         if (this.key.space && this.speed > 2) {
-            this.driftMultiplier = 0.9 * this.speed * (this.speedValue / 0.01);
+            this.driftMultiplier = 0.9 * this.speed;
             if (this.key.w) return;
             if (this.speed > 0) this.speed -= 0.02;
             else this.speed = 0;
