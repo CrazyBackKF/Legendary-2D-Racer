@@ -32,14 +32,12 @@ class Bot extends Player {
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
         this.drawHitbox();
-        if(!this.botPlaying) return;
         this.turn();
         this.changeStatsByBehavior();
-        this.move();
         this.accelerate();
         this.changeAngle();
         //this.checkObstacles();
-        this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
+        this.move();
         this.checkCheckpoints();
         this.checkCollisionsWithPlayer();
         this.checkCollisionWithBots();
@@ -47,6 +45,8 @@ class Bot extends Player {
         this.updateDistance();
         //this.deaccelerate();
         // console.log(this.speed)
+        if(!this.botPlaying) return;
+        this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
     }
 
     physics() {
