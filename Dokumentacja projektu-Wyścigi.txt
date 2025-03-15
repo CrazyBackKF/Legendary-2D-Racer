@@ -230,3 +230,7 @@
 - modyfikacja wyglądu menu tuningu
 - dodanie zmiany zachowania ze względu na tuning
 - usprawnienie zachowań
+
+15.03.2025
+- dodanie mapy śnieżnej
+- zmienienie głównego menu, żeby znajdowała się tam nowa mapa

@@ -58,23 +58,38 @@ let index = 0;
 frame;
 let lastFullScreen;
 let time = Date.now();
+const check1 = [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18];
+const check3 = [32,33,34,43,44,31,35,42,45,30,29,36,28,27,26,46,37,41,38,39,40,25,21,24,22,23,20,47,49,48,6,5,4,50,7,3,55,19,11,51,54,56,52,53,8,9,10,12,2,57,18,1,0,59,58,17,13,16,15,14] // za długo to robiłem lol
 
 //wyswietlanie mapy
 const stage = {
     1: {
         arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
         imgSrc: "assets/img/tlo1.png",
-        collisionsTab: getCollisions(collisions.background1.parse2d(), this.arrowRotations).collisions,
-        checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d()).checkpoints, [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18]), // checkpoint order
-        roadTab: getCollisions(collisions.background1.parse2d()).road,
+        collisionsTab: getCollisions(collisions.background1.parse2d(128), this.arrowRotations).collisions,
+        checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d(128)).checkpoints, check1), // checkpoint order
+        roadTab: getCollisions(collisions.background1.parse2d(128)).road,
         amountOfObstacles: obstaclesType.length,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 400},
-        botPos: {x: 300, y: 330}
-
+        botPos: {x: 300, y: 330},
+        startTranslation: {x: -canvas.width / 2, y:  -canvas.height},
+        scale: 1
+    },
+    3: {
+        arrowRotations: [90,90,180,180,90,90,90,0,0,270,270,270,0,0,90,90,90,90,180,180,180,270,270,270,180,180,90,90,180,270,180,180,270,270,270,0,0,0,270,270,270,180,180,270,270,0,0,0,90,90,0,0,270,270,180,270,0,0,90,90],
+        imgSrc: "assets/img/tlo3.png",
+        collisionsTab: getCollisions(collisions.background3.parse2d(192), this.arrowRotations).collisions,
+        checkpointsTab: reorderArray(getCollisions(collisions.background3.parse2d(192)).checkpoints, check3),
+        roadTab: getCollisions(collisions.background3.parse2d(192)).road,
+        amountOfObstacles: obstaclesType.length,
+        amountOfBuffers: 6,
+        playerPos: {x: 550, y: 400},
+        botPos: {x: 300, y: 330},
+        startTranslation: {x: -1550, y: -1150},
+        scale: 2
     }
 }
-
 const background = new Image();
 const obstacles = [];
 const bots = [];

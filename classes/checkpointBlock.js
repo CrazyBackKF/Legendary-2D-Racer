@@ -23,7 +23,7 @@ class CheckpointBlock extends collisionBlock {
         c.scale(global.scale.x, global.scale.y);
         c.fillStyle = this.color;
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
-        c.font = "5px Arial";
+        c.font = "20px Arial";
         c.fillStyle = "black"
         c.fillText(this.index, this.position.x, this.position.y)
         c.restore();

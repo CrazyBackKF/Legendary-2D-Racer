@@ -286,8 +286,7 @@ class Player extends Sprite {
             return;
         }
         else {
-            if (this.speed > 0) this.speed -= (this.notOnRoadFriction * this.speed);
-            else if (this.speed < 0) this.speed += (this.notOnRoadFriction * this.speed);
+            this.speed -= (this.notOnRoadFriction * this.speed);
         }
         if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
@@ -507,11 +506,11 @@ class Player extends Sprite {
     moveCameraVertically() {
         // warunki sprawdzające czy kamera nie wychodzi poza mapę
 
-        if (global.translation.y - this.velocity.y < -canvas.height || global.translation.y - this.velocity.y > 0) return;
+        if (global.translation.y - this.velocity.y < -canvas.height * stage[currentMap].scale || global.translation.y - this.velocity.y > 0) return;
 
         // w przeciwnym wypadku, gdy "camerabox" wyjdzie poza granicę canvasu to przesuń mapę o prędkość z 
         // jaką się poruszamy i zatrzymaj gracza, żeby sprawić iluzję przesuwania się samochodu, mimo że przesuwa się mapa
-        else if ((this.camerabox.position.y <= 0 && this.velocity.y < 0) || (this.camerabox.position.y + this.camerabox.height >= canvas.height && this.velocity.y > 0)) {
+        if ((this.camerabox.position.y <= 0 && this.velocity.y < 0) || (this.camerabox.position.y + this.camerabox.height >= canvas.height && this.velocity.y > 0)) {
             global.translation.y -= this.velocity.y;
             this.position.y -= this.velocity.y
         }
@@ -519,9 +518,9 @@ class Player extends Sprite {
 
     moveCameraHorizontally() {
         // to samo z poziomą orientacją
-        if (global.translation.x - this.velocity.x < -canvas.width || global.translation.x - this.velocity.x > 0) return;
+        if (global.translation.x - this.velocity.x < -canvas.width * stage[currentMap].scale || global.translation.x - this.velocity.x > 0) return;
 
-        else if ((this.camerabox.position.x <= 0 && this.velocity.x < 0) || (this.camerabox.position.x + this.camerabox.width >= canvas.width && this.velocity.x > 0)) {
+        if ((this.camerabox.position.x <= 0 && this.velocity.x < 0) || (this.camerabox.position.x + this.camerabox.width >= canvas.width && this.velocity.x > 0)) {
             global.translation.x -= this.velocity.x;
             this.position.x -= this.velocity.x;
         }

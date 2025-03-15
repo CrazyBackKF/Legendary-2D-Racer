@@ -155,9 +155,8 @@ function shadowText(text, position, offset, size, textAllign = "center", textBas
 
 function changeLevelProperties() {
     counter = 3;
-    global.translation.x = -canvas.width / 2;
-    global.translation.y = -canvas.height;
-
+    global.translation.x = stage[currentMap].startTranslation.x;
+    global.translation.y = stage[currentMap].startTranslation.y;
     for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
         stage[currentMap].checkpointsTab[i].index = i;
         stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
