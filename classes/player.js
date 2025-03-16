@@ -25,6 +25,7 @@ class Player extends Sprite {
         this.isColliding = false;//bool do okreslania wystepowania kolizji
         this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
         this.isOnRoad = false; //bool czy gracz jest na drodze
+        this.isOnIce = false;
         //prędkość w poziomie x i y
         this.velocity = {
             x: 0,
@@ -138,7 +139,6 @@ class Player extends Sprite {
             if (this.speed > 0) this.speed -= (this.speedValue + this.brakeValue);
             else this.speed -= (this.speedValue - this.friction + this.bonusSpeed);
         }
-        if (!deltaTime) deltaTime = 1 / 120;
         this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.x) * deltaTime * 120;
         this.velocity.x = (this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.y) * deltaTime * 120;
     }
@@ -271,6 +271,7 @@ class Player extends Sprite {
     //po wyjechaniu z drogi na 5 sekund, samochód wraca do ostatniego checkpointu
     checkRoad() {
         this.isOnRoad = false;
+        this.isOnIce = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             const car = getObjectsToCollisions(this, false, this.angle, false)
             const road = getObjectsToCollisions(stage[currentMap].roadTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
@@ -281,8 +282,22 @@ class Player extends Sprite {
             }
         }
 
-        if (this.isOnRoad) {
+        for (let i = 0; i < stage[currentMap].iceTab.length; i++) {
+            const car = getObjectsToCollisions(this, false, this.angle, false)
+            const ice = getObjectsToCollisions(stage[currentMap].iceTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
+
+            if (isColliding(ice, car)) {
+                this.isOnIce = true;
+                break; // Wystarczy wykryć jedną kolizję
+            }
+        }
+        if (this.isOnIce) {
             this.lastRoadTime = 0;
+            this.friction = 0;
+        }
+        else if (this.isOnRoad) {
+            this.lastRoadTime = 0;
+            this.friction = 0.01;
             return;
         }
         else {

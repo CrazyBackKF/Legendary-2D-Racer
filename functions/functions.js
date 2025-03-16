@@ -20,6 +20,7 @@ function getCollisions(collisions) {
     const checkpointsTab = [];
     const collisionsTab = [];
     const roadTab = [];
+    const iceTab = [];
     let witdhMultiplier, heightMultipler;
     for (let i = 1; i < collisions.length; i++) {
         for (let j = 0; j < collisions[i].length; j++) {
@@ -58,18 +59,30 @@ function getCollisions(collisions) {
                 }))
             }
             else if (collisions[i][j] == 3) {
-                roadTab.push(new Road({
+                roadTab.push(new collisionBlock({
                     position: {
                         x: j * 8,
                         y: i * 8
                     },
                     width: 8,
-                    height: 8, color: 'rgba(255, 255, 255, 0.5)'
+                    height: 8,
+                    color: 'rgba(255, 255, 255, 0.5)'
+                }))
+            }
+            else if (collisions[i][j] == 5) {
+                iceTab.push(new collisionBlock({
+                    position: {
+                        x: j * 8,
+                        y: i * 8
+                    },
+                    width: 8,
+                    height: 8,
+                    color: 'rgba(0, 255, 255, 0.5)'
                 }))
             }
         }
     }
-    return { collisions: collisionsTab, checkpoints: checkpointsTab, road: roadTab };
+    return { collisions: collisionsTab, checkpoints: checkpointsTab, road: roadTab, ice: iceTab };
 }
 
 function reorderArray(arr, order) {
@@ -103,7 +116,7 @@ function returnDirection(obj1, obj2) {
 }
 
 // isDifferent dodałem, ponieważ czasem trochę inaczej zapisuje obiekty a nie chce mi się tego zmieniać
-function getObjectsToCollisions(obj, isDifferent = false , angle = 0, isInRadians = false, scale = {x: 1, y: 1}, translation = {x: 0, y: 0}) {
+function getObjectsToCollisions(obj, isDifferent = false, angle = 0, isInRadians = false, scale = { x: 1, y: 1 }, translation = { x: 0, y: 0 }) {
     if (!isInRadians) angle = convertToRadians(angle);
     if (!isDifferent) {
         return {
@@ -143,7 +156,7 @@ function isCollidingButtons(mouse, button) {
     );
 }
 
-function shadowText(text, position, offset, size, textAllign = "center", textBaseline = "middle" ,font = "Press Start 2P") { 
+function shadowText(text, position, offset, size, textAllign = "center", textBaseline = "middle", font = "Press Start 2P") {
     c.font = `${size}px "${font}"`;
     c.textAlign = textAllign;
     c.textBaseline = textBaseline;
@@ -164,7 +177,7 @@ function changeLevelProperties() {
     }
 
     background.src = stage[currentMap].imgSrc;
-    
+
     obstacles.length = 0;
 
     for (let i = 0; i < stage[currentMap].amountOfObstacles; i++) {
@@ -175,7 +188,7 @@ function changeLevelProperties() {
             height: 8 * global.scale.y,
             type: obstaclesType[index]
         }))
-    
+
         if (index == obstaclesType.length - 1) {
             index = 0;
         } else {
@@ -192,9 +205,9 @@ function changeLevelProperties() {
         bot.position.x = stage[currentMap].botPos.x + (col * 150) - global.translation.x;
         bot.position.y = stage[currentMap].botPos.y + (row * 75) - global.translation.y;
     })
-    
+
     index = 0;
-    
+
     for (let i = 0; i < stage[currentMap].amountOfBuffers; i++) {
         const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
         obstacles.push(new Obstacle({
@@ -203,8 +216,8 @@ function changeLevelProperties() {
             height: 8 * global.scale.y,
             type: buffersType[index]
         }))
-    
-    
+
+
         if (index == buffersType.length - 1) {
             index = 0;
         } else {
@@ -212,6 +225,28 @@ function changeLevelProperties() {
         }
     }
 
+}
+
+function addSnow() {
+    snowTab.push(new Snow({
+        position: {
+            x: Math.random() * canvas.width + 1,
+            y: 0
+        },
+        index: snowTab.length,
+        radius: Math.random() * 5 + 2,
+        velocity: {
+            x: Math.random() * 2 - 1,
+            y: Math.random() * 2 + 1
+        }
+    }))
+    c.fillStyle = "rgba(224, 247, 250, 0.5)";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+    snowTab.forEach(snow => {
+        snow.update();
+    })
+    snowTab = snowTab.filter(snow => snow.position.y < canvas.height);
+    console.log(snowTab)
 }
 
 // Obsługa przycisków kiedy wcisniety kiedy nie

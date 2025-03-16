@@ -234,3 +234,7 @@
 15.03.2025
 - dodanie mapy śnieżnej
 - zmienienie głównego menu, żeby znajdowała się tam nowa mapa
+
+16.03.2025
+- dodanie lodu (reakcja na lód do zmiany)
+- dodanie śniegu w trzeciej mapie

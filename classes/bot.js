@@ -39,6 +39,7 @@ class Bot extends Player {
         //this.checkObstacles();
         this.move();
         this.checkCheckpoints();
+        //this.checkRoad();
         this.checkCollisionsWithPlayer();
         this.checkCollisionWithBots();
         this.checkLaps();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.1" name="zima1" tilewidth="4096" tileheight="4096" tilecount="27" columns="0">
+<tileset version="1.10" tiledversion="1.11.1" name="zima1" tilewidth="4096" tileheight="4096" tilecount="29" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image source="../../../../../../Downloads/snow0.bmp" width="4096" height="4096"/>
@@ -81,5 +81,11 @@
  </tile>
  <tile id="27">
   <image source="checkpoint.png" width="8" height="8"/>
+ </tile>
+ <tile id="28">
+  <image source="../../../../../../Downloads/snow12.bmp" width="1024" height="1024"/>
+ </tile>
+ <tile id="29">
+  <image source="ice.png" width="8" height="8"/>
  </tile>
 </tileset>

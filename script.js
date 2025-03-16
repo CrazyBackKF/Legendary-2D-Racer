@@ -69,6 +69,7 @@ const stage = {
         collisionsTab: getCollisions(collisions.background1.parse2d(128), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d(128)).checkpoints, check1), // checkpoint order
         roadTab: getCollisions(collisions.background1.parse2d(128)).road,
+        iceTab: [], // nie ma lodu w 1 mapie
         amountOfObstacles: obstaclesType.length,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 400},
@@ -82,6 +83,7 @@ const stage = {
         collisionsTab: getCollisions(collisions.background3.parse2d(192), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background3.parse2d(192)).checkpoints, check3),
         roadTab: getCollisions(collisions.background3.parse2d(192)).road,
+        iceTab: getCollisions(collisions.background3.parse2d(192)).ice,
         amountOfObstacles: obstaclesType.length,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 400},
@@ -95,7 +97,8 @@ const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk'];
-const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer']
+const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer'];
+let snowTab = [];
 
 for (let i = 0; i < 4; i++) {
     bots.push(new Bot(
@@ -138,7 +141,7 @@ function animate(currentTime) {
     //}
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
-    if (deltaTime > 1 / 30) deltaTime = 1 / 30; // Zapobieganie skokom FPS
+    if (deltaTime > 1 / 30  || !deltaTime) deltaTime = 1 / 30; // Zapobieganie skokom FPS
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
     c.translate(global.translation.x, global.translation.y);
@@ -167,6 +170,9 @@ function animate(currentTime) {
             obstacles[i].draw();
             obstacles[i].update();
         }
+        for (let i = 0; i < stage[currentMap].iceTab.length; i++) {
+            stage[currentMap].iceTab[i].draw();
+        }
     }
     player.update(deltaTime);
     //tworzenie obiektu z ktorym byla wykonana kolizja
@@ -189,7 +195,7 @@ function animate(currentTime) {
     }
 
     //wyswietlanie komunikatu aby wrocic na tor
-    if (!player.isOnRoad) {
+    if (!player.isOnRoad && !player.isOnIce) {
         c.fillStyle = "rgba(255, 165, 0, 0.9)"
         c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
         c.strokeStyle = "black"
@@ -201,9 +207,9 @@ function animate(currentTime) {
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
 
+    if (currentMap == 3) addSnow();
     if (player.isPlaying) UI();
     else endOfMatch();
-
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
     c.fillRect(0, 0, canvas.width, canvas.height)
 }
@@ -211,8 +217,11 @@ function animate(currentTime) {
 let counter = 3;
 let lastCounterTime;
 
-function startAnimation() {
+function startAnimation(currentTime) {
     frame = requestAnimationFrame(startAnimation);
+    deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
+    lastFrame = currentTime;
+    if (deltaTime > 1 / 30 || !deltaTime) deltaTime = 1 / 30; // Zapobieganie skokom FPS
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
     c.translate(global.translation.x, global.translation.y);
@@ -223,6 +232,7 @@ function startAnimation() {
     player.changeSpriteProperties();
     player.draw();
     bots.forEach(bot => bot.drawHitbox());
+    addSnow();
     shadowText(counter, {x: canvas.width / 2 - 20, y: 100}, offset, 40);
 
     if (Date.now() - lastCounterTime >= 1000) {
