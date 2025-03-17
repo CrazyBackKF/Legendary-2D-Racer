@@ -8,6 +8,7 @@ class Bot extends Player {
         this.expectedAngle = 0;
         this.brakeValue = 1;
         this.isColliding1 = false;
+        this.isColliding2 = false;
         this.speedValue = 0.03;
         this.previousCheckpoint = 0;
         this.laps = -1;
@@ -39,6 +40,7 @@ class Bot extends Player {
         //this.checkObstacles();
         this.move();
         this.checkCheckpoints();
+        this.checkCollisions();
         //this.checkRoad();
         this.checkCollisionsWithPlayer();
         this.checkCollisionWithBots();
@@ -167,6 +169,7 @@ class Bot extends Player {
             this.laps++
         };
         if (this.laps == 3) {
+            this.distance += 10000000 * (allCars.length - this.place)
             this.correctPlace = this.place;
             this.botPlaying = false;
         }

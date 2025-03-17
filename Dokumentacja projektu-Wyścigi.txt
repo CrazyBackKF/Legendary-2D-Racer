@@ -238,3 +238,7 @@
 16.03.2025
 - dodanie lodu (reakcja na lód do zmiany)
 - dodanie śniegu w trzeciej mapie
+
+17.03.2025
+- dodawanie pieniędzy po zakończeniu wyścigu
+- dodanie kolizji, między obiektami na mapie w które nie można wjechać

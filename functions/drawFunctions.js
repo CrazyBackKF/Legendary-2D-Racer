@@ -60,6 +60,11 @@ function endOfMatch() {
     })
     c.restore();
 
+    shadowText("+", {x: 675, y: 125}, offset, 25);
+    coin.draw();
+    shadowText(player.moneyToAdd, {x: 740, y: 115}, offset, 25, "start", "top");
+
     endScreenButtons.forEach(button => button.draw());
 }
+
 

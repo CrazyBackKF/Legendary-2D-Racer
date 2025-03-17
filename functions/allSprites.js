@@ -38,6 +38,18 @@ const endScreen = new Sprite({
     alpha: 0.98
 })
 
+const coin = new Sprite({
+    position: {
+        x: 1150,
+        y: 170
+    },
+    imageSrc: "assets/img/Icons/Coin.png",
+    scale: {
+        x: 0.6,
+        y: 0.6
+    }
+})
+
 const menuButtons = [
     new Button({
         position: {

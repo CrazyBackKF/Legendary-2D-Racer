@@ -23,6 +23,7 @@ class Player extends Sprite {
         this.turboAmount = 1.5; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;//bool do okreslania wystepowania kolizji
+        this.isColliding2 = false;
         this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
         this.isOnRoad = false; //bool czy gracz jest na drodze
         this.isOnIce = false;
@@ -74,7 +75,8 @@ class Player extends Sprite {
         this.alpha = 1;
         this.name = "Player";
         this.correctPlace;
-        this.money = JSON.parse(localStorage.getItem("money")) || 1000000;
+        this.money = JSON.parse(localStorage.getItem("money")) || 0;
+        this.moneyToAdd = 0;
     }
 
 
@@ -265,8 +267,27 @@ class Player extends Sprite {
 
     // Metoda sprawdza kolizję między samochodzem a blokami kolizji
     checkCollisions() {
-        // funkcja pozostała, ponieważ będzie wykorzystana na kolizje z botami, i obiektami na mapie
+        let wasColliding = false;
+        
+        for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
+            const car = getObjectsToCollisions(this, false, this.angle, false);
+            const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], false, 0, false, global.scale, global.translation);
+    
+            if (isColliding(car, collision)) {
+                wasColliding = true;
+                if (!this.isColliding2) {
+                    this.speed *= -0.8;
+                }
+                this.isColliding2 = true;
+                break;
+            }
+        }
+    
+        if (!wasColliding) {
+            this.isColliding2 = false;
+        }
     }
+    
 
     //po wyjechaniu z drogi na 5 sekund, samochód wraca do ostatniego checkpointu
     checkRoad() {
@@ -466,10 +487,11 @@ class Player extends Sprite {
                 if (i == 0) {
                     for (let j = 0; j < stage[currentMap].checkpointsTab.length; j++) {
                         //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
-                        // odkomentować
-                        //if (!stage[currentMap].checkpointsTab[j].isPassed) break;
+                        if (!stage[currentMap].checkpointsTab[j].isPassed) break;
                         if (this.laps == 3) //jezli sa 3 okrazenia to koniec
                         {
+                            this.distance += 10000000 * (allCars.length - this.place) // po skończeniu trzech okrążeń dodaje do dystansy dużą liczbę, w zależności od jego pozycji
+                            //, bo po wygranej, źle liczyło miejsce, tak samo dla botów
                             gsap.to(this, {
                                 alpha: 0,
                                 repeat: 4,
@@ -478,6 +500,7 @@ class Player extends Sprite {
                             })
                             this.correctPlace = this.place;
                             this.isPlaying = false;
+                            this.addMoney(); // dodaje monety, ze względu na miejsce
                             break;
                         }
                         else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
@@ -502,6 +525,12 @@ class Player extends Sprite {
                 break;
             }
         }
+    }
+
+    addMoney() {
+        this.moneyToAdd = 100 * currentMap + 10 * (allCars.length - this.correctPlace); // zapisuje to, żeby móc się odwołać do tego w skrypcie, i narysować to po skończeniu wyścigu
+        this.money += this.moneyToAdd;
+        localStorage.setItem("money", this.money);
     }
 
     //metoda reagujaca na kolizje

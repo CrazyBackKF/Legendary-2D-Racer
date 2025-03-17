@@ -88,7 +88,7 @@ const stage = {
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 400},
         botPos: {x: 300, y: 330},
-        startTranslation: {x: -1550, y: -1150},
+        startTranslation: {x: -1700, y: -1150},
         scale: 2
     }
 }
@@ -152,7 +152,6 @@ function animate(currentTime) {
         //rysowanie scian
         for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
             stage[currentMap].collisionsTab[i].draw();
-            stage[currentMap].collisionsTab[i].angle += 0.01;
         }
 
         //rysowanie checkpointow
@@ -232,7 +231,7 @@ function startAnimation(currentTime) {
     player.changeSpriteProperties();
     player.draw();
     bots.forEach(bot => bot.drawHitbox());
-    addSnow();
+    if (currentMap == 3) addSnow();
     shadowText(counter, {x: canvas.width / 2 - 20, y: 100}, offset, 40);
 
     if (Date.now() - lastCounterTime >= 1000) {

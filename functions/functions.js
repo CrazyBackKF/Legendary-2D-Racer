@@ -34,7 +34,7 @@ function getCollisions(collisions) {
                 heightMultipler = 1;
             }
 
-            if (collisions[i][j] == 1) {
+            if (collisions[i][j] == 4) {
                 collisionsTab.push(new collisionBlock({
                     position: {
                         x: j * 8,
@@ -246,7 +246,6 @@ function addSnow() {
         snow.update();
     })
     snowTab = snowTab.filter(snow => snow.position.y < canvas.height);
-    console.log(snowTab)
 }
 
 // Obsługa przycisków kiedy wcisniety kiedy nie
