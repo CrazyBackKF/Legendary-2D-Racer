@@ -66,6 +66,7 @@ const stage = {
     1: {
         arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
         imgSrc: "assets/img/tlo1.png",
+        foregroundSrc: "assets/img/tlo1Foreground.png",
         collisionsTab: getCollisions(collisions.background1.parse2d(128), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d(128)).checkpoints, check1), // checkpoint order
         roadTab: getCollisions(collisions.background1.parse2d(128)).road,
@@ -80,6 +81,7 @@ const stage = {
     3: {
         arrowRotations: [90,90,180,180,90,90,90,0,0,270,270,270,0,0,90,90,90,90,180,180,180,270,270,270,180,180,90,90,180,270,180,180,270,270,270,0,0,0,270,270,270,180,180,270,270,0,0,0,90,90,0,0,270,270,180,270,0,0,90,90],
         imgSrc: "assets/img/tlo3.png",
+        foregroundSrc: "assets/img/tlo3Foreground.png",
         collisionsTab: getCollisions(collisions.background3.parse2d(192), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background3.parse2d(192)).checkpoints, check3),
         roadTab: getCollisions(collisions.background3.parse2d(192)).road,
@@ -93,6 +95,7 @@ const stage = {
     }
 }
 const background = new Image();
+const foreground = new Image(); // żeby była iluza, że samochód wjeżdża za np drzewa
 const obstacles = [];
 const bots = [];
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
@@ -149,11 +152,6 @@ function animate(currentTime) {
     c.drawImage(background, 0, 0);
     c.restore();
     if (key.q) {
-        //rysowanie scian
-        for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
-            stage[currentMap].collisionsTab[i].draw();
-        }
-
         //rysowanie checkpointow
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
             stage[currentMap].checkpointsTab[i].draw();
@@ -192,7 +190,21 @@ function animate(currentTime) {
     for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
         if (i == player.lastCheckpoint + 1) stage[currentMap].checkpointsTab[i].drawArrow();
     }
+    
+    if (foreground.src != "") {
+        c.save();
+        c.translate(global.translation.x, global.translation.y);
+        c.scale(global.scale.x, global.scale.y);
+        c.drawImage(foreground, 0, 0);
+        c.restore();
+    }
 
+    if (key.q) {
+        //rysowanie scian
+        for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
+            stage[currentMap].collisionsTab[i].draw();
+        }
+    }
     //wyswietlanie komunikatu aby wrocic na tor
     if (!player.isOnRoad && !player.isOnIce) {
         c.fillStyle = "rgba(255, 165, 0, 0.9)"
@@ -206,6 +218,7 @@ function animate(currentTime) {
         c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
     }
 
+    
     if (currentMap == 3) addSnow();
     if (player.isPlaying) UI();
     else endOfMatch();

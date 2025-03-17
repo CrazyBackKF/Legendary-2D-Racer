@@ -177,6 +177,7 @@ function changeLevelProperties() {
     }
 
     background.src = stage[currentMap].imgSrc;
+    foreground.src = stage[currentMap].foregroundSrc;
 
     obstacles.length = 0;
 

@@ -242,3 +242,4 @@
 17.03.2025
 - dodawanie pieniędzy po zakończeniu wyścigu
 - dodanie kolizji, między obiektami na mapie w które nie można wjechać
+- dodanie foregroundu
