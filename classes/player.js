@@ -54,7 +54,7 @@ class Player extends Sprite {
             y: 0
         }
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
-        this.laps = 0; //zmienna opisujaca ilosc okrazen
+        this.laps = 1; //zmienna opisujaca ilosc okrazen
         this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
         this.allObstacles = false;
         this.deletedObstacle = "";
@@ -639,7 +639,7 @@ class Player extends Sprite {
             y: 0
         }
         this.lastCheckpoint = -1; //zmienna pomocnicza do zaznaczanie checkpointo (-1 poniewaz trzeba zaliczyc start/mete z indexem 0)
-        this.laps = 0; //zmienna opisujaca ilosc okrazen
+        this.laps = 1; //zmienna opisujaca ilosc okrazen
         this.oliedMultiplier = 1; //zmienne zmieniajaca turnSpeed jezeli gracz przejechal przez kaluze oleju
         this.allObstacles = false;
         this.deletedObstacle = "";
