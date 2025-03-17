@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" width="192" height="108" tilewidth="8" tileheight="8" infinite="0" nextlayerid="9" nextobjectid="1179">
+<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" width="192" height="108" tilewidth="8" tileheight="8" infinite="0" nextlayerid="9" nextobjectid="1180">
  <editorsettings>
   <export target="../../../../../../Downloads/tlo2.tmj" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="zima1.tsx"/>
- <objectgroup id="2" name="tlo">
+ <objectgroup id="2" name="tlo" visible="0">
   <object id="94" gid="11" x="-0.121212" y="44.8788" width="41.3333" height="41.3333"/>
   <object id="95" gid="11" x="40.6667" y="41.3333" width="41.3333" height="41.3333"/>
   <object id="96" gid="11" x="80.2727" y="41.7728" width="41.3333" height="41.3333"/>
@@ -1037,7 +1037,7 @@
   <object id="1170" gid="11" x="-33.6174" y="574.835" width="41.3333" height="41.3333"/>
   <object id="1171" gid="11" x="-34.3825" y="612.945" width="41.3333" height="41.3333"/>
  </objectgroup>
- <objectgroup id="3" name="tor">
+ <objectgroup id="3" name="tor" visible="0">
   <object id="7" gid="7" x="852.333" y="797" width="187.349" height="69"/>
   <object id="8" gid="7" x="665.659" y="797" width="187.349" height="69"/>
   <object id="9" gid="5" x="602" y="797" width="69" height="69"/>
@@ -1079,7 +1079,7 @@
   <object id="74" gid="7" x="1039.66" y="796.833" width="187.349" height="69"/>
   <object id="75" gid="7" x="1227.08" y="797" width="192.099" height="69"/>
  </objectgroup>
- <objectgroup id="4" name="tor2">
+ <objectgroup id="4" name="tor2" visible="0">
   <object id="13" gid="5" x="671" y="482.5" width="69" height="69" rotation="180"/>
   <object id="16" gid="5" x="169.5" y="482.5" width="69" height="69" rotation="90"/>
   <object id="18" gid="5" x="169.33" y="703.5" width="69" height="69"/>
@@ -1105,7 +1105,7 @@
   <object id="70" gid="5" x="1483.83" y="555.167" width="69" height="69" rotation="180"/>
   <object id="73" gid="2147483653" x="1414.48" y="796.875" width="70.3636" height="69.4167"/>
  </objectgroup>
- <objectgroup id="8" name="lód" opacity="0.74">
+ <objectgroup id="8" name="lód" visible="0" opacity="0.74">
   <object id="1172" gid="29" x="176.5" y="631.5" width="55" height="71.75"/>
   <object id="1173" gid="29" x="64.1288" y="632.667" width="48.2273" height="124.667"/>
   <object id="1174" gid="29" x="1200.17" y="736.833" width="47.5" height="127.917" rotation="90"/>
@@ -1121,6 +1121,7 @@
   <object id="1113" gid="24" x="1267" y="244" width="138.291" height="138"/>
   <object id="1114" gid="21" x="1260" y="410" width="136.822" height="81.3333"/>
   <object id="1116" gid="19" x="24.9697" y="40.8788" width="217.611" height="117.03" rotation="90"/>
+  <object id="1179" gid="20" x="966.608" y="728.333" width="71.3277" height="13.2832" rotation="90"/>
  </objectgroup>
  <layer id="7" name="kolizje" width="192" height="108" visible="0" opacity="0.6">
   <data encoding="csv">

@@ -188,10 +188,10 @@ function animate(currentTime) {
     }
 
     for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
-        if (i == player.lastCheckpoint + 1) stage[currentMap].checkpointsTab[i].drawArrow();
+        if (i == player.lastCheckpoint + 1 && i != 0) stage[currentMap].checkpointsTab[i].drawArrow();
     }
     
-    if (foreground.src != "") {
+    if (foreground.src != "") { // jeżeli tło ma foreground
         c.save();
         c.translate(global.translation.x, global.translation.y);
         c.scale(global.scale.x, global.scale.y);
@@ -244,6 +244,15 @@ function startAnimation(currentTime) {
     player.changeSpriteProperties();
     player.draw();
     bots.forEach(bot => bot.drawHitbox());
+
+    if (foreground.src != "") {
+        c.save();
+        c.translate(global.translation.x, global.translation.y);
+        c.scale(global.scale.x, global.scale.y);
+        c.drawImage(foreground, 0, 0);
+        c.restore();
+    }
+    
     if (currentMap == 3) addSnow();
     shadowText(counter, {x: canvas.width / 2 - 20, y: 100}, offset, 40);
 
