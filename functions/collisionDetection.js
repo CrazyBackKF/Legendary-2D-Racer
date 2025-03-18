@@ -191,3 +191,121 @@ function pointInPolygon(point, polygon) {
     }
     return inside;
 }
+
+function satCollisionWithVertices(entityA, entityB) {
+    const verticesA = getTransformedVertices(entityA);
+    const verticesB = getTransformedVertices(entityB);
+    
+    const colliding = checkSeparatingAxis(verticesA, verticesB) && checkSeparatingAxis(verticesB, verticesA);
+    
+    if (!colliding) {
+        return { colliding: false, collidingVertices: [] };
+    }
+    
+    let collidingVertices = [];
+    
+    // Sprawdzamy, które wierzchołki z A są wewnątrz B
+    for (const vertex of verticesA) {
+        if (pointInPolygon(vertex, verticesB)) {
+            collidingVertices.push(vertex);
+        }
+    }
+    
+    // Sprawdzamy, które wierzchołki z B są wewnątrz A
+    for (const vertex of verticesB) {
+        if (pointInPolygon(vertex, verticesA)) {
+            collidingVertices.push(vertex);
+        }
+    }
+    
+    return { colliding: true, collidingVertices };
+}
+
+// Funkcja pomocnicza, która pobiera wierzchołki jako tablicę w odpowiedniej kolejności
+function getVertices(entity) {
+    // Ustal pivot zgodnie z Twoim kodem: (position.x + width/2, position.y + height/4)
+    const pivotX = entity.position.x + entity.width / 2;
+    const pivotY = entity.position.y + entity.height / 4;
+    // Pobieramy punkty z getPoints (zakładamy, że kąt jest w stopniach)
+    const points = getPoints(entity, entity.angle, pivotX, pivotY, false);
+    // Zwracamy wierzchołki w kolejności: lt, rt, rb, lb (tworząc poprawny wielokąt)
+    return [points.lt, points.rt, points.rb, points.lb];
+}
+
+// Funkcja obliczająca Minimal Translation Vector (MTV)
+function computeMTV(entityA, entityB) {
+    const verticesA = getVertices(entityA);
+    const verticesB = getVertices(entityB);
+    let mtvAxis = null;
+    let mtvOverlap = Infinity;
+
+    // Pobieramy osie (normale) dla obu wielokątów
+    const axesA = getAxes(verticesA);
+    const axesB = getAxes(verticesB);
+    const axes = axesA.concat(axesB);
+
+    for (const axis of axes) {
+        const projA = project(verticesA, axis);
+        const projB = project(verticesB, axis);
+        // Obliczamy nakładanie (overlap) między projekcjami
+        const overlap = Math.min(projA.max, projB.max) - Math.max(projA.min, projB.min);
+        if (overlap < 0) {
+            // Brak kolizji
+            return { colliding: false, mtv: null };
+        }
+        if (overlap < mtvOverlap) {
+            mtvOverlap = overlap;
+            mtvAxis = axis;
+        }
+    }
+
+    // Obliczamy środki obu wielokątów
+    const centerA = computeCenter(verticesA);
+    const centerB = computeCenter(verticesB);
+    const centerDiff = { x: centerB.x - centerA.x, y: centerB.y - centerA.y };
+    console.log(mtvAxis)
+    // Upewniamy się, że MTV skierowany jest z entityA na zewnątrz (od entityB)
+    if (dot(centerDiff, mtvAxis) < 0) {
+        mtvAxis = { x: -mtvAxis.x, y: -mtvAxis.y };
+    }
+    return { colliding: true, mtv: { x: mtvAxis.x * mtvOverlap, y: mtvAxis.y * mtvOverlap } };
+}
+
+function getAxes(vertices) {
+    const axes = [];
+    for (let i = 0; i < vertices.length; i++) {
+        const j = (i + 1) % vertices.length;
+        const edge = { x: vertices[j].x - vertices[i].x, y: vertices[j].y - vertices[i].y };
+        // Normalna do krawędzi
+        const normal = { x: -edge.y, y: edge.x };
+        // Normalizacja wektora
+        const length = Math.hypot(normal.x, normal.y);
+        axes.push({ x: normal.x / length, y: normal.y / length });
+    }
+    return axes;
+}
+
+function project(vertices, axis) {
+    let min = Infinity, max = -Infinity;
+    for (const v of vertices) {
+        const projection = v.x * axis.x + v.y * axis.y;
+        min = Math.min(min, projection);
+        max = Math.max(max, projection);
+    }
+    return { min, max };
+}
+
+function computeCenter(vertices) {
+    let center = { x: 0, y: 0 };
+    for (const v of vertices) {
+        center.x += v.x;
+        center.y += v.y;
+    }
+    center.x /= vertices.length;
+    center.y /= vertices.length;
+    return center;
+}
+
+function dot(v1, v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
