@@ -70,7 +70,7 @@ const menuButtons = [
             y: 450
         },
         click: function() {
-            if (mainMenu.translation.currentLvl == 3) return;
+            if (mainMenu.translation.currentLvl == 5) return;
             else mainMenu.translation.currentLvl++;
             changeLvl();
         },

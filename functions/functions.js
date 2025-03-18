@@ -170,6 +170,7 @@ function changeLevelProperties() {
     counter = 3;
     global.translation.x = stage[currentMap].startTranslation.x;
     global.translation.y = stage[currentMap].startTranslation.y;
+    console.log(stage[currentMap].checkpointsTab)
     for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
         stage[currentMap].checkpointsTab[i].index = i;
         stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);

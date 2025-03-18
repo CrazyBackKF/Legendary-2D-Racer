@@ -29,8 +29,8 @@ const mainMenu = {
 }
 
 const circles = [];
-for (let i = 0; i < 3; i++) {
-    circles.push({position: {x: 350 + i * 150 , y: 500}})
+for (let i = 0; i < 5; i++) {
+    circles.push({position: {x: 350 + i * 75 , y: 500}})
 }
 
 function changeLvl() {

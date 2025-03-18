@@ -243,3 +243,7 @@
 - dodawanie pieniędzy po zakończeniu wyścigu
 - dodanie kolizji, między obiektami na mapie w które nie można wjechać
 - dodanie foregroundu
+
+18.03.2025
+- dodanie mapy 2
+- zmienienie mapy zimowej na pozycje 4 (więcej map, może 5 jak się uda)
