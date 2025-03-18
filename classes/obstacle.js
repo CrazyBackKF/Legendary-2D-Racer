@@ -49,7 +49,6 @@ class Obstacle {
                 };
                 if (isColliding(obstacle1, obstacle2)) {
                     currentlyColliding = true;
-                    console.log("wystepuje kolizja miedzy przeszkodami")
 
                     // Wykrycie wejścia w kolizję po raz pierwszy
                     if (!this.isColliding) {
