@@ -170,7 +170,6 @@ function changeLevelProperties() {
     counter = 3;
     global.translation.x = stage[currentMap].startTranslation.x;
     global.translation.y = stage[currentMap].startTranslation.y;
-    console.log(stage[currentMap].checkpointsTab)
     for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
         stage[currentMap].checkpointsTab[i].index = i;
         stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
@@ -200,12 +199,14 @@ function changeLevelProperties() {
     player.reset();
     player.position.x = stage[currentMap].playerPos.x;
     player.position.y = stage[currentMap].playerPos.y;
+    player.angle = stage[currentMap].rotation;
     bots.forEach((bot, i) => {
         let row = Math.floor(i / 2); // Rząd (0 lub 1)
         let col = i % 2;             // Kolumna (0 lub 1)
         bot.reset();
         bot.position.x = stage[currentMap].botPos.x + (col * 150) - global.translation.x;
         bot.position.y = stage[currentMap].botPos.y + (row * 75) - global.translation.y;
+        bot.angle = convertToRadians(stage[currentMap].rotation);
     })
 
     index = 0;

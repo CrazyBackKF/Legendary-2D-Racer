@@ -6,42 +6,10 @@ const key = {
     q: false
 }
 
-let currentMap = 1;
 let lastFrame = 0;
 let deltaTime = 1;
 
-const obstaclesType = [{
-    type: "oil",
-    color: "black"
-},
-{
-    type: "traffic cone",
-    color: "orange"
-},
-{
-    type: "hole",
-    color: "gray"
-},
-{
-    type: "spikes",
-    color: "purple"
-}
-];
 
-// coiny inne takie przeszkody beda zawarte w tej samej tablicy co przeszkody
-//jest to wygodniejsze i dziala tak samo tylko inne jest zachowanie
-const buffersType = [
-    {
-        type: "nitro",
-        color: "lightblue"
-    },
-    {
-        type: "coin",
-        color: "green"
-    }
-];
-
-let index = 0;
 
 // const global = {
 //     scale: {
@@ -58,58 +26,7 @@ let index = 0;
 frame;
 let lastFullScreen;
 let time = Date.now();
-const check1 = [4, 5, 13, 14, 3, 6, 12, 15, 16, 7, 11, 8, 9, 10, 2, 17, 1, 0, 18];
-const check2 = [20,24,40,5,6,19,21,23,25,41,18,22,7,39,4,17,26,8,27,28,29,30,31,38,9,10,16,3,32,42,33,11,12,13,34,37,35,36,15,14,2,1,0,45,43,44];
-const check3 = [32,33,34,43,44,31,35,42,45,30,29,36,28,27,26,46,37,41,38,39,40,25,21,24,22,23,20,47,49,48,6,5,4,50,7,3,55,19,11,51,54,56,52,53,8,9,10,12,2,57,18,1,0,59,58,17,13,16,15,14] // za długo to robiłem lol
 
-//wyswietlanie mapy
-const stage = {
-    1: {
-        arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
-        imgSrc: "assets/img/tlo1.png",
-        foregroundSrc: "assets/img/tlo1Foreground.png",
-        collisionsTab: getCollisions(collisions.background1.parse2d(128), this.arrowRotations).collisions,
-        checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d(128)).checkpoints, check1), // checkpoint order
-        roadTab: getCollisions(collisions.background1.parse2d(128)).road,
-        iceTab: [], // nie ma lodu w 1 mapie
-        amountOfObstacles: obstaclesType.length,
-        amountOfBuffers: 6,
-        playerPos: {x: 550, y: 400},
-        botPos: {x: 300, y: 330},
-        startTranslation: {x: -canvas.width / 2, y:  -canvas.height},
-        scale: 1
-    },
-    2: {
-        arrowRotations: [90,90,180,180,180,270,270,270,0,0,90,0,270,270,270,180,180,180,270,180,270,0,270,180,270,0,0,90,90,0,270,270,0,90,0,270,270,180,180,180,270,0,0,0,90,90],
-        imgSrc: "assets/img/tlo2.png",
-        foregroundSrc: "",
-        collisionsTab: getCollisions(collisions.background2.parse2d(128), this.arrowRotations).collisions,
-        checkpointsTab: reorderArray(getCollisions(collisions.background2.parse2d(128)).checkpoints, check2), // checkpoint order
-        roadTab: getCollisions(collisions.background2.parse2d(128)).road,
-        iceTab: [],
-        amountOfObstacles: obstaclesType.length,
-        amountOfBuffers: 6,
-        playerPos: {x: 550, y: 450},
-        botPos: {x: 300, y: 380},
-        startTranslation: {x: -canvas.width / 2 - 100, y:  -canvas.height},
-        scale: 1
-    },
-    4: {
-        arrowRotations: [90,90,180,180,90,90,90,0,0,270,270,270,0,0,90,90,90,90,180,180,180,270,270,270,180,180,90,90,180,270,180,180,270,270,270,0,0,0,270,270,270,180,180,270,270,0,0,0,90,90,0,0,270,270,180,270,0,0,90,90],
-        imgSrc: "assets/img/tlo3.png",
-        foregroundSrc: "assets/img/tlo3Foreground.png",
-        collisionsTab: getCollisions(collisions.background3.parse2d(192), this.arrowRotations).collisions,
-        checkpointsTab: reorderArray(getCollisions(collisions.background3.parse2d(192)).checkpoints, check3),
-        roadTab: getCollisions(collisions.background3.parse2d(192)).road,
-        iceTab: getCollisions(collisions.background3.parse2d(192)).ice,
-        amountOfObstacles: obstaclesType.length,
-        amountOfBuffers: 6,
-        playerPos: {x: 550, y: 400},
-        botPos: {x: 300, y: 330},
-        startTranslation: {x: -1700, y: -1150},
-        scale: 2
-    }
-}
 const background = new Image();
 const foreground = new Image(); // żeby była iluza, że samochód wjeżdża za np drzewa
 const obstacles = [];

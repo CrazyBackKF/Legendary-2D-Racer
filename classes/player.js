@@ -98,7 +98,7 @@ class Player extends Sprite {
         //this.checkObstacles();
         this.checkRoad();
         this.turbo();
-        this.checkCollisionWithBots();
+        //this.checkCollisionWithBots();
         this.updateDistance();
         this.changeStats();
         if (!this.isPlaying) return;
@@ -528,7 +528,7 @@ class Player extends Sprite {
     }
 
     addMoney() {
-        this.moneyToAdd = 100 * currentMap + 10 * (allCars.length - this.correctPlace); // zapisuje to, żeby móc się odwołać do tego w skrypcie, i narysować to po skończeniu wyścigu
+        this.moneyToAdd = 100 * stage[currentMap].moneyMultiplier + 10 * (allCars.length - this.correctPlace); // zapisuje to, żeby móc się odwołać do tego w skrypcie, i narysować to po skończeniu wyścigu
         this.money += this.moneyToAdd;
         localStorage.setItem("money", this.money);
     }
