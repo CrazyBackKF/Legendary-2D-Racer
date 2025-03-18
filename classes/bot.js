@@ -1,5 +1,5 @@
 class Bot extends Player {
-    constructor({ position, color, behavior, index, name }) {
+    constructor({ position, color, behavior, index }) {
         super({ position, color })
         this.angle = convertToRadians(270);
         //zmienne okreslajace bota m. in. szybkosc, kat obrotu, checkpointy
@@ -8,10 +8,9 @@ class Bot extends Player {
         this.expectedAngle = 0;
         this.brakeValue = 1;
         this.isColliding1 = false;
-        this.isColliding2 = false;
         this.speedValue = 0.03;
         this.previousCheckpoint = 0;
-        this.laps = -1;
+        this.laps = 0;
         //zmienne do zachowan botow w zaleznosci od jego typu
         this.shouldAttack = false;
         this.hasBraked = false;
@@ -22,33 +21,24 @@ class Bot extends Player {
         this.behavior = behavior;
         this.index = index;
         this.lastCheckpointTime = Date.now();
-        this.distance = 0;
-        this.distanceFromLastCheckpoint = 0;
-        this.botPlaying = true;
-        this.name = name;
-        this.correctPlace;
     }
-
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
-        this.drawHitbox();
+        this.draw();
         this.turn();
         this.changeStatsByBehavior();
+        this.move();
         this.accelerate();
         this.changeAngle();
-        //this.checkObstacles();
-        this.move();
+        this.checkObstacles();
+        this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
         this.checkCheckpoints();
-        //this.checkRoad();
         this.checkCollisionsWithPlayer();
         this.checkCollisionWithBots();
         this.checkLaps();
-        this.updateDistance();
-        //this.deaccelerate();
+        // this.deaccelerate();
         // console.log(this.speed)
-        if(!this.botPlaying) return;
-        this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
     }
 
     physics() {
@@ -58,7 +48,7 @@ class Bot extends Player {
     }
 
     //metoda rysuje bota
-    drawHitbox() {
+    draw() {
         c.save();
         c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);
@@ -109,17 +99,17 @@ class Bot extends Player {
             }
         }
         /////////////////////////////////////////////////////////////////do debugowania
-        // c.beginPath();
-        // c.fillStyle = "black";
-        // c.arc(checkpointPosition.x, checkpointPosition.y, 5, 0, 2 * Math.PI);
-        // c.closePath();
-        // c.fill();
-        // c.beginPath();
+        c.beginPath();
+        c.fillStyle = "black";
+        c.arc(checkpointPosition.x, checkpointPosition.y, 5, 0, 2 * Math.PI);
+        c.closePath();
+        c.fill();
+        c.beginPath();
 
-        // c.strokeStyle = "black";
-        // c.moveTo(this.position.x + this.width / 2 + global.translation.x, this.position.y + this.height / 4 + global.translation.y);
-        // c.lineTo(checkpointPosition.x, checkpointPosition.y);
-        // c.stroke();
+        c.strokeStyle = "black";
+        c.moveTo(this.position.x + this.width / 2 + global.translation.x, this.position.y + this.height / 4 + global.translation.y);
+        c.lineTo(checkpointPosition.x, checkpointPosition.y);
+        c.stroke();
         //////////////////////////////////////////////////////////////
 
         this.expectedAngle = Math.atan2(direction.y, direction.x) + Math.PI / 2; //obliczanie kąta między botem o checkpointem za pomocą funkcji cyklometrzycnzej arcus tangens
@@ -140,7 +130,6 @@ class Bot extends Player {
                 this.lastCheckpointTime = Date.now();
                 this.randomOffset.x = 0;
                 this.randomOffset.y = 0;
-                this.distance += this.distanceFromLastCheckpoint;
                 break;
             }
         }
@@ -153,7 +142,7 @@ class Bot extends Player {
         angleDifference = Math.atan2(Math.sin(angleDifference), Math.cos(angleDifference));
 
         // Ograniczamy maksymalną prędkość skrętu
-        const turnSpeed = 0.05; // Możesz dostosować wartość
+        const turnSpeed = 0.025; // Możesz dostosować wartość
 
         if (Math.abs(angleDifference) < turnSpeed) {
             this.angle = this.expectedAngle; // Drobna korekta, jeśli jest już prawie wyrównane
@@ -164,13 +153,9 @@ class Bot extends Player {
 
     // sprawdzamy ilosc okrazen
     checkLaps() {
-        if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) {
-            this.laps++
-        };
+        if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) this.laps++;
         if (this.laps == 3) {
-            this.distance += 10000000 * (allCars.length - this.place)
-            this.correctPlace = this.place;
-            this.botPlaying = false;
+            console.log("Bot wygrał")
         }
         this.previousCheckpoint = this.currentCheckpoint;
     }
@@ -179,21 +164,23 @@ class Bot extends Player {
     changeStatsByBehavior() {
         // bot jedzie z tą samą szybkością
         if (this.behavior == "stabilny") {
-            this.maxSpeed = 2;
-            this.speedValue = 0.01;
+            this.maxSpeed = 3;
+            this.speedValue = 0.03;
         }
         // bot jedzie bardzo szybko na prostej i zwalnia na zakręcie
         else if (this.behavior == "sprinter") {
             if (Math.abs(this.expectedAngle - this.angle) > Math.PI / 12) {
                 if (!this.hasBraked) this.speed = 1;
+                //console.log("skręcam");
                 this.hasBraked = true;
                 this.maxSpeed = 1;
                 this.speedValue = 0.02;
                 this.brakeValue = 0.01;
             }
             else {
+                //console.log("prosta");
                 this.hasBraked = false;
-                this.maxSpeed = 4;
+                this.maxSpeed = 6;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
@@ -225,14 +212,16 @@ class Bot extends Player {
             // }
             if (Math.abs(this.expectedAngle - this.angle) > Math.PI / 12) {
                 if (!this.hasBraked) this.speed = 1;
+                //console.log("skręcam");
                 this.hasBraked = true;
                 this.maxSpeed = 1;
                 this.speedValue = 0.02;
                 this.brakeValue = 0.01;
             }
             else {
+                //console.log("prosta");
                 this.hasBraked = false;
-                this.maxSpeed = 3;
+                this.maxSpeed = 6;
                 this.speedValue = 0.05;
                 if (this.brakeValue < 1) this.brakeValue += 0.1;
             }
@@ -326,8 +315,9 @@ class Bot extends Player {
 
         const enemy = getObjectsToCollisions(player, true, player.angle, false, { x: 1, y: 1 }, { x: -global.translation.x, y: -global.translation.y });
 
-        if (satCollision(car, enemy).colliding) { // napisz do tego kod SAT
+        if (satCollisionWithVertices(car, enemy).colliding) { // napisz do tego kod SAT
             if (!this.isColliding) {
+                //console.log("chuj")
                 this.reactToCollisions(player.velocity);
             }
         }
@@ -348,7 +338,7 @@ class Bot extends Player {
         for (let i = 0; i < enemies.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, true)
             const bot = getObjectsToCollisions(enemies[i], true, enemies[i].angle, true)
-            if (satCollision(car, bot).colliding) { // napisz do tego kod SAT
+            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     this.isColliding = true;
                     this.reactToCollisions(enemies[i].velocity); // metoda znajduje się w klasie Player, od której klasa Bot dziedziczy
@@ -372,43 +362,5 @@ class Bot extends Player {
             if (this.speed > 0 && this.speed < 1) this.speed -= 0.1;
             else if (this.speed < 0 && this.speed > -1) this.speed += 0.1;
         }
-    }
-
-    updateDistance() {
-        let lastCheckpoint = this.previousCheckpoint - 1;
-        if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1; 
-        const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
-        const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
-        const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
-        const botX = this.position.x + this.width / 2 + global.translation.x;
-        const botY = this.position.y + this.height / 4 + global.translation.y;
-        this.distanceFromLastCheckpoint = Math.hypot(checkpointX - botX, checkpointY - botY);
-        ////////////////////////////// do debugowania
-        // c.strokeStyle = "black";
-        // c.beginPath();
-        // c.moveTo(botX, botY); 
-        // c.lineTo(checkpointX, checkpointY);
-        // c.stroke();
-    }
-
-    reset() {
-        this.angle = convertToRadians(270);
-        this.currentCheckpoint = 0;
-        this.maxSpeed = 2;
-        this.expectedAngle = 0;
-        this.brakeValue = 1;
-        this.isColliding1 = false;
-        this.speedValue = 0.03;
-        this.previousCheckpoint = 0;
-        this.laps = -1;
-        this.shouldAttack = false;
-        this.hasBraked = false;
-        this.randomOffset = {
-            x: 0,
-            y: 0
-        }
-        this.distance = 0;
-        this.distanceFromLastCheckpoint = 0;
-        this.botPlaying = true;
     }
 }
