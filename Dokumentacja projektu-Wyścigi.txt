@@ -248,3 +248,6 @@
 - dodanie mapy 2
 - zmienienie mapy zimowej na pozycje 4 (więcej map, może 5 jak się uda)
 - dodanie mapy 3
+
+19.03.2025
+- dodanie mapy 5

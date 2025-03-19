@@ -272,7 +272,6 @@ class Player extends Sprite {
         for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
             const car = getObjectsToCollisions(this, false, this.angle, false);
             const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], false, 0, false, global.scale, global.translation);
-    
             if (isColliding(car, collision)) {
                 wasColliding = true;
                 if (!this.isColliding2) {
@@ -294,17 +293,17 @@ class Player extends Sprite {
         this.isOnRoad = false;
         this.isOnIce = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
-            const car = getObjectsToCollisions(this, false, this.angle, false)
+            const car = getObjectsToCollisions(this, false, this.angle, false);
             const road = getObjectsToCollisions(stage[currentMap].roadTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
-            if (isColliding(road, car)) {
+            if (isColliding(car, road)) {
                 this.isOnRoad = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
         }
 
         for (let i = 0; i < stage[currentMap].iceTab.length; i++) {
-            const car = getObjectsToCollisions(this, false, this.angle, false)
+            const car = getObjectsToCollisions(this, false, this.angle, false);
             const ice = getObjectsToCollisions(stage[currentMap].iceTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
             if (isColliding(ice, car)) {
@@ -351,7 +350,7 @@ class Player extends Sprite {
         this.isColliding = false;
 
         for (let i = 0; i < obstacles.length; i++) {
-            const rotatedRect = getObjectsToCollisions(this, false, this.angle);
+            const rotatedRect = getObjectsToCollisions(this, false, this.angle, false);
 
             const square = getObjectsToCollisions(obstacles[i], false, 0, false, global.scale, global.translation);
 
@@ -448,7 +447,7 @@ class Player extends Sprite {
         let currentlyColliding = false;
 
         for (let i = 0; i < bots.length; i++) {
-            const car = getObjectsToCollisions(this, true, this.angle, false)
+            const car = getObjectsToCollisions(this, false, this.angle, false)
 
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT

@@ -152,7 +152,7 @@ function animate(currentTime) {
     }
 
     
-    if (currentMap == 4) addSnow();
+    if (currentMap == 4 || currentMap == 5) addSnow();
     if (player.isPlaying) UI();
     else endOfMatch();
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
@@ -186,7 +186,7 @@ function startAnimation(currentTime) {
         c.restore();
     }
     
-    if (currentMap == 4) addSnow();
+    if (currentMap == 4 || currentMap == 5) addSnow();
     shadowText(counter, {x: canvas.width / 2 - 20, y: 100}, offset, 40);
 
     if (Date.now() - lastCounterTime >= 1000) {
