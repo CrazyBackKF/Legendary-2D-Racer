@@ -251,3 +251,7 @@
 
 19.03.2025
 - dodanie mapy 5
+
+20.03.2025
+- dodanie menu w którym można kupić inne kolory auta i je zmieniać
+- dodanie zdjęcia samochdów na boty

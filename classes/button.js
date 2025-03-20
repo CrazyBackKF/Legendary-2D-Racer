@@ -1,5 +1,5 @@
 class Button {
-    constructor({ position, click, imageSrc, hoverImageSrc, scale = {x: 1, y: 1}, isClickable = true, name = "" }) {
+    constructor({ position, click, imageSrc, hoverImageSrc, scale = {x: 1, y: 1}, isClickable = true, name = "", translation = {x: 0, y: 0} }) {
         this.position = position;
         this.click = click;
         this.image = new Image();
@@ -22,6 +22,7 @@ class Button {
         }
         this.isClickable = isClickable;
         this.name = name;
+        this.translation = translation;
     }
 
     draw() {

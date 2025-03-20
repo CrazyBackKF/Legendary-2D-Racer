@@ -4,7 +4,7 @@
   <export target="../../../../../../Downloads/tlo2.tmj" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="zima1.tsx"/>
- <objectgroup id="2" name="tlo" visible="0">
+ <objectgroup id="2" name="tlo">
   <object id="94" gid="11" x="-0.121212" y="44.8788" width="41.3333" height="41.3333"/>
   <object id="95" gid="11" x="40.6667" y="41.3333" width="41.3333" height="41.3333"/>
   <object id="96" gid="11" x="80.2727" y="41.7728" width="41.3333" height="41.3333"/>
@@ -1114,7 +1114,7 @@
   <object id="1177" gid="29" x="1438.3" y="375.333" width="48.4091" height="168"/>
   <object id="1178" gid="29" x="423.795" y="493.5" width="48.4091" height="40.5" rotation="90"/>
  </objectgroup>
- <objectgroup id="5" name="dekoracje">
+ <objectgroup id="5" name="dekoracje" visible="0">
   <object id="1109" gid="2147483664" x="699" y="354.667" width="330.912" height="432" rotation="90"/>
   <object id="1110" gid="18" x="664" y="201" width="465.553" height="147"/>
   <object id="1111" gid="13" x="314" y="217" width="144.906" height="128"/>

@@ -77,6 +77,7 @@ class Player extends Sprite {
         this.correctPlace;
         this.money = JSON.parse(localStorage.getItem("money")) || 0;
         this.moneyToAdd = 0;
+        this.imageSrc = imageSrc;
     }
 
 
@@ -111,6 +112,7 @@ class Player extends Sprite {
             x: this.position.x + this.width / 2,
             y: this.position.y + this.height / 4
         }
+        this.image.src = this.imageSrc
     }
 
     // Metoda która dodaje prędkość pojazdu

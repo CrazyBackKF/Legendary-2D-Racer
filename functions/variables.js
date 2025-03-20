@@ -7,6 +7,7 @@ const player = new Player({
         y: 0
     },
     color: 'red',
-    imageSrc: "assets/img/player1.png"
+    imageSrc: JSON.parse(localStorage.getItem("playerSprite")) || "assets/img/cars/player1.png"
 })
+console.log(player.imageSrc)
 const offset = 3; // offset do cieni

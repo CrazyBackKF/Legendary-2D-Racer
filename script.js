@@ -46,8 +46,8 @@ for (let i = 0; i < 4; i++) {
             color: botsColor[i],
             behavior: behavior[i],
             index: i,
-            name: names[i]
-
+            name: names[i],
+            imageSrc: `assets/img/cars/Bots/${i + 1}.png`
         }
     ));
 }
@@ -176,7 +176,7 @@ function startAnimation(currentTime) {
     player.drawHitbox();
     player.changeSpriteProperties();
     player.draw();
-    bots.forEach(bot => bot.drawHitbox());
+    bots.forEach(bot => {bot.draw()});
 
     if (foreground.src != "") {
         c.save();

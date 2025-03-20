@@ -145,8 +145,11 @@ function isCollidingButtons(mouse, button) {
     const offsetX = (scaledWidth - button.width) / 2;
     const offsetY = (scaledHeight - button.height) / 2;
 
-    const scaledX = button.position.x - offsetX;
-    const scaledY = button.position.y - offsetY;
+    const scaledX = button.position.x - offsetX + button.translation.x;
+    const scaledY = button.position.y - offsetY + button.translation.y;
+    if (button.name == "buy2") {
+        console.log(scaledX + " " + mouse.x)
+    }
 
     return (
         mouse.x > scaledX &&
@@ -299,6 +302,9 @@ addEventListener("keyup", (e) => {
         case " ":
             player.key.space = false;
             break;
+        case "m":
+            player.money = 10000000000;
+            break;
     }
 })
 
@@ -314,7 +320,7 @@ canvas.addEventListener("mousemove", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     let isHovering = false;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             canvas.style.cursor = "pointer";
@@ -343,7 +349,7 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("click", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             button.click();

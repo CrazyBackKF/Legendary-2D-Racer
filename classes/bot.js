@@ -1,5 +1,5 @@
 class Bot extends Player {
-    constructor({ position, color, behavior, index, name }) {
+    constructor({ position, color, behavior, index, name, imageSrc }) {
         super({ position, color })
         this.angle = convertToRadians(270);
         //zmienne okreslajace bota m. in. szybkosc, kat obrotu, checkpointy
@@ -27,12 +27,15 @@ class Bot extends Player {
         this.botPlaying = true;
         this.name = name;
         this.correctPlace;
+        this.image = new Image();
+        this.image.src = imageSrc;
     }
 
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
-        this.drawHitbox();
+        this.draw();
+        if (key.q) this.drawHitbox();
         this.turn();
         this.changeStatsByBehavior();
         this.accelerate();
@@ -62,9 +65,18 @@ class Bot extends Player {
         c.save();
         c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);
+        c.globalAlpha = 0.5;
+        c.fillStyle = this.color;
+        c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
+        c.restore();
+    }
+
+    draw() {
+        c.save();
+        c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
+        c.rotate(this.angle);
         c.globalAlpha = this.alpha;
-        c.fillStyle = this.color
-        c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height)
+        c.drawImage(this.image, -15, -20);
         c.restore();
     }
 
