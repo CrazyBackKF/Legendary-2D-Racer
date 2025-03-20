@@ -272,9 +272,9 @@ class Player extends Sprite {
         let wasColliding = false;
         
         for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
-            const car = getObjectsToCollisions(this, false, this.angle, false);
-            const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], false, 0, false, global.scale, global.translation);
-            if (isColliding(car, collision)) {
+            const car = getObjectsToCollisions(this, true, this.angle, false);
+            const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], true, 0, false, global.scale, global.translation);
+            if (satCollisionWithVertices(car, collision).colliding) {
                 wasColliding = true;
                 if (!this.isColliding2) {
                     this.speed *= -0.8;
@@ -295,20 +295,20 @@ class Player extends Sprite {
         this.isOnRoad = false;
         this.isOnIce = false;
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
-            const car = getObjectsToCollisions(this, false, this.angle, false);
-            const road = getObjectsToCollisions(stage[currentMap].roadTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
+            const car = getObjectsToCollisions(this, true, this.angle, false);
+            const road = getObjectsToCollisions(stage[currentMap].roadTab[i], true, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
-            if (isColliding(car, road)) {
+            if (satCollisionWithVertices(car, road).colliding) {
                 this.isOnRoad = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
         }
 
         for (let i = 0; i < stage[currentMap].iceTab.length; i++) {
-            const car = getObjectsToCollisions(this, false, this.angle, false);
-            const ice = getObjectsToCollisions(stage[currentMap].iceTab[i], false, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
+            const car = getObjectsToCollisions(this, true, this.angle, false);
+            const ice = getObjectsToCollisions(stage[currentMap].iceTab[i], true, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
-            if (isColliding(ice, car)) {
+            if (satCollisionWithVertices(car, ice).colliding) {
                 this.isOnIce = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
@@ -352,11 +352,11 @@ class Player extends Sprite {
         this.isColliding = false;
 
         for (let i = 0; i < obstacles.length; i++) {
-            const rotatedRect = getObjectsToCollisions(this, false, this.angle, false);
+            const car = getObjectsToCollisions(this, true, this.angle, false);
 
-            const square = getObjectsToCollisions(obstacles[i], false, 0, false, global.scale, global.translation);
+            const square = getObjectsToCollisions(obstacles[i], true, 0, false, global.scale, global.translation);
 
-            if (isColliding(rotatedRect, square)) {
+            if (satCollisionWithVertices(car, square).colliding) {
                 currentlyColliding = true;
 
                 let angleTypeTab = [110, -110]
@@ -473,12 +473,12 @@ class Player extends Sprite {
     checkCheckpoints() {
         //okreslanie kolizji z checkpointem
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
-            const rotatedRect = getObjectsToCollisions(this, false, this.angle, false)
+            const car = getObjectsToCollisions(this, true, this.angle, false)
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
-            const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], false, 0, false, global.scale, global.translation);
+            const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], true, 0, false, global.scale, global.translation);
 
-            if (isColliding(rotatedRect, checkpoint) && this.lastCheckpoint - i == -1) {
+            if (satCollisionWithVertices(car, checkpoint).colliding && this.lastCheckpoint - i == -1) {
                 //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
                 stage[currentMap].checkpointsTab[i].angle = this.angle;
 
