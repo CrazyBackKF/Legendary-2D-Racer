@@ -23,6 +23,9 @@ const obstaclesType = [{
 }
 ];
 
+const obctacleImgSrc = ["assets/przeszkody/plamaOleju.png","assets/przeszkody/pacholekDrogowy.png","assets/przeszkody/dziura.png","assets/przeszkody/kolce.png"]
+const buffersImgSrc = ["assets/przeszkody/boosterNitro.png","assets/img/Icons/coin.png"]
+
 // coiny i inne takie przeszkody beda zawarte w tej samej tablicy co przeszkody
 //jest to wygodniejsze i dziala tak samo tylko inne jest zachowanie
 const buffersType = [
@@ -66,7 +69,7 @@ const stage = {
         checkpointsTab: reorderArray(getCollisions(collisions.background2.parse2d(128)).checkpoints, check2), // checkpoint order
         roadTab: getCollisions(collisions.background2.parse2d(128)).road,
         iceTab: [],
-        amountOfObstacles: obstaclesType.length,
+        amountOfObstacles: obstaclesType.length * 2,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 450},
         botPos: {x: 300, y: 380},
@@ -84,7 +87,7 @@ const stage = {
         checkpointsTab: reorderArray(getCollisions(collisions.background3.parse2d(128)).checkpoints, check3), // checkpoint order
         roadTab: getCollisions(collisions.background3.parse2d(128)).road,
         iceTab: [],
-        amountOfObstacles: obstaclesType.length,
+        amountOfObstacles: obstaclesType.length * 2,
         amountOfBuffers: 6,
         playerPos: {x: 150, y: 100},
         botPos: {x: 250, y: 80},
@@ -102,7 +105,7 @@ const stage = {
         checkpointsTab: reorderArray(getCollisions(collisions.background4.parse2d(192)).checkpoints, check4),
         roadTab: getCollisions(collisions.background4.parse2d(192)).road,
         iceTab: getCollisions(collisions.background4.parse2d(192)).ice,
-        amountOfObstacles: obstaclesType.length,
+        amountOfObstacles: obstaclesType.length * 3,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 400},
         botPos: {x: 300, y: 330},
@@ -119,7 +122,7 @@ const stage = {
         checkpointsTab: reorderArray(getCollisions(collisions.background5.parse2d(192)).checkpoints, check5),
         roadTab: getCollisions(collisions.background5.parse2d(192)).road,
         iceTab: getCollisions(collisions.background5.parse2d(192)).ice,
-        amountOfObstacles: obstaclesType.length,
+        amountOfObstacles: obstaclesType.length * 3,
         amountOfBuffers: 6,
         playerPos: {x: 550, y: 180},
         botPos: {x: 300, y: 110},
