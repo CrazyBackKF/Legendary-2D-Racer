@@ -2,11 +2,10 @@ function UI() {
     // Timer i liczba okrążeń
     // c.fillStyle = "rgba(0, 0, 0, 0.7)";
     // c.fillRect(0, 10, 150, 100);
-    const minutes = parseInt((Date.now() - player.startTime) / 60000);
-    const seconds = parseInt(((Date.now() - player.startTime) % 60000) / 1000);
+    const time = getTime(Date.now() - player.startTime);
 
     shadowText(`${player.laps}/3`, {x: 60, y: 70}, offset, 30);
-    shadowText(`${minutes}:${seconds}`, {x: 75, y: 100}, offset, 20);
+    shadowText(time, {x: 75, y: 100}, offset, 20);
     shadowText("LAPS", {x: 50, y: 40}, offset, 20);
 
     // Wskaźnik turbo

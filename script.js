@@ -172,6 +172,9 @@ function startAnimation(currentTime) {
     c.scale(global.scale.x, global.scale.y);
     c.drawImage(background, 0, 0);
     c.restore();
+    for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].update();
+    }
     player.drawHitbox();
     player.changeSpriteProperties();
     player.draw();
@@ -193,6 +196,7 @@ function startAnimation(currentTime) {
         lastCounterTime = Date.now();
     }
     if (counter == 0) {
+        player.startTime = Date.now();
         cancelAnimationFrame(frame);
         animate();
     }

@@ -147,9 +147,6 @@ function isCollidingButtons(mouse, button) {
 
     const scaledX = button.position.x - offsetX + button.translation.x;
     const scaledY = button.position.y - offsetY + button.translation.y;
-    if (button.name == "buy2") {
-        console.log(scaledX + " " + mouse.x)
-    }
 
     return (
         mouse.x > scaledX &&
@@ -167,6 +164,17 @@ function shadowText(text, position, offset, size, textAllign = "center", textBas
     c.fillText(text, position.x + offset, position.y + offset);
     c.fillStyle = "white";
     c.fillText(text, position.x, position.y);
+}
+
+function getTime(time) {
+    let minutes = parseInt(time / 60000);
+    let seconds = parseInt((time % 60000) / 1000);
+
+    // dodaje zero z przodu, jak minuty, albo sekundy są jednocyfrowe
+    minutes = minutes.toString().padStart(2, "0");
+    seconds = seconds.toString().padStart(2, "0");
+
+    return `${minutes}:${seconds}`;
 }
 
 function changeLevelProperties() {

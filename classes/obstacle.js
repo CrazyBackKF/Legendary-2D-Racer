@@ -10,7 +10,7 @@ class Obstacle {
     }
 
     update() {
-        this.draw();
+        if (this.image) this.draw();
         if (key.q) this.drawHitbox();
         this.checkCollisonBetweenObstacles();
     }

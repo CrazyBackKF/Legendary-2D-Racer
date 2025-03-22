@@ -263,7 +263,6 @@ function computeMTV(entityA, entityB) {
     const centerA = computeCenter(verticesA);
     const centerB = computeCenter(verticesB);
     const centerDiff = { x: centerB.x - centerA.x, y: centerB.y - centerA.y };
-    console.log(mtvAxis)
     // Upewniamy się, że MTV skierowany jest z entityA na zewnątrz (od entityB)
     if (dot(centerDiff, mtvAxis) < 0) {
         mtvAxis = { x: -mtvAxis.x, y: -mtvAxis.y };
