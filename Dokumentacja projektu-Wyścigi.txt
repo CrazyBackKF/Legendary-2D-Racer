@@ -257,4 +257,8 @@
 - dodanie zdjęcia samochdów na boty
 - naprawa błędów
 
-21.03.2025 dodanie assetow do przeszkod
+21.03.2025 
+- dodanie assetow do przeszkod
+
+22.03.2025
+- naprawa assetow

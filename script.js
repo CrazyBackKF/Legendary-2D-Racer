@@ -95,14 +95,13 @@ function animate(currentTime) {
             stage[currentMap].roadTab[i].draw();
         }
 
-        //rysowanie przeskód
-        for (let i = 0; i < obstacles.length; i++) {
-            obstacles[i].draw();
-            obstacles[i].update();
-        }
         for (let i = 0; i < stage[currentMap].iceTab.length; i++) {
             stage[currentMap].iceTab[i].draw();
         }
+    }
+    //rysowanie przeskód
+    for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].update();
     }
     player.update(deltaTime);
     //tworzenie obiektu z ktorym byla wykonana kolizja

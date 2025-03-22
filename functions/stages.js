@@ -23,7 +23,7 @@ const obstaclesType = [{
 }
 ];
 
-const obctacleImgSrc = ["assets/przeszkody/plamaOleju.png","assets/przeszkody/pacholekDrogowy.png","assets/przeszkody/dziura.png","assets/przeszkody/kolce.png"]
+const obstacleImgSrc = ["assets/przeszkody/plamaOleju.png","assets/przeszkody/pacholekDrogowy.png","assets/przeszkody/dziura.png","assets/przeszkody/kolce.png"]
 const buffersImgSrc = ["assets/przeszkody/boosterNitro.png","assets/img/Icons/coin.png"]
 
 // coiny i inne takie przeszkody beda zawarte w tej samej tablicy co przeszkody
