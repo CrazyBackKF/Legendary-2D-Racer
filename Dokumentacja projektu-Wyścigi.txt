@@ -263,3 +263,7 @@
 22.03.2025
 - naprawa assetow
 - zmienienie wyświetlania czasu
+
+24.03.2025
+- naprawa pojawiajacych sie bledow zwiazanych z assetem przeszkod
+- sformatowanie kodu i dodanie komentarzy
