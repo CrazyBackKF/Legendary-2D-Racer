@@ -27,6 +27,7 @@ class Bot extends Player {
         this.botPlaying = true;
         this.name = name;
         this.correctPlace;
+        //zmienne doassetubota
         this.image = new Image();
         this.image.src = imageSrc;
     }
@@ -35,7 +36,9 @@ class Bot extends Player {
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
         this.draw();
+
         if (key.q) this.drawHitbox();
+
         this.turn();
         this.changeStatsByBehavior();
         this.accelerate();
@@ -48,34 +51,36 @@ class Bot extends Player {
         this.checkLaps();
         this.updateDistance();
         //this.deaccelerate();
-        if(!this.botPlaying) return;
+
+        if (!this.botPlaying) return;
+
         this.checkCollisionsWithPlayer();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
-    }
-
-    physics() {
-        if (!deltaTime) return;
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
     }
 
     //metoda rysuje bota
     drawHitbox() {
         c.save();
+
         c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);
+
         c.globalAlpha = 0.5;
         c.fillStyle = this.color;
         c.fillRect(-this.width / 2, -this.height / 4, this.width, this.height);
+
         c.restore();
     }
 
     draw() {
         c.save();
+
         c.translate(global.translation.x + (this.position.x + this.width / 2), global.translation.y + (this.position.y + this.height / 4));
         c.rotate(this.angle);
+
         c.globalAlpha = this.alpha;
         c.drawImage(this.image, -15, -20);
+
         c.restore();
     }
 
@@ -105,6 +110,7 @@ class Bot extends Player {
             x: (checkpoint.position.x * global.scale.x + checkpoint.width / 2 * global.scale.x + global.translation.x + this.randomOffset.x),
             y: (checkpoint.position.y * global.scale.y + checkpoint.height / 2 * global.scale.y + global.translation.y + this.randomOffset.y)
         }
+
         let direction;
 
         if (!this.shouldAttack) {
@@ -157,6 +163,7 @@ class Bot extends Player {
         }
     }
 
+    //zmianakatu obrotu
     changeAngle() {
         let angleDifference = this.expectedAngle - this.angle;
 
@@ -177,12 +184,14 @@ class Bot extends Player {
     checkLaps() {
         if (this.currentCheckpoint == 1 && this.currentCheckpoint != this.previousCheckpoint) {
             this.laps++
-        };
+        }
+
         if (this.laps == 3) {
             this.distance += 10000000 * (allCars.length - this.place)
             this.correctPlace = this.place;
             this.botPlaying = false;
         }
+
         this.previousCheckpoint = this.currentCheckpoint;
     }
 
@@ -260,9 +269,11 @@ class Bot extends Player {
         }
     }
 
+    //metoda do sprawdzenia kolizji z przeszkodami
     checkObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
         let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
+
         for (let i = 0; i < obstacles.length; i++) {
             const obstacle = getObjectsToCollisions(this, false, this.angle, true, { x: 1, y: 1 }, global.translation);
 
@@ -273,9 +284,7 @@ class Bot extends Player {
                 let angleTypeTab = [convertToRadians(110), convertToRadians(-110)]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
-                if (!this.isColliding1 && !obstacles[i].isBuffer) {
-                    console.log(obstacles[i])
-                    console.log(obstacles)
+                if (!this.isColliding1) {
                     this.isColliding1 = true;
                     //reakcja na aprzeszkode 'oil'
                     if (obstacles[i].type.type == "oil") {
@@ -345,8 +354,8 @@ class Bot extends Player {
         }
     }
 
+    //metody do sprawdzania kolizji miedzy autami
     checkCollisionsWithPlayer() {
-
 
         const car = getObjectsToCollisions(this, true, this.angle, true);
 
@@ -392,17 +401,12 @@ class Bot extends Player {
         }
     }
 
-    deaccelerate() {
-        // jeżeli przez ileś sekund nie zaliczył checkpointa, zaczyna hamować, żeby pomóc mu wjechać w checkpoint
-        if (Date.now() - this.lastCheckpointTime > 5000) {
-            if (this.speed > 0 && this.speed < 1) this.speed -= 0.1;
-            else if (this.speed < 0 && this.speed > -1) this.speed += 0.1;
-        }
-    }
-
+    //metoda ktora okresla polozenie checkpointa do ktorego botma jechac
     updateDistance() {
         let lastCheckpoint = this.previousCheckpoint - 1;
-        if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1; 
+
+        if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
+
         const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
         const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
         const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;

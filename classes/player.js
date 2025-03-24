@@ -103,22 +103,27 @@ class Player extends Sprite {
         this.checkCollisionWithBots();
         this.updateDistance();
         this.changeStats();
+
         if (!this.isPlaying) return;
+
         this.physics();
     }
 
     changeSpriteProperties() {
         this.rotation = convertToRadians(this.angle);
+
         this.translation = {
             x: this.position.x + this.width / 2,
             y: this.position.y + this.height / 4
         }
+
         this.image.src = this.imageSrc
     }
 
     // Metoda która dodaje prędkość pojazdu
     physics() {
         if (!deltaTime) return;
+
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
     }
@@ -135,6 +140,7 @@ class Player extends Sprite {
                 if (this.speed > 0) this.speed = 0;
             }
         }
+
         if (this.key.w && this.speed <= this.maxSpeed) {
             if (this.speed < 0) this.speed += (this.speedValue + this.brakeValue);
             else this.speed += (this.speedValue - this.friction + this.bonusSpeed);
@@ -144,6 +150,7 @@ class Player extends Sprite {
             if (this.speed > 0) this.speed -= (this.speedValue + this.brakeValue);
             else this.speed -= (this.speedValue - this.friction + this.bonusSpeed);
         }
+
         this.velocity.y = -(this.speed * Math.cos(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.x) * deltaTime * 120;
         this.velocity.x = (this.speed * Math.sin(convertToRadians(this.angle)) * this.speedMultiplier + this.knockback.y) * deltaTime * 120;
     }
@@ -194,21 +201,25 @@ class Player extends Sprite {
     // Metoda która obraca pojazd
     turn() {
         let turnSpeed = this.changeTurningSpeed();
+
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;
                 if (this.angle <= 0) this.angle = 360;
             }
+
             if (this.speed < 0) {
                 this.angle += turnSpeed;
                 if (this.angle >= 360) this.angle = 0;
             }
         }
+
         if (this.key.d) {
             if (this.speed > 0) {
                 this.angle += turnSpeed;
                 if (this.angle >= 360) this.angle = 0;
             }
+
             if (this.speed < 0) {
                 this.angle -= turnSpeed;
                 if (this.angle <= 0) this.angle = 360;
@@ -231,6 +242,7 @@ class Player extends Sprite {
     // Metoda która dodaje turbo gdy wciśnie się t
     turbo() {
         if (this.turboAmount > this.maxTurbo) this.turboAmount = this.maxTurbo;
+
         if (Date.now() - this.lastTurbo >= 500 && this.turboAmount < this.maxTurbo) // Gdy nie zużyjesz turbo przez 0.5 s to zacznie się odnawiać
         {
             this.turboAmount += 0.004;
@@ -256,9 +268,12 @@ class Player extends Sprite {
     drift() {
         if (this.key.space && this.speed > 2) {
             this.driftMultiplier = 0.9 * this.speed;
+
             if (this.key.w) return;
+
             if (this.speed > 0) this.speed -= 0.02;
             else this.speed = 0;
+
             if (this.oliedMultiplier == 2.5) {
                 this.oliedMultiplier /= 2;
             }
@@ -275,12 +290,16 @@ class Player extends Sprite {
         for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, false);
             const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], true, 0, false, global.scale, global.translation);
+
             if (satCollisionWithVertices(car, collision).colliding) {
                 wasColliding = true;
+
                 if (!this.isColliding2) {
                     this.speed *= -0.8;
                 }
+
                 this.isColliding2 = true;
+
                 break;
             }
         }
@@ -295,6 +314,7 @@ class Player extends Sprite {
     checkRoad() {
         this.isOnRoad = false;
         this.isOnIce = false;
+
         for (let i = 0; i < stage[currentMap].roadTab.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, false);
             const road = getObjectsToCollisions(stage[currentMap].roadTab[i], true, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
@@ -314,6 +334,7 @@ class Player extends Sprite {
                 break; // Wystarczy wykryć jedną kolizję
             }
         }
+
         if (this.isOnIce) {
             this.lastRoadTime = 0;
             this.friction = 0;
@@ -321,14 +342,17 @@ class Player extends Sprite {
         else if (this.isOnRoad) {
             this.lastRoadTime = 0;
             this.friction = 0.01;
+            
             return;
         }
         else {
             this.speed -= (this.notOnRoadFriction * this.speed);
         }
+
         if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
                 const element = stage[currentMap].checkpointsTab[i];
+
                 if (stage[currentMap].checkpointsTab[i].isPassed) {
                     this.position.x = element.position.x
                     this.position.y = element.position.y
@@ -374,6 +398,7 @@ class Player extends Sprite {
                             speed: this.speed - (0.35 * this.speed),
                             ease: "power2.out"
                         })
+
                         this.oliedMultiplier = 2.5;
                     }
                     //reakcja na przezszkode 'hole'
@@ -384,6 +409,7 @@ class Player extends Sprite {
                             speed: this.speed - (0.2 * this.speed),
                             ease: "power2.out"
                         })
+
                         this.oliedMultiplier = 1.5
                     }
                     //reakcja na 'traffic cone'
@@ -410,7 +436,6 @@ class Player extends Sprite {
                             this.turboAmount = 2
                         }
                     }
-
 
                     //usuniecie 'oiledMultiplayer' nie ma juz reakcji na to
                     setTimeout(() => {
@@ -453,6 +478,7 @@ class Player extends Sprite {
         }
     }
 
+    //metoda do sprawdzenia kolizji z botami, checkpointami
     checkCollisionWithBots() {
         let currentlyColliding = false;
 
@@ -466,6 +492,7 @@ class Player extends Sprite {
                     this.reactToCollisions(bots[i].velocity, bots[i].angle);
                     currentlyColliding = true
                 }
+
                 break; // Jeśli wykryto kolizję, nie trzeba dalej sprawdzać
             }
         }
@@ -497,6 +524,7 @@ class Player extends Sprite {
                     for (let j = 0; j < stage[currentMap].checkpointsTab.length; j++) {
                         //jezli gracz nie zaliczyl wszystkich checkpointow (ktores jest false to koniec petli) - najwazniejszy warunek poniewaz bez niego zawsze bedzie dodac 'laps'
                         if (!stage[currentMap].checkpointsTab[j].isPassed) break;
+
                         if (this.laps == 3) //jezli sa 3 okrazenia to koniec
                         {
                             this.distance += 10000000 * (allCars.length - this.place) // po skończeniu trzech okrążeń dodaje do dystansy dużą liczbę, w zależności od jego pozycji
@@ -507,9 +535,11 @@ class Player extends Sprite {
                                 yoyo: true,
                                 duration: 0.2
                             })
+
                             this.correctPlace = this.place;
                             this.isPlaying = false;
                             this.addMoney(); // dodaje monety, ze względu na miejsce
+
                             break;
                         }
                         else // jezli to nie koniec dodajemy kolo do zmkennej i ustwawiamy na false
@@ -517,7 +547,9 @@ class Player extends Sprite {
                             stage[currentMap].checkpointsTab.forEach(checkpoint => {
                                 checkpoint.isPassed = false;
                             });
+
                             this.laps++;
+
                             break;
                         }
                     }
@@ -531,20 +563,24 @@ class Player extends Sprite {
                 if (this.lastCheckpoint == stage[currentMap].checkpointsTab.length - 1) {
                     this.lastCheckpoint = -1
                 }
+
                 break;
             }
         }
     }
 
+    //metoda dodajaca pieniadze
     addMoney() {
         this.moneyToAdd = 100 * stage[currentMap].moneyMultiplier + 10 * (allCars.length - this.correctPlace); // zapisuje to, żeby móc się odwołać do tego w skrypcie, i narysować to po skończeniu wyścigu
         this.money += this.moneyToAdd;
+
         localStorage.setItem("money", this.money);
     }
 
     //metoda reagujaca na kolizje
     reactToCollisions(enemyVelocity) {
         const force = 1
+
         this.knockback.x = (this.velocity.x - enemyVelocity.x) * force;
         this.knockback.y = (this.velocity.y - enemyVelocity.y) * force
     }
@@ -579,14 +615,18 @@ class Player extends Sprite {
         }
     }
 
+    //inne metody
     updateDistance() {
         let lastCheckpoint = this.lastCheckpoint;
+
         if (this.lastCheckpoint == -1) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
+
         const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
         const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
         const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
         const playerX = this.position.x + this.width / 2;
         const playerY = this.position.y + this.height / 4;
+
         this.distanceFromLastCheckpoint = Math.hypot(checkpointX - playerX, checkpointY - playerY);
         ////////////////////////////////////////// do debugowania
         // c.strokeStyle = "black";
@@ -604,8 +644,6 @@ class Player extends Sprite {
         this.bonusSpeed = tuning.spoiler.stats[tuning.spoiler.level];
         this.maxTurbo = tuning.turbo.stats[tuning.turbo.level];
     }
-
-
 
     reset() {
         this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu

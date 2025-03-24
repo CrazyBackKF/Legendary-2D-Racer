@@ -1,7 +1,8 @@
 class Button {
     constructor({ position, click, imageSrc, hoverImageSrc, scale = {x: 1, y: 1}, isClickable = true, name = "", translation = {x: 0, y: 0} }) {
         this.position = position;
-        this.click = click;
+        this.click = click; //przekazywanie funkcji wykonywanej podczas klikniecia
+        //zmienne okreslajace obraz
         this.image = new Image();
         this.hoverImage = new Image();
         this.image.src = imageSrc;
@@ -20,21 +21,26 @@ class Button {
             x: scale.x * 1.2,
             y: scale.y * 1.2
         }
+        //zmienne pomocnicze
         this.isClickable = isClickable;
         this.name = name;
         this.translation = translation;
     }
 
+    //rysowanie przycisku
     draw() {
         c.save();
+
         c.translate(this.position.x + this.width / 2, this.position.y + this.height / 2)
         c.scale(this.scale.x, this.scale.y);
+
         if (!this.isHovering) {
             c.drawImage(this.image, -this.width / 2, -this.height / 2);
         }
         else {
             c.drawImage(this.hoverImage, -this.width / 2, -this.height / 2);
         }
+
         c.restore();
     }
 }

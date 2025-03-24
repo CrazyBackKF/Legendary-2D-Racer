@@ -5,9 +5,11 @@ class CheckpointBlock extends collisionBlock {
         this.isPassed = isPassed // czy checkpoint zotal zaliczony
         this.index = index //index chekpointa
         this.angle = 0;
+        //zmienne do strzalek pokazujacych nastepny checkpoint
         this.image = new Image();
         this.imageSrc = "File1.png"
         this.image.src = "assets/img/arrow/" + this.imageSrc;
+        //zmienne do okreslania klatek animacji sztrzalki
         this.allFrames = 0;
         this.frameBuffer = 2;
         this.frameCounter = 1;
@@ -16,8 +18,10 @@ class CheckpointBlock extends collisionBlock {
         this.rotation = rotation;
     }
 
+    //metoda do rysowania checkpointow
     draw() {
         c.save();
+
         //skalowanie hitboxow zgodnie z mapa
         c.translate(global.translation.x, global.translation.y);
         c.scale(global.scale.x, global.scale.y);
@@ -26,9 +30,11 @@ class CheckpointBlock extends collisionBlock {
         c.font = "20px Arial";
         c.fillStyle = "black"
         c.fillText(this.index, this.position.x, this.position.y)
+
         c.restore();
     }
     
+    //metoda do animacji
     animate() {
         if (this.allFrames % this.frameBuffer == 0) {
             this.frameCounter++;
@@ -45,11 +51,14 @@ class CheckpointBlock extends collisionBlock {
         this.allFrames++;
     }
 
+    //metoda rysowania strzalek
     drawArrow() {
         c.save();
+
         c.translate(global.translation.x + (this.position.x + this.width / 2) * 2, global.translation.y + (this.position.y + this.height / 2) * 2);
         c.scale(global.scale.x, global.scale.y)
         c.rotate(this.rotation)
+
         c.drawImage(
             this.image,
             -(this.image.width * 0.1) / 2,
@@ -57,7 +66,9 @@ class CheckpointBlock extends collisionBlock {
             this.image.width * 0.1,
             this.image.height * 0.1
         );
+
         c.restore();
+
         this.animate();
     }
 }

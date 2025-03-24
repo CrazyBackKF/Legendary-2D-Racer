@@ -4,29 +4,34 @@ class Obstacle {
         this.type = type;
         this.width = width;
         this.height = height;
-        this.isColliding = false;
+        this.isColliding = false; //zmienne okreslajaca czy obiekt jest kolidowany
         this.image = new Image();
         this.image.src = imageSrc;
     }
 
     update() {
         if (this.image) this.draw();
+
         if (key.q) this.drawHitbox();
+
         this.checkCollisonBetweenObstacles();
     }
 
     drawHitbox() {
         c.save();
+
         c.translate(global.translation.x, global.translation.y);
         c.scale(global.scale.x, global.scale.y)
         c.globalAlpha = 0.5;
         c.fillStyle = this.type.color;
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
+
         c.restore();
     }
 
     draw() {
         c.save();
+
         // Liczymy rzeczywiste przesunięcie dla obrazka, uwzględniając skalowanie hitboxa
         const realX = global.translation.x + this.position.x * global.scale.x;
         const realY = global.translation.y + this.position.y * global.scale.y;
@@ -46,6 +51,7 @@ class Obstacle {
         c.restore();
     }
 
+    //metoda ktora sprawdza kolizji miedzy przeszkodami nie chcemy aby sie stakowaly w jednym miejscu
     checkCollisonBetweenObstacles() {
         let currentlyColliding = false; // Flaga do sprawdzenia, czy nadal jesteśmy w kolizji
         let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
@@ -72,6 +78,7 @@ class Obstacle {
                     height: obstacles[j].height * global.scale.y,
                     angle: 0
                 };
+
                 if (isColliding(obstacle1, obstacle2)) {
                     currentlyColliding = true;
 

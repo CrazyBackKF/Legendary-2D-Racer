@@ -1,8 +1,10 @@
 class Sprite {
     constructor({position, imageSrc, scale = {x: 1, y: 1}, rotation = 0, translation = {x: 0, y: 0}, maxFrames = 1, frameBuffer = 0, isMovingWithTranslation = true, alpha = 1}) {
         this.position = position;
+        //zmienne do zrodla obrazka
         this.image = new Image();
         this.image.src = imageSrc;
+        //zmienne charakteryzujace obrazek i animacje
         this.scale = scale;
         this.translation = translation;
         this.rotation = rotation;
@@ -31,12 +33,15 @@ class Sprite {
         else {
             this.newPosition = this.position
         }
+
         c.save();
+
         c.globalAlpha = this.alpha;
         c.translate(this.translation.x, this.translation.y);
         c.scale(this.scale.x, this.scale.y);
         c.rotate(this.rotation);
         c.drawImage(this.image, this.newPosition.x, this.newPosition.y);
+
         c.restore();
     }
 
@@ -52,6 +57,7 @@ class Sprite {
                 this.lastFrame = 1;
             }
         }
+
         this.allFrames++;
     }
 }

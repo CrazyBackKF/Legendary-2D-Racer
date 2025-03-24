@@ -20,6 +20,7 @@ class Snow{
         c.fill();
     }
 
+    //metoda aktualizujaca pozycje
     updatePos() {
         this.position.x += this.velocity.x * deltaTime * 120;
         this.position.y += this.velocity.y * deltaTime * 120;
@@ -30,5 +31,4 @@ class Snow{
             snowTab.splice(this.index, 1);
         }
     }
-
 }
