@@ -40,17 +40,16 @@ class Bot extends Player {
         this.changeStatsByBehavior();
         this.accelerate();
         this.changeAngle();
-        //this.checkObstacles();
+        this.checkObstacles();
         this.move();
         this.checkCheckpoints();
         //this.checkRoad();
-        this.checkCollisionsWithPlayer();
         this.checkCollisionWithBots();
         this.checkLaps();
         this.updateDistance();
         //this.deaccelerate();
-        // console.log(this.speed)
         if(!this.botPlaying) return;
+        this.checkCollisionsWithPlayer();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
     }
 
@@ -274,8 +273,9 @@ class Bot extends Player {
                 let angleTypeTab = [convertToRadians(110), convertToRadians(-110)]
 
                 // Wykrycie wejścia w kolizję po raz pierwszy
-                if (!this.isColliding1) {
-
+                if (!this.isColliding1 && !obstacles[i].isBuffer) {
+                    console.log(obstacles[i])
+                    console.log(obstacles)
                     this.isColliding1 = true;
                     //reakcja na aprzeszkode 'oil'
                     if (obstacles[i].type.type == "oil") {
@@ -296,6 +296,13 @@ class Bot extends Player {
                             ease: "power2.out"
                         })
                         this.oliedMultiplier = 1.5
+                    }
+                    //reakcja na 'kolce'
+                    else if (obstacles[i].type.type == "spikes") {
+                        gsap.to(this, {
+                            duration: 0.7,
+                            speed: this.speed - this.speed,
+                        })
                     }
                     //reakcja na 'traffic cone'
                     else {
@@ -320,8 +327,15 @@ class Bot extends Player {
             }
         }
 
-        if (collisionIndex !== -1) {
-            player.deletedObstacle = obstacles[collisionIndex].type;
+        if (collisionIndex !== -1 && obstacles[collisionIndex].type.type != "coin" && obstacles[collisionIndex].type.type != "nitro") {
+            const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+            obstacles.push(new Obstacle({
+                position,
+                width: 8 * global.scale.x,
+                height: 8 * global.scale.y,
+                type: obstacles[collisionIndex].type,
+                imageSrc: obstacles[collisionIndex].type.imgSrc
+            }))
             obstacles.splice(collisionIndex, 1);
         }
 

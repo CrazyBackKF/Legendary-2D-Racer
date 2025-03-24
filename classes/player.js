@@ -78,6 +78,7 @@ class Player extends Sprite {
         this.money = JSON.parse(localStorage.getItem("money")) || 0;
         this.moneyToAdd = 0;
         this.imageSrc = imageSrc;
+        this.deletedObstacleImg = "";
     }
 
 
@@ -96,10 +97,10 @@ class Player extends Sprite {
         this.checkIfHitCanvas();
         this.checkCollisions();
         this.checkCheckpoints();
-        //this.checkObstacles();
+        this.checkObstacles();
         this.checkRoad();
         this.turbo();
-        //this.checkCollisionWithBots();
+        this.checkCollisionWithBots();
         this.updateDistance();
         this.changeStats();
         if (!this.isPlaying) return;
@@ -425,7 +426,14 @@ class Player extends Sprite {
 
         //usuwanie obiektu w momencie kolizji
         if (collisionIndex !== -1) {
-            this.deletedObstacle = obstacles[collisionIndex].type;
+            const position = stage[currentMap].roadTab[Math.floor(Math.random() * stage[currentMap].roadTab.length) + 1].position;
+            obstacles.push(new Obstacle({
+                position,
+                width: 8 * global.scale.x,
+                height: 8 * global.scale.y,
+                type: obstacles[collisionIndex].type,
+                imageSrc: obstacles[collisionIndex].type.imgSrc
+            }))
             obstacles.splice(collisionIndex, 1);
         }
 
@@ -449,7 +457,7 @@ class Player extends Sprite {
         let currentlyColliding = false;
 
         for (let i = 0; i < bots.length; i++) {
-            const car = getObjectsToCollisions(this, false, this.angle, false)
+            const car = getObjectsToCollisions(this, true, this.angle, false)
 
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
             if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
