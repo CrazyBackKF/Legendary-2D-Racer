@@ -111,7 +111,8 @@ function animate(currentTime) {
             position,
             width: 8 * global.scale.x,
             height: 8 * global.scale.y,
-            type: player.deletedObstacle
+            type: player.deletedObstacle,
+            imageSrc: player.deletedObstacleImg
         }))
     }
 
@@ -179,7 +180,6 @@ function startAnimation(currentTime) {
     player.changeSpriteProperties();
     player.draw();
     bots.forEach(bot => {bot.draw()});
-
     if (foreground.src != "") {
         c.save();
         c.translate(global.translation.x, global.translation.y);
