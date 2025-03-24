@@ -7,35 +7,38 @@ const check5 = [3,2,1,0,63,62,61,4,60,59,5,56,57,58,6,7,8,55,43,44,45,42,23,22,9
 
 const obstaclesType = [{
     type: "oil",
-    color: "black"
+    color: "black",
+    imgSrc:"assets/przeszkody/plamaOleju.png"
 },
 {
     type: "traffic cone",
-    color: "orange"
+    color: "orange",
+    imgSrc:"assets/przeszkody/pacholekDrogowy.png"
 },
 {
     type: "hole",
-    color: "gray"
+    color: "gray",
+    imgSrc:"assets/przeszkody/dziura.png"
 },
 {
     type: "spikes",
-    color: "purple"
+    color: "purple",
+    imgSrc:"assets/przeszkody/kolce.png"
 }
 ];
-
-const obstacleImgSrc = ["assets/przeszkody/plamaOleju.png","assets/przeszkody/pacholekDrogowy.png","assets/przeszkody/dziura.png","assets/przeszkody/kolce.png"]
-const buffersImgSrc = ["assets/przeszkody/boosterNitro.png","assets/img/Icons/coin.png"]
 
 // coiny i inne takie przeszkody beda zawarte w tej samej tablicy co przeszkody
 //jest to wygodniejsze i dziala tak samo tylko inne jest zachowanie
 const buffersType = [
     {
         type: "nitro",
-        color: "lightblue"
+        color: "lightblue",
+        imgSrc:"assets/przeszkody/boosterNitro.png"
     },
     {
         type: "coin",
-        color: "green"
+        color: "green",
+        imgSrc:"assets/img/Icons/coin.png"
     }
 ];
 

@@ -199,7 +199,7 @@ function changeLevelProperties() {
             width: 8 * global.scale.x,
             height: 8 * global.scale.y,
             type: obstaclesType[index],
-            imageSrc: obstacleImgSrc[index]
+            imageSrc: obstaclesType[index].imgSrc
         }))
 
         if (index == obstaclesType.length - 1) {
@@ -230,7 +230,7 @@ function changeLevelProperties() {
             width: 8 * global.scale.x,
             height: 8 * global.scale.y,
             type: buffersType[index],
-            imageSrc: buffersImgSrc[index]
+            imageSrc: buffersType[index].imgSrc
         }))
 
 
