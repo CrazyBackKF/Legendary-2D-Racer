@@ -664,7 +664,7 @@ class Player extends Sprite {
 
     changeAudio() {
         if (this.key.w || this.key.s) {
-            if (this.volume < 0.4) this.volume += 0.005;
+            if (this.volume < 0.2) this.volume += 0.005;
             if (Math.abs(this.speed) < this.maxSpeed * 0.5) {
                 if (!carAudios.lowOn.playing()) {
                     this.stopAudio("lowOn")
@@ -696,7 +696,7 @@ class Player extends Sprite {
                 }
             }
         } else {
-            if (this.volume > 0) this.volume -= 0.05;
+            if (this.volume > 0.05) this.volume -= 0.05;
             if (Math.abs(this.speed) < this.maxSpeed * 0.2) {
                 if (!carAudios.idle.playing()) {
                     this.stopAudio("idle")

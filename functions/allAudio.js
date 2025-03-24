@@ -1,55 +1,55 @@
 const carAudios = {
     idle: new Howl({
         src: ["assets/audio/car/idle.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     startup: new Howl({
         src: ["assets/audio/car/startup.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     lowOn: new Howl({
         src: ["assets/audio/car/low_on.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     medOn: new Howl({
         src: ["assets/audio/car/med_on.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     highOn: new Howl({
         src: ["assets/audio/car/high_on.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     max: new Howl({
         src: ["assets/audio/car/maxRPM.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     lowOff: new Howl({
         src: ["assets/audio/car/low_off.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     medOff: new Howl({
         src: ["assets/audio/car/med_off.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
     highOff: new Howl({
         src: ["assets/audio/car/high_off.wav"],
-        volume: 0.4,
+        volume: 0.05,
         autoplay: false,
         loop: true
     }),
