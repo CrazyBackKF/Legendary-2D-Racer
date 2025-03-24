@@ -430,6 +430,7 @@ class Player extends Sprite {
                     }
                     else if (obstacles[i].type.type == "coin") {
                         this.money += 20;
+                        localStorage.setItem("money", JSON.stringify(this.money));
                     }
                     else if (obstacles[i].type.type == "nitro") {
                         this.turboAmount += 0.5;
