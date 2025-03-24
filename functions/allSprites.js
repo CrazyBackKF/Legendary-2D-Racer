@@ -1,3 +1,181 @@
+//funkcja do przycisku tuning
+function tuningOnClick() {
+    const upgrade = tuning[this.name];
+
+    if (upgrade.cost[upgrade.level] > player.money) return;
+
+    player.money -= upgrade.cost[upgrade.level]
+
+    if (upgrade.level < 3) {
+        upgrade.level++;
+    }
+
+    if (upgrade.level == 3) {
+        this.isClickable = false;
+    }
+
+    gsap.to(tuning[this.name], {
+        width: upgrade.level * upgrade.widthOffset + 10
+    })
+}
+
+//deklaracja przyciskow
+const tuningButtons = [
+    // Hamulce
+    new Button({
+        position: {
+            x: 420,
+            y: 215
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false,
+        name: "brakes",
+        click: tuningOnClick
+    }),
+
+    // Silnik
+    new Button({
+        position: {
+            x: 420,
+            y: 335
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false,
+        name: "engine",
+        click: tuningOnClick
+    }),
+
+    // Koła
+    new Button({
+        position: {
+            x: 420,
+            y: 455
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false,
+        name: "wheels",
+        click: tuningOnClick
+    }),
+
+    // Spojler
+    new Button({
+        position: {
+            x: 925,
+            y: 215
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false,
+        name: "spoiler",
+        click: tuningOnClick
+    }),
+
+    // Turbo
+    new Button({
+        position: {
+            x: 925,
+            y: 335
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false,
+        name: "turbo",
+        click: tuningOnClick
+    }),
+
+    // Powrót
+    new Button({
+        position: {
+            x: 900,
+            y: 30
+        },
+        imageSrc: "assets/img/Home/Default.png",
+        hoverImageSrc: "assets/img/Home/Hover.png",
+        isClickable: false,
+        name: "return",
+        click: function() {
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    tuningButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    animateMainMenu();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
+        }
+    })
+]
+
+const carButtons = [
+    new Button({
+        position: {
+            x: 235,
+            y: 450
+        },
+        click: function() {
+            if (carMenu.translation.currentCar == 1) return;
+            else carMenu.translation.currentCar--;
+            changeCar();
+        },
+        imageSrc: "assets/img/ArrowLeft/Default.png",
+        hoverImageSrc: "assets/img/ArrowLeft/Hover.png",
+        isClickable: false
+    }),
+
+    new Button({
+        position: {
+            x: 710,
+            y: 450
+        },
+        click: function() {
+            if (carMenu.translation.currentCar == 4) return;
+            else carMenu.translation.currentCar++;
+            changeCar();
+        },
+        imageSrc: "assets/img/ArrowRight/Default.png",
+        hoverImageSrc: "assets/img/ArrowRight/Hover.png",
+        isClickable: false
+    }),
+
+    // Powrót
+    new Button({
+        position: {
+            x: 900,
+            y: 30
+        },
+        imageSrc: "assets/img/Home/Default.png",
+        hoverImageSrc: "assets/img/Home/Hover.png",
+        isClickable: false,
+        click: function() {
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    carButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    animateMainMenu();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
+        }
+    })
+]
+
 const speedometer = new Sprite({
     position: {
         x: 1500,
@@ -198,175 +376,7 @@ const endScreenButtons = [
     })
 ]
 
-function tuningOnClick() {
-    const upgrade = tuning[this.name];
-    if (upgrade.cost[upgrade.level] > player.money) return;
-    player.money -= upgrade.cost[upgrade.level]
-    if (upgrade.level < 3) {
-        upgrade.level++;
-    }
-    if (upgrade.level == 3) {
-        this.isClickable = false;
-    }
-    gsap.to(tuning[this.name], {
-        width: upgrade.level * upgrade.widthOffset + 10
-    })
-}
-
-const tuningButtons = [
-    // Hamulce
-    new Button({
-        position: {
-            x: 420,
-            y: 215
-        },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
-        name: "brakes",
-        click: tuningOnClick
-    }),
-
-    // Silnik
-    new Button({
-        position: {
-            x: 420,
-            y: 335
-        },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
-        name: "engine",
-        click: tuningOnClick
-    }),
-
-    // Koła
-    new Button({
-        position: {
-            x: 420,
-            y: 455
-        },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
-        name: "wheels",
-        click: tuningOnClick
-    }),
-
-    // Spojler
-    new Button({
-        position: {
-            x: 925,
-            y: 215
-        },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
-        name: "spoiler",
-        click: tuningOnClick
-    }),
-
-    // Turbo
-    new Button({
-        position: {
-            x: 925,
-            y: 335
-        },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
-        name: "turbo",
-        click: tuningOnClick
-    }),
-
-    // Powrót
-    new Button({
-        position: {
-            x: 900,
-            y: 30
-        },
-        imageSrc: "assets/img/Home/Default.png",
-        hoverImageSrc: "assets/img/Home/Hover.png",
-        isClickable: false,
-        name: "return",
-        click: function() {
-            const tl = gsap.timeline();
-            tl.to(global, {
-                alpha: 1,
-                duration: 1,
-                onComplete: () => {
-                    cancelAnimationFrame(frame);
-                    tuningButtons.forEach(button => button.isClickable = false);
-                    menuButtons.forEach(button => button.isClickable = true);
-                    animateMainMenu();
-                }
-            })
-            tl.to(global, {
-                alpha: 0,
-                duration: 1.5,
-            })
-        }
-    })
-]
-
-const carButtons = [
-    new Button({
-        position: {
-            x: 235,
-            y: 450
-        },
-        click: function() {
-            if (carMenu.translation.currentCar == 1) return;
-            else carMenu.translation.currentCar--;
-            changeCar();
-        },
-        imageSrc: "assets/img/ArrowLeft/Default.png",
-        hoverImageSrc: "assets/img/ArrowLeft/Hover.png",
-        isClickable: false
-    }),
-    new Button({
-        position: {
-            x: 710,
-            y: 450
-        },
-        click: function() {
-            if (carMenu.translation.currentCar == 4) return;
-            else carMenu.translation.currentCar++;
-            changeCar();
-        },
-        imageSrc: "assets/img/ArrowRight/Default.png",
-        hoverImageSrc: "assets/img/ArrowRight/Hover.png",
-        isClickable: false
-    }),
-    // Powrót
-    new Button({
-        position: {
-            x: 900,
-            y: 30
-        },
-        imageSrc: "assets/img/Home/Default.png",
-        hoverImageSrc: "assets/img/Home/Hover.png",
-        isClickable: false,
-        click: function() {
-            const tl = gsap.timeline();
-            tl.to(global, {
-                alpha: 1,
-                duration: 1,
-                onComplete: () => {
-                    cancelAnimationFrame(frame);
-                    carButtons.forEach(button => button.isClickable = false);
-                    menuButtons.forEach(button => button.isClickable = true);
-                    animateMainMenu();
-                }
-            })
-            tl.to(global, {
-                alpha: 0,
-                duration: 1.5,
-            })
-        }
-    })
-]
-
+//for z przyciskami do zmiany samochodu
 for (let i = 0; i < 4; i++) {
     carButtons.push(new Button({
         position: {
@@ -383,7 +393,6 @@ for (let i = 0; i < 4; i++) {
         },
         click: function() {
             if (carMenu.translation.currentCar == i + 1) {
-                console.log(this)
                 if (!cars[i + 1].isOwned && player.money >= cars[i + 1].cost) {
                     player.money -= cars[i + 1].cost;
                     localStorage.setItem(`money`, JSON.stringify(player.money));
@@ -407,6 +416,7 @@ for (let i = 0; i < 4; i++) {
     }))
 }
 
+//wywalywanie przyciskow
 menuButtons.forEach(button => button.type = "menu");
 endScreenButtons.forEach(button => button.type = "endScreen");
 tuningButtons.forEach(button => button.type = "tuning");
