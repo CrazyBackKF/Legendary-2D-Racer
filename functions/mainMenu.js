@@ -48,6 +48,10 @@ function animateMainMenu() {
     c.save();
     c.translate(mainMenu.translation.x, mainMenu.translation.y)
     c.drawImage(mainMenuBackground, 0, 0);
+    for (let i = 0; i < Object.keys(stage).length; i++) {
+        c.fillStyle = "black";
+        c.fillRect(50 + 1024 * i, 150, 100, 50);
+    }
     c.restore();
     c.drawImage(menu, 0, 0);
 
@@ -72,6 +76,7 @@ function animateMainMenu() {
     })
 
     shadowText(player.money, {x: 100, y: 65}, offset, 30, "start", "bottom");
+
     
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`;
     c.fillRect(0, 0, canvas.width, canvas.height);

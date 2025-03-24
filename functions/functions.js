@@ -177,6 +177,26 @@ function getTime(time) {
     return `${minutes}:${seconds}`;
 }
 
+function getRandomTrack() {
+    return music.game[Math.floor(Math.random() * music.game.length)];
+}
+
+function playRandomTrack() {
+    const track = getRandomTrack();  // Losujemy utwór
+    // Tworzymy nowy obiekt Howl z losowym utworem
+    const sound = new Howl({
+        src: [track],
+        volume: 0.5,
+        loop: false,
+        autoplay: false,
+        onend: function() {
+            playRandomTrack();  // Po zakończeniu odtwarzania, losujemy nowy utwór
+        }
+    });
+    
+    sound.play();  // Odtwarzamy muzykę
+}
+
 function changeLevelProperties() {
     counter = 3;
     global.translation.x = stage[currentMap].startTranslation.x;
@@ -240,6 +260,8 @@ function changeLevelProperties() {
             index++;
         }
     }
+
+    playRandomTrack();
 
 }
 

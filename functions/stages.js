@@ -61,7 +61,8 @@ const stage = {
         startTranslation: {x: -canvas.width / 2, y:  -canvas.height},
         scale: 1,
         rotation: 270,
-        moneyMultiplier: 1
+        moneyMultiplier: 1,
+        bestTime: ""
     },
     
     2: {
@@ -79,7 +80,8 @@ const stage = {
         startTranslation: {x: -canvas.width / 2 - 100, y:  -canvas.height},
         scale: 1,
         rotation: 270,
-        moneyMultiplier: 1.5
+        moneyMultiplier: 1.5,
+        bestTime: ""
     },
 
     3: {
@@ -97,7 +99,8 @@ const stage = {
         startTranslation: {x: 0, y:  0},
         scale: 1,
         rotation: 90,
-        moneyMultiplier: 1.5
+        moneyMultiplier: 1.5,
+        bestTime: ""
     },
 
     4: {
@@ -115,7 +118,8 @@ const stage = {
         startTranslation: {x: -1700, y: -1150},
         scale: 2,
         rotation: 270,
-        moneyMultiplier: 2
+        moneyMultiplier: 2,
+        bestTime: ""
     },
     5: {
         arrowRotations: [90,90,90,90,0,270,270,270,0,0,0,270,270,270,0,0,90,90,90,180,180,180,90,90,0,0,0,0,270,270,270,270,270,270,270,270,270,270,270,180,180,180,180,90,90,90,90,0,0,0,90,90,90,180,180,180,270,270,270,270,180,90,90,90],
@@ -132,6 +136,7 @@ const stage = {
         startTranslation: {x: -1100, y: 0},
         scale: 2,
         rotation: 270,
-        moneyMultiplier: 2
+        moneyMultiplier: 2,
+        bestTime: ""
     }
 }

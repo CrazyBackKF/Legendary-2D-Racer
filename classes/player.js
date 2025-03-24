@@ -79,6 +79,7 @@ class Player extends Sprite {
         this.moneyToAdd = 0;
         this.imageSrc = imageSrc;
         this.deletedObstacleImg = "";
+        this.volume = 0.2;
     }
 
 
@@ -103,6 +104,7 @@ class Player extends Sprite {
         this.checkCollisionWithBots();
         this.updateDistance();
         this.changeStats();
+        this.changeAudio();
 
         if (!this.isPlaying) return;
 
@@ -235,7 +237,7 @@ class Player extends Sprite {
         }
         else if (this.speed < 0) {
             if (this.speed >= -2) return -this.speed / 1.5 * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
-            else return (2 + (this.speed / this.maxSpeed) ) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
+            else return (2 + (this.speed / this.maxSpeed)) * this.driftMultiplier * deltaTime * 120 * this.oliedMultiplier;
         }
     }
 
@@ -286,7 +288,7 @@ class Player extends Sprite {
     // Metoda sprawdza kolizję między samochodzem a blokami kolizji
     checkCollisions() {
         let wasColliding = false;
-        
+
         for (let i = 0; i < stage[currentMap].collisionsTab.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, false);
             const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], true, 0, false, global.scale, global.translation);
@@ -303,12 +305,12 @@ class Player extends Sprite {
                 break;
             }
         }
-    
+
         if (!wasColliding) {
             this.isColliding2 = false;
         }
     }
-    
+
 
     //po wyjechaniu z drogi na 5 sekund, samochód wraca do ostatniego checkpointu
     checkRoad() {
@@ -342,7 +344,7 @@ class Player extends Sprite {
         else if (this.isOnRoad) {
             this.lastRoadTime = 0;
             this.friction = 0.01;
-            
+
             return;
         }
         else {
@@ -431,8 +433,7 @@ class Player extends Sprite {
                     }
                     else if (obstacles[i].type.type == "nitro") {
                         this.turboAmount += 0.5;
-                        if(this.turboAmount > 2)
-                        {
+                        if (this.turboAmount > 2) {
                             this.turboAmount = 2
                         }
                     }
@@ -579,10 +580,26 @@ class Player extends Sprite {
 
     //metoda reagujaca na kolizje
     reactToCollisions(enemyVelocity) {
-        const force = 1
+        const impactFactor = 0.3;
+        const minKnockback = 0.5;
+        const maxKnockback = 5;
 
-        this.knockback.x = (this.velocity.x - enemyVelocity.x) * force;
-        this.knockback.y = (this.velocity.y - enemyVelocity.y) * force
+        let relativeVelocityX = this.velocity.x - enemyVelocity.x;
+        let relativeVelocityY = this.velocity.y - enemyVelocity.y;
+
+        let impactForce = Math.sqrt(relativeVelocityX ** 2 + relativeVelocityY ** 2) * impactFactor;
+
+        impactForce = Math.max(minKnockback, Math.min(maxKnockback, impactForce));
+
+        let length = Math.sqrt(relativeVelocityX ** 2 + relativeVelocityY ** 2);
+        if (length > 0) {
+            relativeVelocityX /= length;
+            relativeVelocityY /= length;
+        }
+
+        // Ustawienie knockbacku w odpowiednim kierunku
+        this.knockback.x += relativeVelocityX * impactForce;
+        this.knockback.y += relativeVelocityY * impactForce;
     }
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)
@@ -644,6 +661,90 @@ class Player extends Sprite {
         this.bonusSpeed = tuning.spoiler.stats[tuning.spoiler.level];
         this.maxTurbo = tuning.turbo.stats[tuning.turbo.level];
     }
+
+    changeAudio() {
+        if (this.key.w || this.key.s) {
+            if (this.volume < 0.4) this.volume += 0.005;
+            if (Math.abs(this.speed) < this.maxSpeed * 0.5) {
+                if (!carAudios.lowOn.playing()) {
+                    this.stopAudio("lowOn")
+                    carAudios.lowOn.play();
+                    carAudios.lowOn.volume(this.volume);
+                }
+            }
+            else if (Math.abs(this.speed) < this.maxSpeed * 0.7) {
+                if (!carAudios.medOn.playing()) {
+                    this.stopAudio("medOn")
+                    carAudios.medOn.play();
+                    carAudios.medOn.volume(this.volume);
+                }
+            }
+            else if (Math.abs(this.speed) < this.maxSpeed * 0.99) {
+                if (!carAudios.highOn.playing()) {
+                    this.stopAudio("highOn")
+                    carAudios.highOn.play();
+                    this.audio = "high"
+                    carAudios.highOn.volume(this.volume);
+                }
+            }
+            else {
+                if (!carAudios.max.playing()) {
+                    this.stopAudio("max")
+                    carAudios.max.play();
+                    this.audio = "max"
+                    carAudios.max.volume(this.volume);
+                }
+            }
+        } else {
+            if (this.volume > 0) this.volume -= 0.05;
+            if (Math.abs(this.speed) < this.maxSpeed * 0.2) {
+                if (!carAudios.idle.playing()) {
+                    this.stopAudio("idle")
+                    carAudios.idle.play();
+                    carAudios.idle.volume(this.volume);
+                }
+            }
+            else if (Math.abs(this.speed) < this.maxSpeed * 0.5) {
+                if (!carAudios.lowOff.playing()) {
+                    this.stopAudio("lowOff")
+                    carAudios.lowOff.play();
+                    carAudios.lowOff.volume(this.volume);
+                }
+            }
+            else if (Math.abs(this.speed) < this.maxSpeed * 0.7) {
+                if (!carAudios.medOff.playing()) {
+                    this.stopAudio("medOff")
+                    carAudios.medOff.play();
+                    carAudios.medOff.volume(this.volume);
+                }
+            }
+            else if (Math.abs(this.speed) < this.maxSpeed * 0.99) {
+                if (!carAudios.highOff.playing()) {
+                    this.stopAudio("highOff")
+                    carAudios.highOff.play();
+                    carAudios.highOff.volume(this.volume);
+                }
+            }
+            else {
+                if (!carAudios.max.playing()) {
+                    this.stopAudio("max")
+                    carAudios.max.play();
+                    carAudios.max.volume(this.volume);
+                }
+            }
+        }
+
+    }
+
+    stopAudio(type) {
+        for (let key in carAudios) {
+            const audio = carAudios[key];
+            if (key != type) {
+                audio.stop();
+            }
+        }
+    }
+
 
     reset() {
         this.angle = 270; //zmienna opisujaca kat obrotu pojazdu podczas skretu

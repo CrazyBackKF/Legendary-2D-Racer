@@ -77,6 +77,7 @@ function animate(currentTime) {
     //}
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
+
     if (deltaTime > 1 / 30  || !deltaTime) deltaTime = 1 / 30; // Zapobieganie skokom FPS
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
