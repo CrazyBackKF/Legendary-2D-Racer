@@ -30,15 +30,15 @@ class Bot extends Player {
         //zmienne doassetubota
         this.image = new Image();
         this.image.src = imageSrc;
+        this.playingFlag = true; // flaga do animacji po skończeniu wyścigu przez bota
+        this.alpha = 1;
     }
 
 
     //wszystkie metody bota, żeby kod w script.js był czytelniejszy; nie trzeba wywoływać wszystkie metody w script.js, tylko update
     update() {
-        this.draw();
-
         if (key.q) this.drawHitbox();
-
+        this.draw();
         this.turn();
         this.changeStatsByBehavior();
         this.accelerate();
@@ -53,7 +53,6 @@ class Bot extends Player {
         //this.deaccelerate();
 
         if (!this.botPlaying) return;
-
         this.checkCollisionsWithPlayer();
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
     }
@@ -186,10 +185,17 @@ class Bot extends Player {
             this.laps++
         }
 
-        if (this.laps == 3) {
+        if (this.laps == 3 && this.playingFlag) {
+            this.playingFlag = false; // ustawiam flage, dzięki czemu animacja nie będzie się powielała dużo razy podczas klatki
             this.distance += 10000000 * (allCars.length - this.place)
             this.correctPlace = this.place;
             this.botPlaying = false;
+            gsap.to(this, {
+                alpha: 0,
+                duration: 0.5,
+                repeat: 4,
+                yoyo: true
+            })
         }
 
         this.previousCheckpoint = this.currentCheckpoint;
@@ -439,6 +445,9 @@ class Bot extends Player {
         }
         this.distance = 0;
         this.distanceFromLastCheckpoint = 0;
+        this.botPlaying = true;
+        this.playingFlag = true;
+        this.alpha = 1;
         this.botPlaying = true;
     }
 }

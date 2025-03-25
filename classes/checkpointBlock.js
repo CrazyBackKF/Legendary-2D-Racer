@@ -4,7 +4,6 @@ class CheckpointBlock extends collisionBlock {
         super({ position, width, height, color })
         this.isPassed = isPassed // czy checkpoint zotal zaliczony
         this.index = index //index chekpointa
-        this.angle = 0;
         //zmienne do strzalek pokazujacych nastepny checkpoint
         this.image = new Image();
         this.imageSrc = "File1.png"
@@ -16,6 +15,14 @@ class CheckpointBlock extends collisionBlock {
         this.lastFrame = 0;
         this.maxFrames = 59;
         this.rotation = rotation;
+        this.playerTranslation = {
+            x: 0,
+            y: 0
+        }
+        this.playerPosition = {
+            x: 0,
+            y: 0
+        }
     }
 
     //metoda do rysowania checkpointow

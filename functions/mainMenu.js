@@ -7,18 +7,6 @@ mainMenuBackground.src = "assets/img/mainMenuTlo.png";
 const menu = new Image();
 menu.src = "assets/img/menu.png"
 
-const global = {
-    scale: {
-        x: 2,
-        y: 2
-    },
-    translation: {
-        x: -canvas.width / 2,
-        y: -canvas.height
-    },
-    alpha: 0
-}
-
 const mainMenu = {
     translation: {
         x: 0,
@@ -49,8 +37,12 @@ function animateMainMenu() {
     c.translate(mainMenu.translation.x, mainMenu.translation.y)
     c.drawImage(mainMenuBackground, 0, 0);
     for (let i = 0; i < Object.keys(stage).length; i++) {
-        c.fillStyle = "black";
-        c.fillRect(50 + 1024 * i, 150, 100, 50);
+        c.fillStyle = "rgba(173, 216, 230, 0.8)";
+        c.fillRect(50 + 1024 * i, 150, 150, 70);
+        shadowText("BEST TIME", {x: 60 + 1024 * i, y: 160}, 2.2, 15, "start", "top");
+        if (stage[i + 1].bestTime >= 0) { // ustawiam bestTime za pierwszym razem na -1
+            shadowText(getTime(stage[i + 1].bestTime), {x: 80 + 1024 * i, y: 190}, 2.2, 20, "start", "top")
+        }
     }
     c.restore();
     c.drawImage(menu, 0, 0);
@@ -83,6 +75,5 @@ function animateMainMenu() {
 
     frame = requestAnimationFrame(animateMainMenu);
 }
-animateMainMenu();
 
 

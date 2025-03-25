@@ -140,16 +140,27 @@ function animate(currentTime) {
         }
     }
     //wyswietlanie komunikatu aby wrocic na tor
-    if (!player.isOnRoad && !player.isOnIce) {
+    if (!player.isOnRoad && !player.isOnIce && !(Date.now() - player.lastMoney <= 2000)) {
         c.fillStyle = "rgba(255, 165, 0, 0.9)"
-        c.fillRect((canvas.width - 500) / 2, 50, 500, 100)
+        c.fillRect((canvas.width - 650) / 2, 50, 650, 100)
         c.strokeStyle = "black"
-        c.strokeRect((canvas.width - 500) / 2, 50, 500, 100)
+        c.strokeRect((canvas.width - 650) / 2, 50, 650, 100)
         c.fillStyle = "red";
         c.font = '30px "Press Start 2P"';
         c.textAlign = "center";
         c.textBaseline = "middle"
-        c.fillText(`Wróć na tor!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
+        c.fillText(`Get back on track!  ${5 - parseInt((Date.now() - player.lastRoadTime) / 1000)}`, canvas.width / 2, 100);
+    }
+
+    if (Date.now() - player.lastMoney <= 2000) {
+        c.fillStyle = "rgba(255, 165, 0, 0.9)";
+        c.fillRect((canvas.width - 200) / 2, 50, 200, 90);
+        shadowText("+", {x: 510, y: 95}, offset, 25);
+        c.save();
+        c.translate(-250, -30);
+        coin.draw();
+        c.restore();
+        shadowText(20, {x: 530, y: 95}, offset, 25, "start");
     }
 
     

@@ -205,6 +205,14 @@ function changeLevelProperties() {
         stage[currentMap].checkpointsTab[i].index = i;
         stage[currentMap].checkpointsTab[i].rotation = convertToRadians(stage[currentMap].arrowRotations[i]);
         stage[currentMap].checkpointsTab[i].isPassed = false;
+        stage[currentMap].checkpointsTab[i].playerTranslation = {
+            x: 0,
+            y: 0
+        }
+        stage[currentMap].checkpointsTab[i].playerPosition = {
+            x: 0,
+            y: 0
+        }
     }
 
     background.src = stage[currentMap].imgSrc;
@@ -301,8 +309,8 @@ addEventListener("keydown", (e) => {
         case "s":
             player.key.s = true;
             break;
-        case "t":
-            player.key.t = true;
+        case "shift":
+            player.key.t = true; // zostało t, bo na początku turbo było na t, ale to było nie wygodne
             break;
         case " ":
             player.key.space = true;
@@ -328,7 +336,7 @@ addEventListener("keyup", (e) => {
         case "s":
             player.key.s = false;
             break;
-        case "t":
+        case "shift":
             player.key.t = false;
             break;
         case " ":
@@ -343,7 +351,7 @@ addEventListener("keyup", (e) => {
 // document.querySelector("#fullscreen").addEventListener("click", () => {
 //     canvas.requestFullscreen();
 //     lastFullScreen = Date.now();
-//     animate();
+//     //animate();
 // })
 
 // event listenery do sprawdzania czy gracz najechał lub kliknął na przycisk gdy jest na "End Screenie". Na razie jest tylko jeden, ale może w przysłości będzie
@@ -352,7 +360,7 @@ canvas.addEventListener("mousemove", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     let isHovering = false;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             canvas.style.cursor = "pointer";
@@ -381,7 +389,7 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("click", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             button.click();

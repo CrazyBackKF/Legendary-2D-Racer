@@ -268,3 +268,10 @@
 - naprawa pojawiajacych sie bledow zwiazanych z assetem przeszkod
 - sformatowanie kodu i dodanie komentarzy
 - dodanie muzyki dla samochodów i w tle (przez CORS nie włącza się, gdy próbuje się uruchomić grę lokalnie)
+
+25.03.2025
+- dodanie help screenu
+- dodanie best time na każdą mapę
+- naprawa błędów
+- zmiana sposobu w jaki wraca gracz do poprzedniego checkpointa
+- gdy gracz zbierze monete, to wyświetla to się na ekranie

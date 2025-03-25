@@ -80,6 +80,7 @@ class Player extends Sprite {
         this.imageSrc = imageSrc;
         this.deletedObstacleImg = "";
         this.volume = 0.2;
+        this.lastMoney = 0;
     }
 
 
@@ -352,18 +353,31 @@ class Player extends Sprite {
         }
 
         if (5 - parseInt((Date.now() - this.lastRoadTime) / 1000) == 0) {
+            let didTeleport = false;
             for (let i = stage[currentMap].checkpointsTab.length - 1; i >= 0; i--) {
                 const element = stage[currentMap].checkpointsTab[i];
-
+                // gdy przez ileś sekund nie jest na drodze wróc do poprzedniego checkpointa. Przy każdym checkpoincie zapisuje jaką translacje i pozycje miał 
+                // gracz żeby później móc przywrócić. A rotacje biore z rotacji strzałek, bo niepotrzebnie jest ją też sprawdzać przy przejechaniu przez 
+                // checkpoint
                 if (stage[currentMap].checkpointsTab[i].isPassed) {
-                    this.position.x = element.position.x
-                    this.position.y = element.position.y
-                    global.translation.x = -(element.position.x + element.width);
-                    global.translation.y = -(element.position.y + element.height);
-                    this.angle = element.angle;
+                    didTeleport = true;
+                    this.position.x = element.playerPosition.x
+                    this.position.y = element.playerPosition.y
+                    global.translation.x = element.playerTranslation.x;
+                    global.translation.y = element.playerTranslation.y;
+                    this.angle = stage[currentMap].arrowRotation[i];
                     this.speed = 0;
                     break;
                 }
+            }
+            const element = stage[currentMap].checkpointsTab[0]; // jeżeli nie przejechał przez żaden chekpoint, to wróc do pierwszego
+            if (!didTeleport) {
+                this.position.x = stage[currentMap].playerPos.x
+                this.position.y = stage[currentMap].playerPos.y
+                global.translation.x = stage[currentMap].startTranslation.x;
+                global.translation.y = stage[currentMap].startTranslation.y;
+                this.angle = stage[currentMap].arrowRotation[0];
+                this.speed = 0;
             }
         }
 
@@ -431,6 +445,7 @@ class Player extends Sprite {
                     else if (obstacles[i].type.type == "coin") {
                         this.money += 20;
                         localStorage.setItem("money", JSON.stringify(this.money));
+                        this.lastMoney = Date.now();
                     }
                     else if (obstacles[i].type.type == "nitro") {
                         this.turboAmount += 0.5;
@@ -488,7 +503,7 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false)
 
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
-            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+            if (satCollisionWithVertices(car, bot).colliding && bot.isPlaying) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     this.isColliding = true;
                     this.reactToCollisions(bots[i].velocity, bots[i].angle);
@@ -516,8 +531,12 @@ class Player extends Sprite {
             const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], true, 0, false, global.scale, global.translation);
 
             if (satCollisionWithVertices(car, checkpoint).colliding && this.lastCheckpoint - i == -1) {
-                //przypisuje checkpointowi angle w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie za tor
-                stage[currentMap].checkpointsTab[i].angle = this.angle;
+                //przypisuje checkpointowi pozycje i translache w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie 
+                // za tor
+                stage[currentMap].checkpointsTab[i].playerTranslation.x = global.translation.x;
+                stage[currentMap].checkpointsTab[i].playerTranslation.y = global.translation.y;
+                stage[currentMap].checkpointsTab[i].playerPosition.x = this.position.x;
+                stage[currentMap].checkpointsTab[i].playerPosition.y = this.position.y;
 
                 //jesli nie bedzie drugiej czesci to nie zaleznie ktory checkpoint bedzie ostatni i tak zmieni na true
                 //jest to warunek okreslajacy kolejnosc checkpointow i powstrzymuje gracza przed jechanie w druga strone
@@ -531,6 +550,10 @@ class Player extends Sprite {
                         {
                             this.distance += 10000000 * (allCars.length - this.place) // po skończeniu trzech okrążeń dodaje do dystansy dużą liczbę, w zależności od jego pozycji
                             //, bo po wygranej, źle liczyło miejsce, tak samo dla botów
+                            if ((Date.now() - this.startTime < stage[currentMap].bestTime) || stage[currentMap].bestTime < 0) {
+                                stage[currentMap].bestTime = Date.now() - this.startTime;
+                                localStorage.setItem(`bestTime${currentMap}`, JSON.stringify(Date.now() - this.startTime));
+                            }
                             gsap.to(this, {
                                 alpha: 0,
                                 repeat: 4,

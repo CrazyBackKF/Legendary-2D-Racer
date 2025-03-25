@@ -344,6 +344,36 @@ const menuButtons = [
             x: 0.7,
             y: 0.7
         }
+    }),
+    new Button({
+        position: {
+            x: 700,
+            y: 5
+        },
+        imageSrc: "assets/img/Help/Default.png",
+        hoverImageSrc: "assets/img/Help/Hover.png",
+        scale: {
+            x: 0.7,
+            y: 0.7
+        },
+        click: function() {
+            // przejscie do help screen
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    menuButtons.forEach(button => button.isClickable = false);
+                    helpButtons.forEach(button => button.isClickable = true);
+                    animateHelpScreen();
+                }
+            })
+            tl.to(global, {
+                alpha: 0, 
+                duration: 1,
+            })
+        }
     })
 ]
 
@@ -416,7 +446,36 @@ for (let i = 0; i < 4; i++) {
     }))
 }
 
-//wywalywanie przyciskow
+const helpButtons = [
+    new Button({
+        position: {
+            x: 900,
+            y: 450
+        },
+        click: function() {
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    helpButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    animateMainMenu();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
+        },
+        imageSrc: "assets/img/ArrowRight/Default.png",
+        hoverImageSrc: "assets/img/ArrowRight/Hover.png"
+    })
+]
+
+//dawanie typow przyciskow
 menuButtons.forEach(button => button.type = "menu");
 endScreenButtons.forEach(button => button.type = "endScreen");
 tuningButtons.forEach(button => button.type = "tuning");
+helpButtons.forEach(button => button.type = "help");

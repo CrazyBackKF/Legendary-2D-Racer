@@ -62,7 +62,7 @@ const stage = {
         scale: 1,
         rotation: 270,
         moneyMultiplier: 1,
-        bestTime: ""
+        bestTime: JSON.parse(localStorage.getItem("bestTime1")) || -1
     },
     
     2: {
@@ -81,7 +81,7 @@ const stage = {
         scale: 1,
         rotation: 270,
         moneyMultiplier: 1.5,
-        bestTime: ""
+        bestTime: JSON.parse(localStorage.getItem("bestTime2")) || -1
     },
 
     3: {
@@ -100,7 +100,7 @@ const stage = {
         scale: 1,
         rotation: 90,
         moneyMultiplier: 1.5,
-        bestTime: ""
+        bestTime: JSON.parse(localStorage.getItem("bestTime3")) || -1
     },
 
     4: {
@@ -119,7 +119,7 @@ const stage = {
         scale: 2,
         rotation: 270,
         moneyMultiplier: 2,
-        bestTime: ""
+        bestTime: JSON.parse(localStorage.getItem("bestTime4")) || -1
     },
     5: {
         arrowRotations: [90,90,90,90,0,270,270,270,0,0,0,270,270,270,0,0,90,90,90,180,180,180,90,90,0,0,0,0,270,270,270,270,270,270,270,270,270,270,270,180,180,180,180,90,90,90,90,0,0,0,90,90,90,180,180,180,270,270,270,270,180,90,90,90],
@@ -137,6 +137,6 @@ const stage = {
         scale: 2,
         rotation: 270,
         moneyMultiplier: 2,
-        bestTime: ""
+        bestTime: JSON.parse(localStorage.getItem("bestTime5")) || -1
     }
 }
