@@ -20,7 +20,7 @@ class Player extends Sprite {
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
         this.maxTurbo = 1.5;
-        this.turboAmount = 1.5; //maksymalna ilość turbo
+        this.turboAmount = this.maxTurbo; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;//bool do okreslania wystepowania kolizji
         this.isColliding2 = false;
@@ -255,7 +255,7 @@ class Player extends Sprite {
         if (this.key.t && this.turboAmount > 0) // Gdy wciśnięty klawisz t to prędkość zwiększa się 1.5 razy
         {
             this.lastTurbo = Date.now();
-            this.speedMultiplier = 1.5;
+            this.speedMultiplier = 1.2;
             this.turboAmount -= 0.01;
         }
         else if (this.turboAmount <= 0) {
@@ -434,8 +434,8 @@ class Player extends Sprite {
                     }
                     else if (obstacles[i].type.type == "nitro") {
                         this.turboAmount += 0.5;
-                        if (this.turboAmount > 2) {
-                            this.turboAmount = 2
+                        if (this.turboAmount > this.maxTurbo) {
+                            this.turboAmount = this.maxTurbo
                         }
                     }
 
@@ -756,7 +756,8 @@ class Player extends Sprite {
         this.speedValue = 0.005;    //zmienna dodajaca predkosc z kazda klatka z wcisnietym klawiszem [w / s]
         this.friction = 0.01;  //zmienna opisujaca tarcie[o ile hamuje bez kliknietych klawiszy]
         this.maxSpeed = 3; //maksymalna prędkość z jaką może jechać pojazd
-        this.turboAmount = 2; //maksymalna ilość turbo
+        this.maxTurbo = tuning.turbo.stats[tuning.turbo.level];
+        this.turboAmount = this.maxTurbo; //maksymalna ilość turbo
         this.lastTurbo = 0; //ostatnie kliknięcie turbo
         this.isColliding = false;//bool do okreslania wystepowania kolizji
         this.lastRoadTime = 0; //zmienne przechowujaca czas na drodze
