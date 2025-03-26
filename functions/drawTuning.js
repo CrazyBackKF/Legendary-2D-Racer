@@ -106,4 +106,5 @@ function animateTuning() {
         localStorage.setItem(`${key}Width`, JSON.stringify(upgrade.width));
     }
     localStorage.setItem("money", JSON.stringify(player.money));
+    currentAnimation = "tuning";
 }

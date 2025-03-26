@@ -22,3 +22,8 @@ const global = {
     firstTime: JSON.parse(localStorage.getItem("firstTime")) !== null ? JSON.parse(localStorage.getItem("firstTime")) : true
 }
 const offset = 3; // offset do cieni
+const key = {
+    q: false,
+}
+let currentAnimation;
+let song;

@@ -32,6 +32,13 @@ function changeLvl() {
 let frame;
 
 function animateMainMenu() {
+    if (currentAnimation == "game" || currentAnimation == "pause") {
+        song.stop();
+        for (let key in carAudios) {
+            const audio = carAudios[key];
+            audio.stop();
+        }
+    }
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.save();
     c.translate(mainMenu.translation.x, mainMenu.translation.y)
@@ -74,6 +81,7 @@ function animateMainMenu() {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     frame = requestAnimationFrame(animateMainMenu);
+    currentAnimation = "mainMenu";
 }
 
 

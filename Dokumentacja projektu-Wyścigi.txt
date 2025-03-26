@@ -275,3 +275,7 @@
 - naprawa błędów
 - zmiana sposobu w jaki wraca gracz do poprzedniego checkpointa
 - gdy gracz zbierze monete, to wyświetla to się na ekranie
+
+26.03.2025
+- dodanie pauzy
+- naprawa muzyki

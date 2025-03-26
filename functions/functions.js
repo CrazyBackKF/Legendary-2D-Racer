@@ -184,7 +184,7 @@ function getRandomTrack() {
 function playRandomTrack() {
     const track = getRandomTrack();  // Losujemy utwór
     // Tworzymy nowy obiekt Howl z losowym utworem
-    const sound = new Howl({
+    song = new Howl({
         src: [track],
         volume: 0.5,
         loop: false,
@@ -194,7 +194,7 @@ function playRandomTrack() {
         }
     });
     
-    sound.play();  // Odtwarzamy muzykę
+    song.play();  // Odtwarzamy muzykę
 }
 
 function changeLevelProperties() {
@@ -319,6 +319,18 @@ addEventListener("keydown", (e) => {
             if (!key.q) key.q = true
             else key.q = false
             break;
+        case "escape":
+            if (currentAnimation == "game") {
+                cancelAnimationFrame(frame);
+                pauseButtons.forEach(button => button.isClickable = true);
+                pause();   
+            }
+            else if (currentAnimation == "pause") {
+                cancelAnimationFrame(frame);
+                pauseButtons.forEach(button => button.isClickable = false);
+                counter = 3;
+                startAnimation();
+            }
     }
 })
 
@@ -360,7 +372,7 @@ canvas.addEventListener("mousemove", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     let isHovering = false;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             canvas.style.cursor = "pointer";
@@ -389,7 +401,7 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("click", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             button.click();

@@ -2,9 +2,6 @@
 // znajduje się w "drawFunctions.js", ponieważ tamtejszy addEventListener potrzebował dostępu do canvas
 // const canvas = document.querySelector("canvas");
 // const c = canvas.getContext("2d");
-const key = {
-    q: false
-}
 
 let lastFrame = 0;
 let deltaTime = 1;
@@ -169,6 +166,7 @@ function animate(currentTime) {
     else endOfMatch();
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
     c.fillRect(0, 0, canvas.width, canvas.height)
+    currentAnimation = "game";
 }
 
 let counter = 3;
@@ -214,4 +212,5 @@ function startAnimation(currentTime) {
     }
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
     c.fillRect(0, 0, canvas.width, canvas.height)
+    currentAnimation = "counting";
 }

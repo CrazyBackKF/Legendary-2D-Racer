@@ -474,8 +474,63 @@ const helpButtons = [
     })
 ]
 
+const pauseButtons = [
+    new Button({
+        position: {
+            x: canvas.width / 2 - 50,
+            y: 250
+        },
+        scale: {
+            x: 3,
+            y: 1.5
+        },
+        click: function () {
+            cancelAnimationFrame(frame);
+            counter = 3;
+            pauseButtons.forEach(button => button.isClickable = false);
+            startAnimation();
+        },
+        imageSrc: "assets/img/tuningButton/Default.png", // nie potrzeba nowego przycisku, bo ten świetnie się sprawdza
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    }),
+    new Button({
+        position: {
+            x: canvas.width / 2 - 50,
+            y: 350
+        },
+        scale: {
+            x: 3,
+            y: 1.5
+        },
+        click: function() {
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    pauseButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    player.isPlaying = false;
+                    bots.forEach(bot => bot.botPlaying = false)
+                    animateMainMenu();
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
+        },
+        imageSrc: "assets/img/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        isClickable: false
+    })
+]
+
 //dawanie typow przyciskow
 menuButtons.forEach(button => button.type = "menu");
 endScreenButtons.forEach(button => button.type = "endScreen");
 tuningButtons.forEach(button => button.type = "tuning");
 helpButtons.forEach(button => button.type = "help");
+pauseButtons.forEach(button => button.type = "pause");
