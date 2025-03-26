@@ -203,8 +203,8 @@ class Player extends Sprite {
 
     // Metoda która obraca pojazd
     turn() {
-        let turnSpeed = this.changeTurningSpeed();
-
+        let turnSpeed = Math.min(3, this.changeTurningSpeed());
+        console.log(turnSpeed)
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;

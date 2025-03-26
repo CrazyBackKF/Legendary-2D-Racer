@@ -279,3 +279,4 @@
 26.03.2025
 - dodanie pauzy
 - naprawa muzyki
+- optymalizacja kodu

@@ -44,9 +44,9 @@ class Obstacle {
 
         // Pozycjonujemy obrazek na środku hitboxa
         c.translate(centerX - this.image.width / 4, centerY - this.image.height / 4);
-        c.scale(0.6, 0.6)
+        c.scale(0.8, 0.8)
         // Rysujemy obrazek
-        c.drawImage(this.image, 0, 0);
+        c.drawImage(this.image, -15, -15);
 
         c.restore();
     }
