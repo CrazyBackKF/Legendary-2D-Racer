@@ -18,16 +18,3 @@ function animateHelpScreen() {
     c.fillRect(0, 0, canvas.width, canvas.height);
     currentAnimation = "helpScreen";
 }
-
-if (global.firstTime) {
-    global.firstTime = false;
-    localStorage.setItem("firstTime", JSON.stringify(false));
-    menuButtons.forEach(button => button.isClickable = false);
-    helpButtons.forEach(button => button.isClickable = true);
-    animateHelpScreen();
-}
-else {
-    helpButtons.forEach(button => button.isClickable = false);
-    menuButtons.forEach(button => button.isClickable = true);
-    animateMainMenu();
-}

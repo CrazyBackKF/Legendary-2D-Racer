@@ -409,16 +409,16 @@ class Bot extends Player {
 
     //metoda ktora okresla polozenie checkpointa do ktorego botma jechac
     updateDistance() {
-        let lastCheckpoint = this.previousCheckpoint - 1;
-
+        let lastCheckpoint = this.previousCheckpoint;
         if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
-
-        const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
+        const checkpoint = stage[currentMap].checkpointsTab[(lastCheckpoint) % stage[currentMap].checkpointsTab.length];
         const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
         const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
         const botX = this.position.x + this.width / 2 + global.translation.x;
         const botY = this.position.y + this.height / 4 + global.translation.y;
-        this.distanceFromLastCheckpoint = Math.hypot(checkpointX - botX, checkpointY - botY);
+        const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[(lastCheckpoint - 1) % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
+        console.log("bot " + lastCheckpoint)
+        this.distanceFromLastCheckpoint =  distanceToNextCheckpoint - Math.hypot(checkpointX - botX, checkpointY - botY);
         ////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

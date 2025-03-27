@@ -29,7 +29,6 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
         name: "brakes",
         click: tuningOnClick
     }),
@@ -42,7 +41,6 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
         name: "engine",
         click: tuningOnClick
     }),
@@ -55,7 +53,6 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
         name: "wheels",
         click: tuningOnClick
     }),
@@ -68,7 +65,6 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
         name: "spoiler",
         click: tuningOnClick
     }),
@@ -81,7 +77,6 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
         name: "turbo",
         click: tuningOnClick
     }),
@@ -94,7 +89,6 @@ const tuningButtons = [
         },
         imageSrc: "assets/img/Home/Default.png",
         hoverImageSrc: "assets/img/Home/Hover.png",
-        isClickable: false,
         name: "return",
         click: function() {
             const tl = gsap.timeline();
@@ -129,7 +123,6 @@ const carButtons = [
         },
         imageSrc: "assets/img/ArrowLeft/Default.png",
         hoverImageSrc: "assets/img/ArrowLeft/Hover.png",
-        isClickable: false
     }),
 
     new Button({
@@ -144,7 +137,6 @@ const carButtons = [
         },
         imageSrc: "assets/img/ArrowRight/Default.png",
         hoverImageSrc: "assets/img/ArrowRight/Hover.png",
-        isClickable: false
     }),
 
     // Powrót
@@ -155,7 +147,6 @@ const carButtons = [
         },
         imageSrc: "assets/img/Home/Default.png",
         hoverImageSrc: "assets/img/Home/Hover.png",
-        isClickable: false,
         click: function() {
             const tl = gsap.timeline();
             tl.to(global, {
@@ -402,7 +393,6 @@ const endScreenButtons = [
         },
         imageSrc: "assets/img/endScreenPlayButton/Default.png",
         hoverImageSrc: "assets/img/endScreenPlayButton/Hover.png",
-        isClickable: false
     })
 ]
 
@@ -415,7 +405,6 @@ for (let i = 0; i < 4; i++) {
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false,
         name: "buy",
         translation: {
             x: -1024 * i,
@@ -492,7 +481,6 @@ const pauseButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png", // nie potrzeba nowego przycisku, bo ten świetnie się sprawdza
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
     }),
     new Button({
         position: {
@@ -524,7 +512,49 @@ const pauseButtons = [
         },
         imageSrc: "assets/img/tuningButton/Default.png",
         hoverImageSrc: "assets/img/tuningButton/Hover.png",
-        isClickable: false
+    })
+]
+
+const startButtons = [
+    new Button({
+        position: {
+            x: 450,
+            y: 400
+        },
+        scale: {
+            x: 2,
+            y: 2
+        },
+        click: function() {
+            const tl = gsap.timeline();
+            tl.to(global, {
+                alpha: 1,
+                duration: 1,
+                onComplete: () => {
+                    cancelAnimationFrame(frame);
+                    startButtons.forEach(button => button.isClickable = false);
+                    menuButtons.forEach(button => button.isClickable = true);
+                    if (global.firstTime) {
+                        global.firstTime = false;
+                        localStorage.setItem("firstTime", JSON.stringify(false));
+                        menuButtons.forEach(button => button.isClickable = false);
+                        helpButtons.forEach(button => button.isClickable = true);
+                        animateHelpScreen();
+                    }
+                    else {
+                        helpButtons.forEach(button => button.isClickable = false);
+                        menuButtons.forEach(button => button.isClickable = true);
+                        animateMainMenu();
+                    }
+                }
+            })
+            tl.to(global, {
+                alpha: 0,
+                duration: 1.5,
+            })
+        },
+        imageSrc: "assets/img/ArrowRight/Default.png", // wygląda na znak "play" lol
+        hoverImageSrc: "assets/img/ArrowRight/Hover.png"
     })
 ]
 
@@ -534,3 +564,4 @@ endScreenButtons.forEach(button => button.type = "endScreen");
 tuningButtons.forEach(button => button.type = "tuning");
 helpButtons.forEach(button => button.type = "help");
 pauseButtons.forEach(button => button.type = "pause");
+startButtons.forEach(button => button.type = "start");

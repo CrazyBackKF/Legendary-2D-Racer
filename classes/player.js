@@ -110,6 +110,7 @@ class Player extends Sprite {
         if (!this.isPlaying) return;
 
         this.physics();
+        console.log(this.distance + this.distanceFromLastCheckpoint)
     }
 
     changeSpriteProperties() {
@@ -204,7 +205,6 @@ class Player extends Sprite {
     // Metoda która obraca pojazd
     turn() {
         let turnSpeed = Math.min(3, this.changeTurningSpeed());
-        console.log(turnSpeed)
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;
@@ -659,16 +659,16 @@ class Player extends Sprite {
     //inne metody
     updateDistance() {
         let lastCheckpoint = this.lastCheckpoint;
-
         if (this.lastCheckpoint == -1) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
-
-        const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
+        const checkpoint = stage[currentMap].checkpointsTab[(this.lastCheckpoint + 1) % stage[currentMap].checkpointsTab.length]; // sprawdzamy następny checkpoint, nie poprzedni
         const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
         const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
         const playerX = this.position.x + this.width / 2;
         const playerY = this.position.y + this.height / 4;
 
-        this.distanceFromLastCheckpoint = Math.hypot(checkpointX - playerX, checkpointY - playerY);
+        const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
+        
+        this.distanceFromLastCheckpoint =  distanceToNextCheckpoint - Math.hypot(checkpointX - playerX, checkpointY - playerY);
         ////////////////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

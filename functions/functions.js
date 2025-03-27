@@ -215,6 +215,26 @@ function changeLevelProperties() {
         }
     }
 
+    // stworzyłem nową pętle, żeby kod był czytelniejszy
+    for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
+        const thisCheckpoint = stage[currentMap].checkpointsTab[i];
+        const nextCheckpoint = stage[currentMap].checkpointsTab[(i + 1) % stage[currentMap].checkpointsTab.length];
+
+        const thisPosition = {
+            x: thisCheckpoint.position.x + thisCheckpoint.width / 2,
+            y: thisCheckpoint.position.y + thisCheckpoint.height / 2
+        }
+
+        const nextPosition = {
+            x: nextCheckpoint.position.x + nextCheckpoint.width / 2,
+            y: nextCheckpoint.position.y + nextCheckpoint.height / 2
+        }
+
+        const distance = Math.hypot((thisPosition.x - nextPosition.x), (thisPosition.y - nextPosition.y));
+        thisCheckpoint.distanceToNextCheckpoint = distance;
+        console.log("chuj")
+    }
+
     background.src = stage[currentMap].imgSrc;
     foreground.src = stage[currentMap].foregroundSrc;
 
@@ -372,7 +392,7 @@ canvas.addEventListener("mousemove", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     let isHovering = false;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons, ...startButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             canvas.style.cursor = "pointer";
@@ -401,7 +421,7 @@ canvas.addEventListener("mousemove", (e) => {
 canvas.addEventListener("click", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
-    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons];
+    const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons, ...startButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             button.click();
