@@ -280,3 +280,5 @@
 - dodanie pauzy
 - naprawa muzyki
 - optymalizacja kodu
+- dodanie menu startowego
+- próba zmiany mechaniki pozycji i dodania nowego zachowania bota

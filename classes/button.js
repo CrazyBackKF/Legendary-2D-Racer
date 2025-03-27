@@ -1,5 +1,5 @@
 class Button {
-    constructor({ position, click, imageSrc, hoverImageSrc, scale = {x: 1, y: 1}, isClickable = true, name = "", translation = {x: 0, y: 0} }) {
+    constructor({ position, click, imageSrc, hoverImageSrc, scale = {x: 1, y: 1}, isClickable = false, name = "", translation = {x: 0, y: 0} }) {
         this.position = position;
         this.click = click; //przekazywanie funkcji wykonywanej podczas klikniecia
         //zmienne okreslajace obraz
