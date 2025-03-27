@@ -17,4 +17,5 @@ function animateHelpScreen() {
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`;
     c.fillRect(0, 0, canvas.width, canvas.height);
     currentAnimation = "helpScreen";
+    cursor.draw();
 }

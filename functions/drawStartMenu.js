@@ -34,7 +34,8 @@ function animateStartMenu() {
     c.restore();
 
     if (startMenuAnimation.isFirstFrame) {
-        startMenuAnimation.isFirstFrame = false; // żeby animacje się nie nawarstwiały (w sumie to nie trzeba bo tak czy siak się animuje do zera, ale żeby nie zajmowała miejsca)
+        startMenuAnimation.isFirstFrame = false; // żeby animacje i muzyka się nie nawarstwiały (w sumie to nie trzeba bo tak czy siak się animuje do zera, ale żeby nie zajmowała miejsca)
+        music.startMenu.play();
         const tl = gsap.timeline();
         tl.to(startText.translation, {
             y: 0,
@@ -50,6 +51,7 @@ function animateStartMenu() {
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`;
     c.fillRect(0, 0, canvas.width, canvas.height);
     currentAnimation = "start"
+    cursor.draw();
 }
 
 animateStartMenu();

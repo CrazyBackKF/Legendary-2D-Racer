@@ -198,6 +198,14 @@ const pointer = new Sprite({     // Po angielsku to chyba pointer xd (chodzi o w
     alpha: 0.8
 });
 
+const cursor = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imageSrc: "assets/img/Cursor/cursor.png"
+})
+
 const endScreen = new Sprite({
     position: {
         x: 0,
@@ -258,6 +266,7 @@ const menuButtons = [
                 alpha: 1,
                 duration: 1,
                 onComplete: () => {
+                    music.mainMenu.stop();
                     cancelAnimationFrame(frame);
                     currentMap = mainMenu.translation.currentLvl;
                     for (let button of endScreenButtons) {button.isClickable = false;}
@@ -380,6 +389,7 @@ const endScreenButtons = [
                 alpha: 1,
                 duration: 1,
                 onComplete: () => {
+                    music.mainMenu.play();
                     cancelAnimationFrame(frame);
                     endScreenButtons.forEach(button => button.isClickable = false);
                     menuButtons.forEach(button => button.isClickable = true);
@@ -531,6 +541,8 @@ const startButtons = [
                 alpha: 1,
                 duration: 1,
                 onComplete: () => {
+                    music.startMenu.stop();
+                    music.mainMenu.play();
                     cancelAnimationFrame(frame);
                     startButtons.forEach(button => button.isClickable = false);
                     menuButtons.forEach(button => button.isClickable = true);

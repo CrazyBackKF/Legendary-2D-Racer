@@ -56,8 +56,27 @@ const carAudios = {
 }
 
 const music = {
-    game: []
+    game: [],
+    startMenu: new Howl({
+        src: ["assets/audio/music/startMenu.wav"],
+        loop: true,
+        volume: 0.5,
+        autoplay: false
+    }),
+    mainMenu: new Howl({
+        src: ["assets/audio/music/mainMenu.ogg"],
+        loop: true,
+        volume: 0.5,
+        autoplay: false
+    }),
+    button: new Howl({
+        src: ["assets/audio/music/button.wav"],
+        loop: false,
+        volume: 0.7,
+        autoplay: false
+    })
 }
+console.log("muzyka")
 
 for (let i = 1; i <= 7; i++) {
     music.game.push(`assets/audio/music/game/${i}.ogg`)

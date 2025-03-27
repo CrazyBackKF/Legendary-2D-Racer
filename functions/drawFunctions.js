@@ -64,6 +64,7 @@ function endOfMatch() {
     shadowText(player.moneyToAdd, {x: 740, y: 115}, offset, 25, "start", "top");
 
     endScreenButtons.forEach(button => button.draw());
+    cursor.draw();
 }
 
 

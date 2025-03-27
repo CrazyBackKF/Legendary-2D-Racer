@@ -82,6 +82,7 @@ function animateMainMenu() {
 
     frame = requestAnimationFrame(animateMainMenu);
     currentAnimation = "mainMenu";
+    cursor.draw();
 }
 
 

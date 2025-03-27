@@ -371,11 +371,14 @@ addEventListener("keyup", (e) => {
 canvas.addEventListener("mousemove", (e) => {
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
+    cursor.position.x = mouseX;
+    cursor.position.y = mouseY;
+    
     let isHovering = false;
     const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons, ...startButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
-            canvas.style.cursor = "pointer";
+            cursor.image.src = "assets/img/Cursor/pointer.png";
             isHovering = true;
             button.isHovering = true;
             gsap.to(button.scale, {
@@ -395,7 +398,7 @@ canvas.addEventListener("mousemove", (e) => {
             })
         }
     })
-    if (!isHovering) canvas.style.cursor = "default";
+    if (!isHovering) cursor.image.src = "assets/img/Cursor/cursor.png";
 })
 
 canvas.addEventListener("click", (e) => {
@@ -404,6 +407,7 @@ canvas.addEventListener("click", (e) => {
     const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons, ...startButtons];
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
+            music.button.play();
             button.click();
         }
     })
