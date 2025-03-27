@@ -13,6 +13,9 @@
             margin: 0;
             overflow: hidden;
             background-color: black;
+            cursor: url("assets/img/Cursor/cursor.png"), auto;
+            width: 100vw;
+            height: 100vh;
         }
 
         #fullscreen {
@@ -38,18 +41,14 @@
             width: fit-content;
             height: fit-content;
             padding: 0;
-            cursor: none;
         }
 
-        #canvas {
-            cursor: none;
-        }
     </style>
 </head>
 
 <body>
     <div>
-        <canvas width="1024" height="576" id="canvas"></canvas>
+        <canvas width="1024" height="576"></canvas>
         <!-- <button type="button" id="fullscreen">
             <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                 <path d="M20,10 L80,50 L20,90 Z" fill="white" stroke="white" stroke-width="5"/>

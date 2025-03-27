@@ -173,6 +173,7 @@ let counter = 3;
 let lastCounterTime;
 
 function startAnimation(currentTime) {
+    document.body.style.cursor = "none";
     frame = requestAnimationFrame(startAnimation);
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;

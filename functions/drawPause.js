@@ -37,5 +37,4 @@ function pause() {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     currentAnimation = "pause";
-    cursor.draw();
 }

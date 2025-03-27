@@ -119,5 +119,4 @@ function animateCarMenu() {
     c.fillRect(0, 0, canvas.width, canvas.height);
     
     currentAnimation = "carMenu";
-    cursor.draw();
 }

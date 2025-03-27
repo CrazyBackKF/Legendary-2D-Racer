@@ -107,5 +107,4 @@ function animateTuning() {
     }
     localStorage.setItem("money", JSON.stringify(player.money));
     currentAnimation = "tuning";
-    cursor.draw();
 }
