@@ -282,3 +282,4 @@
 - optymalizacja kodu
 - dodanie menu startowego
 - próba zmiany mechaniki pozycji i dodania nowego zachowania bota
+- dodanie lodu do mapy 5
