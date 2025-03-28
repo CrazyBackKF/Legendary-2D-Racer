@@ -285,3 +285,4 @@
 - dodanie lodu do mapy 5
 - dodanie reszty muzyki (do menu głównego i startowego, oraz na przyciski)
 - dodanie customowego kursora
+- naprawa botow
