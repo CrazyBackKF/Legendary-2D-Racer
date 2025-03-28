@@ -280,3 +280,6 @@
 - dodanie pauzy
 - naprawa muzyki
 - optymalizacja kodu
+
+27.03.2025
+- zmiana mechaniki pozycji

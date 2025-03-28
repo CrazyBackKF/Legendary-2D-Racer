@@ -110,7 +110,6 @@ class Player extends Sprite {
         if (!this.isPlaying) return;
 
         this.physics();
-        console.log(this.distance + this.distanceFromLastCheckpoint)
     }
 
     changeSpriteProperties() {
@@ -667,8 +666,10 @@ class Player extends Sprite {
         const playerY = this.position.y + this.height / 4;
 
         const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
-        
-        this.distanceFromLastCheckpoint =  distanceToNextCheckpoint - Math.hypot(checkpointX - playerX, checkpointY - playerY);
+        this.distanceFromLastCheckpoint = (distanceToNextCheckpoint - Math.hypot(checkpointX - playerX, checkpointY - playerY) / 2);
+        c.fillStyle = "black";
+        // c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
+        // c.fillText(parseInt(distanceToNextCheckpoint) + " " + parseInt(Math.hypot(checkpointX - playerX, checkpointY - playerY) / 2), this.position.x + this.width, this.position.y + this.height);
         ////////////////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

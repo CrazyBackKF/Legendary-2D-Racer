@@ -31,8 +31,8 @@ function UI() {
         c.fillStyle = "black";
         c.save();
         if (car.name != "Player") c.translate(global.translation.x, global.translation.y);
-        c.fillText(parseInt(car.distance + car.distanceFromLastCheckpoint), car.position.x, car.position.y);
-        c.fillText(car.speed, car.position.x + car.width, car.position.y + car.height);
+        //c.fillText(parseInt(car.distanceFromLastCheckpoint), car.position.x, car.position.y);
+        //c.fillText(car.lastCheckpoint, car.position.x + car.width, car.position.y + car.height);
         c.restore();
     });
 

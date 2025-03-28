@@ -47,13 +47,15 @@ class Bot extends Player {
         this.move();
         this.checkCheckpoints();
         //this.checkRoad();
-        this.checkCollisionWithBots();
+        //this.checkCollisionWithBots();
         this.checkLaps();
         this.updateDistance();
         //this.deaccelerate();
 
         if (!this.botPlaying) return;
-        this.checkCollisionsWithPlayer();
+        //this.checkCollisionsWithPlayer();
+        this.velocity.x /= 2;
+        this.velocity.y /= 2;
         this.physics(); //metoda znajduje się w klasie Player, a że Bot dziedziczy z Playera, mogę się do niej odwołać
     }
 
@@ -409,16 +411,27 @@ class Bot extends Player {
 
     //metoda ktora okresla polozenie checkpointa do ktorego botma jechac
     updateDistance() {
-        let lastCheckpoint = this.previousCheckpoint;
-        if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
-        const checkpoint = stage[currentMap].checkpointsTab[(lastCheckpoint) % stage[currentMap].checkpointsTab.length];
-        const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
-        const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
-        const botX = this.position.x + this.width / 2 + global.translation.x;
-        const botY = this.position.y + this.height / 4 + global.translation.y;
-        const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[(lastCheckpoint - 1) % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
-        console.log("bot " + lastCheckpoint)
-        this.distanceFromLastCheckpoint =  distanceToNextCheckpoint - Math.hypot(checkpointX - botX, checkpointY - botY);
+        let lastCheckpoint = this.previousCheckpoint - 1;
+        if (lastCheckpoint == -1) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
+        
+        // męczyłem się z tym przez godzinę, ponieważ dałem this.lastCheckpoint, który zawsze jest równy -1, dziedzicząc z playera, a powinno być lastCheckpoint. Świetnie
+        const checkpoint = stage[currentMap].checkpointsTab[(lastCheckpoint + 1) % stage[currentMap].checkpointsTab.length]; // sprawdzamy następny checkpoint, nie poprzedni
+        const checkpointX = ((checkpoint.position.x + checkpoint.width / 2) * 2);
+        const checkpointY = ((checkpoint.position.y + checkpoint.height / 2) * 2);
+        
+        const botX = this.position.x + this.width / 2;
+        const botY = this.position.y + this.height / 4;
+        
+        const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
+        this.distanceFromLastCheckpoint = distanceToNextCheckpoint - Math.hypot(checkpointX - botX, checkpointY - botY) / 2
+        
+        // c.save();
+        // c.translate(global.translation.x, global.translation.y)
+        // c.fillStyle = "black";
+        // c.fillStyle = "black";
+        // c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
+        // c.fillText(parseInt(distanceToNextCheckpoint) + " " + parseInt(Math.hypot(checkpointX - botX, checkpointY - botY) / 2), this.position.x + this.width, this.position.y + this.height);
+        // c.restore();
         ////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();
