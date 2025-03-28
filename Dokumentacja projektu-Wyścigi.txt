@@ -283,3 +283,5 @@
 
 27.03.2025
 - zmiana mechaniki pozycji
+- optymalizajca kodu
+- dodanie ostatniego bota (taktyka, próbuje cie dogonić i zajechać ci drogę)

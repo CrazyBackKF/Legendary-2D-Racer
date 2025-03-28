@@ -293,7 +293,7 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false);
             const collision = getObjectsToCollisions(stage[currentMap].collisionsTab[i], true, 0, false, global.scale, global.translation);
 
-            if (satCollisionWithVertices(car, collision).colliding) {
+            if (satCollision(car, collision)) {
                 wasColliding = true;
 
                 if (!this.isColliding2) {
@@ -321,7 +321,7 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false);
             const road = getObjectsToCollisions(stage[currentMap].roadTab[i], true, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
-            if (satCollisionWithVertices(car, road).colliding) {
+            if (satCollision(car, road)) {
                 this.isOnRoad = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
@@ -331,7 +331,7 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false);
             const ice = getObjectsToCollisions(stage[currentMap].iceTab[i], true, 0, false, global.scale, global.translation) //skalowanie pozycji zgodnie z mapa
 
-            if (satCollisionWithVertices(car, ice).colliding) {
+            if (satCollision(car, ice)) {
                 this.isOnIce = true;
                 break; // Wystarczy wykryć jedną kolizję
             }
@@ -396,7 +396,7 @@ class Player extends Sprite {
 
             const square = getObjectsToCollisions(obstacles[i], true, 0, false, global.scale, global.translation);
 
-            if (satCollisionWithVertices(car, square).colliding) {
+            if (satCollision(car, square)) {
                 currentlyColliding = true;
 
                 let angleTypeTab = [110, -110]
@@ -502,10 +502,10 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false)
 
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
-            if (satCollisionWithVertices(car, bot).colliding && bot.isPlaying) { // napisz do tego kod SAT
+            if (satCollision(car, bot) && bots[i].botPlaying) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     this.isColliding = true;
-                    this.reactToCollisions(bots[i].velocity, bots[i].angle);
+                    this.reactToCollisions(bots[i].velocity);
                     currentlyColliding = true
                 }
 
@@ -529,7 +529,7 @@ class Player extends Sprite {
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
             const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], true, 0, false, global.scale, global.translation);
 
-            if (satCollisionWithVertices(car, checkpoint).colliding && this.lastCheckpoint - i == -1) {
+            if (satCollision(car, checkpoint) && this.lastCheckpoint - i == -1) {
                 //przypisuje checkpointowi pozycje i translache w momencie wjechania w niego, żeby wiedzieć z jakim kątem trzeba przywrócić auto, gdy wyjedzie 
                 // za tor
                 stage[currentMap].checkpointsTab[i].playerTranslation.x = global.translation.x;
@@ -604,26 +604,28 @@ class Player extends Sprite {
     //metoda reagujaca na kolizje
     reactToCollisions(enemyVelocity) {
         const impactFactor = 0.3;
-        const minKnockback = 0.5;
-        const maxKnockback = 5;
-
+        const minKnockback = 0.5;  
+        const maxKnockback = 5;    
+    
         let relativeVelocityX = this.velocity.x - enemyVelocity.x;
         let relativeVelocityY = this.velocity.y - enemyVelocity.y;
-
+    
         let impactForce = Math.sqrt(relativeVelocityX ** 2 + relativeVelocityY ** 2) * impactFactor;
 
         impactForce = Math.max(minKnockback, Math.min(maxKnockback, impactForce));
-
+    
+        // normalizacja wektora prędkości
         let length = Math.sqrt(relativeVelocityX ** 2 + relativeVelocityY ** 2);
         if (length > 0) {
             relativeVelocityX /= length;
             relativeVelocityY /= length;
         }
-
-        // Ustawienie knockbacku w odpowiednim kierunku
+    
         this.knockback.x += relativeVelocityX * impactForce;
         this.knockback.y += relativeVelocityY * impactForce;
     }
+    
+
 
     //ruch kamery(nizej okreslenie czy pionowo czy poziomo)
     moveCamerabox() {
@@ -666,10 +668,10 @@ class Player extends Sprite {
         const playerY = this.position.y + this.height / 4;
 
         const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
-        this.distanceFromLastCheckpoint = (distanceToNextCheckpoint - Math.hypot(checkpointX - playerX, checkpointY - playerY) / 2);
+        this.distanceFromLastCheckpoint = (distanceToNextCheckpoint - Math.hypot(checkpointX - playerX, checkpointY - playerY) / 2); // podzielic przez 2, ponieważ checkpointy skalujemy 2 razy
         c.fillStyle = "black";
         // c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
-        // c.fillText(parseInt(distanceToNextCheckpoint) + " " + parseInt(Math.hypot(checkpointX - playerX, checkpointY - playerY) / 2), this.position.x + this.width, this.position.y + this.height);
+        // c.fillText(this.place, this.position.x + this.width, this.position.y + this.height);
         ////////////////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

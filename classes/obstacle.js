@@ -58,30 +58,16 @@ class Obstacle {
 
         for (let i = 0; i < obstacles.length; i++) {
 
-            const obstacle1 = {
-                x: (obstacles[i].position.x * global.scale.x + global.translation.x),
-                y: (obstacles[i].position.y * global.scale.y + global.translation.y),
-                width: obstacles[i].width * global.scale.x,
-                height: obstacles[i].height * global.scale.y,
-                angle: 0
-            };
+            const obstacle1 = getObjectsToCollisions(obstacles[i], true, 0, false, global.scale, global.translation);
 
             let obstacle2;
 
             for (let j = 0; j < obstacles.length; j++) {
                 if (i == j) break;
 
-                obstacle2 = {
-                    x: (obstacles[j].position.x * global.scale.x + global.translation.x),
-                    y: (obstacles[j].position.y * global.scale.y + global.translation.y),
-                    width: obstacles[j].width * global.scale.x,
-                    height: obstacles[j].height * global.scale.y,
-                    angle: 0
-                };
-
-                if (isColliding(obstacle1, obstacle2)) {
+                obstacle2 = getObjectsToCollisions(obstacles[j], true, 0, false, global.scale, global.translation)
+                if (satCollision(obstacle1, obstacle2)) {
                     currentlyColliding = true;
-
                     // Wykrycie wejścia w kolizję po raz pierwszy
                     if (!this.isColliding) {
                         this.isColliding = true;

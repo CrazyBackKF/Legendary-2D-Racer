@@ -49,17 +49,18 @@ for (let i = 0; i < 4; i++) {
     ));
 }
 
-// bot do debugowania
+//bot do debugowania
 // bots.push(new Bot(
 //     {
 //         position: {
-//             x: 300 - global.translation.x,
-//             y: 315 - global.translation.y
+//             x: 0,
+//             y: 0
 //         },
 //         color: "orange",
-//         behavior: "stabilny",
+//         behavior: "agresor",
 //         index: 0,
-//         name: names[i]
+//         name: names[0],
+//         imageSrc: "assets/img/cars/Bots/4.png"
 //     }
 // ));
 
