@@ -396,7 +396,7 @@ canvas.addEventListener("mousemove", (e) => {
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             if (!(currentAnimation == "game" || currentAnimation == "counting")) {
-                document.body.style.cursor = `url("assets/img/Cursor/pointer.png"), auto`
+                canvas.style.cursor = `url("assets/img/Cursor/pointer.png"), auto`
             }
             isHovering = true;
             button.isHovering = true;
@@ -417,7 +417,7 @@ canvas.addEventListener("mousemove", (e) => {
             })
         }
     })
-    if (!isHovering && !(currentAnimation == "game" || currentAnimation == "counting")) document.body.style.cursor = `url("assets/img/Cursor/cursor.png"), auto`;
+    if (!isHovering && !(currentAnimation == "game" || currentAnimation == "counting")) canvas.style.cursor = `url("assets/img/Cursor/cursor.png"), auto`;
 })
 
 canvas.addEventListener("click", (e) => {

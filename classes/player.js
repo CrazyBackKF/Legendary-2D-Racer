@@ -133,6 +133,8 @@ class Player extends Sprite {
 
     // Metoda odpowiedzialna za zmianę prędkości pojazdu
     accelerate() {
+        if (this.isOnIce) this.speedValue = 0.003;
+        else this.speedValue = 0.005
         if (!this.key.w && !this.key.s) {
             if (this.speed > 0) {
                 this.speed -= this.friction;
@@ -203,7 +205,7 @@ class Player extends Sprite {
 
     // Metoda która obraca pojazd
     turn() {
-        let turnSpeed = Math.min(3, this.changeTurningSpeed());
+        let turnSpeed = Math.min(3.5, this.changeTurningSpeed());
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;

@@ -276,20 +276,22 @@ class Bot extends Player {
         else if (this.behavior == "taktyk") {
             this.maxSpeed = 3;
             this.speedValue = 0.03;
-            if ((this.distance + this.distanceFromLastCheckpoint) - (player.distance + player.distanceFromLastCheckpoint) > 500) { // komputer czeka, gdy gracz jest za daleko
-                this.maxSpeed = 1;
-                this.speedValue = 0.01;
-                this.brakeValue = 0.01;
-            }
-            else if (this.distance + this.distanceFromLastCheckpoint < player.distance + player.distanceFromLastCheckpoint) {
-                this.maxSpeed = 4;
-                this.speedValue = 0.034;
-                this.brakeValue = 1;
-            }
-            else {
-                this.maxSpeed = 2;
-                this.speedValue = 0.02;
-                this.brakeValue = 0.05;
+            if (this.laps < 2) {
+                if ((this.distance + this.distanceFromLastCheckpoint) - (player.distance + player.distanceFromLastCheckpoint) > 500) { // komputer czeka, gdy gracz jest za daleko
+                    this.maxSpeed = 1;
+                    this.speedValue = 0.01;
+                    this.brakeValue = 0.01;
+                }
+                else if (this.distance + this.distanceFromLastCheckpoint < player.distance + player.distanceFromLastCheckpoint) {
+                    this.maxSpeed = 4;
+                    this.speedValue = 0.034;
+                    this.brakeValue = 1;
+                }
+                else {
+                    this.maxSpeed = 2;
+                    this.speedValue = 0.02;
+                    this.brakeValue = 0.05;
+                }
             }
 
         }
@@ -431,18 +433,18 @@ class Bot extends Player {
     updateDistance() {
         let lastCheckpoint = this.previousCheckpoint - 1;
         if (lastCheckpoint == -1) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
-        
+
         // męczyłem się z tym przez godzinę, ponieważ dałem this.lastCheckpoint, który zawsze jest równy -1, dziedzicząc z playera, a powinno być lastCheckpoint. Świetnie
         const checkpoint = stage[currentMap].checkpointsTab[(lastCheckpoint + 1) % stage[currentMap].checkpointsTab.length]; // sprawdzamy następny checkpoint, nie poprzedni
         const checkpointX = ((checkpoint.position.x + checkpoint.width / 2) * 2);
         const checkpointY = ((checkpoint.position.y + checkpoint.height / 2) * 2);
-        
+
         const botX = this.position.x + this.width / 2;
         const botY = this.position.y + this.height / 4;
-        
+
         const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
         this.distanceFromLastCheckpoint = distanceToNextCheckpoint - Math.hypot(checkpointX - botX, checkpointY - botY) / 2
-        
+
         c.save();
         c.translate(global.translation.x, global.translation.y)
         c.fillStyle = "black";
