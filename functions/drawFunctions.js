@@ -27,13 +27,13 @@ function UI() {
     allCars.sort((a, b) => (b.distance + b.distanceFromLastCheckpoint) - (a.distance + a.distanceFromLastCheckpoint));
     allCars.forEach((car, i) => {
         car.place = i + 1
-        c.font = "20px Arial";
-        c.fillStyle = "black";
-        c.save();
-        if (car.name != "Player") c.translate(global.translation.x, global.translation.y);
-        c.fillText(parseInt(car.distance + car.distanceFromLastCheckpoint), car.position.x, car.position.y);
-        c.fillText(car.speed, car.position.x + car.width, car.position.y + car.height);
-        c.restore();
+        // c.font = "20px Arial";
+        // c.fillStyle = "black";
+        // c.save();
+        // if (car.name != "Player") c.translate(global.translation.x, global.translation.y);
+        // c.fillText(parseInt(car.distance + car.distanceFromLastCheckpoint), car.position.x, car.position.y);
+        // c.fillText(car.speed, car.position.x + car.width, car.position.y + car.height);
+        // c.restore();
     });
 
     // Wypisywanie pozycji gracza

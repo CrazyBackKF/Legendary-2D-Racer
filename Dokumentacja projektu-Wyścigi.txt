@@ -278,6 +278,8 @@
 
 26.03.2025
 - dodanie pauzy
+
+27.03.2025
 - naprawa muzyki
 - optymalizacja kodu
 - dodanie menu startowego
@@ -285,3 +287,8 @@
 - dodanie lodu do mapy 5
 - dodanie reszty muzyki (do menu głównego i startowego, oraz na przyciski)
 - dodanie customowego kursora
+
+28.03.2025
+- zmiana mechaniki pozycji
+- optymalizajca kodu
+- dodanie ostatniego bota (taktyka, próbuje cie dogonić i zajechać ci drogę)

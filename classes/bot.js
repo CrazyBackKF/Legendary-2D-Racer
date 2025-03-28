@@ -112,13 +112,13 @@ class Bot extends Player {
 
         let direction;
 
-        if (!this.shouldAttack) {
+        if (!this.shouldAttack || this.distance + this.distanceFromLastCheckpoint >= player.distance + player.distanceFromLastCheckpoint) {
             direction = {
                 x: checkpointPosition.x - (this.position.x + this.width / 2 + global.translation.x),
                 y: checkpointPosition.y - (this.position.y + this.height / 4 + global.translation.y)
             }
         }
-        else {
+        else if (this.distance + this.distanceFromLastCheckpoint < player.distance + player.distanceFromLastCheckpoint) {
             direction = {
                 x: player.position.x + player.width / 2 - (this.position.x + this.width / 2 + global.translation.x),
                 y: player.position.y + player.height / 4 - (this.position.y + this.height / 4 + global.translation.y)
@@ -144,13 +144,13 @@ class Bot extends Player {
     //metoda zmienia na następny checkpoint, po kolizji bota z checkpointem
     checkCheckpoints() {
         for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
-            const rotatedRect = getObjectsToCollisions(this, false, this.angle, true)
+            const rotatedRect = getObjectsToCollisions(this, true, this.angle, true)
 
             //pozycja checkpointa analogiczna do square z poprzednioego for'a   
-            const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], false, 0, false, global.scale)
+            const checkpoint = getObjectsToCollisions(stage[currentMap].checkpointsTab[i], true, 0, false, global.scale)
             checkpoint.index = stage[currentMap].checkpointsTab[i].index;
 
-            if (isColliding(rotatedRect, checkpoint) && this.currentCheckpoint - i == 0) {
+            if (satCollision(rotatedRect, checkpoint) && this.currentCheckpoint - i == 0) {
                 if (this.currentCheckpoint < stage[currentMap].checkpointsTab.length - 1) this.currentCheckpoint++;
                 else this.currentCheckpoint = 0;
                 this.lastCheckpointTime = Date.now();
@@ -256,6 +256,11 @@ class Bot extends Player {
                 this.speedValue = 0.02;
                 this.brakeValue = 0.01;
             }
+            else if (this.distance + this.distanceFromLastCheckpoint < player.distance + player.distanceFromLastCheckpoint) {
+                this.maxSpeed = 4;
+                this.speedValue = 0.03;
+                this.brakeValue = 1;
+            }
             else {
                 this.hasBraked = false;
                 this.maxSpeed = 3;
@@ -271,6 +276,21 @@ class Bot extends Player {
         else if (this.behavior == "taktyk") {
             this.maxSpeed = 3;
             this.speedValue = 0.03;
+            if ((this.distance + this.distanceFromLastCheckpoint) - (player.distance + player.distanceFromLastCheckpoint) > 500) { // komputer czeka, gdy gracz jest za daleko
+                this.maxSpeed = 1;
+                this.speedValue = 0.01;
+                this.brakeValue = 0.01;
+            }
+            else if (this.distance + this.distanceFromLastCheckpoint < player.distance + player.distanceFromLastCheckpoint) {
+                this.maxSpeed = 4;
+                this.speedValue = 0.034;
+                this.brakeValue = 1;
+            }
+            else {
+                this.maxSpeed = 2;
+                this.speedValue = 0.02;
+                this.brakeValue = 0.05;
+            }
 
         }
     }
@@ -281,11 +301,11 @@ class Bot extends Player {
         let collisionIndex = -1; //zmienna ktora opisuje index przeszkody z kolizja
 
         for (let i = 0; i < obstacles.length; i++) {
-            const obstacle = getObjectsToCollisions(this, false, this.angle, true, { x: 1, y: 1 }, global.translation);
+            const obstacle = getObjectsToCollisions(this, true, this.angle, true, { x: 1, y: 1 }, global.translation);
 
-            const square = getObjectsToCollisions(obstacles[i], false, 0, true, global.scale, global.translation);
+            const square = getObjectsToCollisions(obstacles[i], true, 0, true, global.scale, global.translation);
 
-            if (isColliding(obstacle, square)) {
+            if (satCollision(obstacle, square)) {
                 currentlyColliding = true;
                 let angleTypeTab = [convertToRadians(110), convertToRadians(-110)]
 
@@ -367,7 +387,7 @@ class Bot extends Player {
 
         const enemy = getObjectsToCollisions(player, true, player.angle, false, { x: 1, y: 1 }, { x: -global.translation.x, y: -global.translation.y });
 
-        if (satCollisionWithVertices(car, enemy).colliding) { // napisz do tego kod SAT
+        if (satCollision(car, enemy)) { // napisz do tego kod SAT
             if (!this.isColliding) {
                 this.reactToCollisions(player.velocity);
             }
@@ -389,7 +409,7 @@ class Bot extends Player {
         for (let i = 0; i < enemies.length; i++) {
             const car = getObjectsToCollisions(this, true, this.angle, true)
             const bot = getObjectsToCollisions(enemies[i], true, enemies[i].angle, true)
-            if (satCollisionWithVertices(car, bot).colliding) { // napisz do tego kod SAT
+            if (satCollision(car, bot)) { // napisz do tego kod SAT
                 if (!this.isColliding) {
                     this.isColliding = true;
                     this.reactToCollisions(enemies[i].velocity); // metoda znajduje się w klasie Player, od której klasa Bot dziedziczy
@@ -410,15 +430,26 @@ class Bot extends Player {
     //metoda ktora okresla polozenie checkpointa do ktorego botma jechac
     updateDistance() {
         let lastCheckpoint = this.previousCheckpoint - 1;
-
-        if (this.previousCheckpoint == 0) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
-
-        const checkpoint = stage[currentMap].checkpointsTab[lastCheckpoint];
-        const checkpointX = (checkpoint.position.x + checkpoint.width / 2) * 2 + global.translation.x;
-        const checkpointY = (checkpoint.position.y + checkpoint.height / 2) * 2 + global.translation.y;
-        const botX = this.position.x + this.width / 2 + global.translation.x;
-        const botY = this.position.y + this.height / 4 + global.translation.y;
-        this.distanceFromLastCheckpoint = Math.hypot(checkpointX - botX, checkpointY - botY);
+        if (lastCheckpoint == -1) lastCheckpoint = stage[currentMap].checkpointsTab.length - 1;
+        
+        // męczyłem się z tym przez godzinę, ponieważ dałem this.lastCheckpoint, który zawsze jest równy -1, dziedzicząc z playera, a powinno być lastCheckpoint. Świetnie
+        const checkpoint = stage[currentMap].checkpointsTab[(lastCheckpoint + 1) % stage[currentMap].checkpointsTab.length]; // sprawdzamy następny checkpoint, nie poprzedni
+        const checkpointX = ((checkpoint.position.x + checkpoint.width / 2) * 2);
+        const checkpointY = ((checkpoint.position.y + checkpoint.height / 2) * 2);
+        
+        const botX = this.position.x + this.width / 2;
+        const botY = this.position.y + this.height / 4;
+        
+        const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
+        this.distanceFromLastCheckpoint = distanceToNextCheckpoint - Math.hypot(checkpointX - botX, checkpointY - botY) / 2
+        
+        c.save();
+        c.translate(global.translation.x, global.translation.y)
+        c.fillStyle = "black";
+        c.fillStyle = "black";
+        c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
+        c.fillText(this.place, this.position.x + this.width, this.position.y + this.height);
+        c.restore();
         ////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

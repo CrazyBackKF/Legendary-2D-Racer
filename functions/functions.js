@@ -215,6 +215,25 @@ function changeLevelProperties() {
         }
     }
 
+    // stworzyłem nową pętle, żeby kod był czytelniejszy
+    for (let i = 0; i < stage[currentMap].checkpointsTab.length; i++) {
+        const thisCheckpoint = stage[currentMap].checkpointsTab[i];
+        const nextCheckpoint = stage[currentMap].checkpointsTab[(i + 1) % stage[currentMap].checkpointsTab.length];
+
+        const thisPosition = {
+            x: thisCheckpoint.position.x + thisCheckpoint.width / 2,
+            y: thisCheckpoint.position.y + thisCheckpoint.height / 2
+        }
+
+        const nextPosition = {
+            x: nextCheckpoint.position.x + nextCheckpoint.width / 2,
+            y: nextCheckpoint.position.y + nextCheckpoint.height / 2
+        }
+
+        const distance = Math.hypot((thisPosition.x - nextPosition.x), (thisPosition.y - nextPosition.y));
+        thisCheckpoint.distanceToNextCheckpoint = distance;
+    }
+
     background.src = stage[currentMap].imgSrc;
     foreground.src = stage[currentMap].foregroundSrc;
 

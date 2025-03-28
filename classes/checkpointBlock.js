@@ -23,6 +23,7 @@ class CheckpointBlock extends collisionBlock {
             x: 0,
             y: 0
         }
+        this.distanceToNextCheckpoint = 0;
     }
 
     //metoda do rysowania checkpointow
@@ -36,7 +37,7 @@ class CheckpointBlock extends collisionBlock {
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
         c.font = "20px Arial";
         c.fillStyle = "black"
-        c.fillText(this.index, this.position.x, this.position.y)
+        c.fillText(this.distanceToNextCheckpoint, this.position.x, this.position.y)
 
         c.restore();
     }
