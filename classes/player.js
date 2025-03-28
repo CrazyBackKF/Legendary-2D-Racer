@@ -204,7 +204,6 @@ class Player extends Sprite {
     // Metoda która obraca pojazd
     turn() {
         let turnSpeed = Math.min(3.5, this.changeTurningSpeed());
-        console.log(turnSpeed)
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;
@@ -503,7 +502,8 @@ class Player extends Sprite {
             const car = getObjectsToCollisions(this, true, this.angle, false)
 
             const bot = getObjectsToCollisions(bots[i], true, bots[i].angle, true, { x: 1, y: 1 }, global.translation)
-            if (satCollisionWithVertices(car, bot).colliding && bot.isPlaying) { // napisz do tego kod SAT
+            if (satCollisionWithVertices(car, bot).colliding && bots[i].botPlaying) { // napisz do tego kod SAT
+                console.log("kolizja")
                 if (!this.isColliding) {
                     this.isColliding = true;
                     this.reactToCollisions(bots[i].velocity, bots[i].angle);
