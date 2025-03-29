@@ -25,6 +25,7 @@ const global = {
 const offset = 3; // offset do cieni
 const key = {
     q: false,
+    shift: false
 }
 let currentAnimation;
 let song;

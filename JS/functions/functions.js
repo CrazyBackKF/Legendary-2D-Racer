@@ -343,7 +343,18 @@ addEventListener("keydown", (e) => {
             player.key.space = true;
             break;
         case 'q':
-            key.q = !key.q;
+            if (key.alt) key.q = !key.q;
+            break;
+        case 'alt':
+            key.alt = true;
+            break;
+        case 'z':
+            if (key.alt) {
+                for (let key in tuning) {
+                    const upgrade = tuning[key];
+                    upgrade.level = 3;
+                }
+            }
             break;
         case "p":
             if (currentAnimation == "game") {
@@ -379,11 +390,14 @@ addEventListener("keyup", (e) => {
         case "shift":
             player.key.t = false;
             break;
+        case "alt":
+            key.alt = false;
+            break;
         case " ":
             player.key.space = false;
             break;
         case "m":
-            player.money = 10000000000;
+            if (key.alt) player.money = 10000000000;
             break;
     }
 })
