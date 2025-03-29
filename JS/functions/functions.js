@@ -429,3 +429,10 @@ canvas.addEventListener("click", (e) => {
         }
     })
 })
+
+addEventListener("DOMContentLoaded", () => {
+    for (let i = 1; i < 60; i++) {
+        const image = new Image();
+        image.src = `assets/img/Sprites/arrow/File${i}.png`;
+    }
+})

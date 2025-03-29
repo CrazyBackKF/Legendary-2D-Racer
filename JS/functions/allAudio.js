@@ -76,7 +76,6 @@ const music = {
         autoplay: false
     })
 }
-console.log("muzyka")
 
 for (let i = 1; i <= 7; i++) {
     music.game.push(`assets/audio/music/game/${i}.ogg`)
