@@ -56,6 +56,7 @@ function getCollisions(collisions) {
                     height: 8 * heightMultipler,
                     color: 'rgba(255,255,00, 0.5)',
                     isPassed: false,
+                    images: arrowImages
                 }))
             }
             else if (collisions[i][j] == 3) {
@@ -428,11 +429,4 @@ canvas.addEventListener("click", (e) => {
             button.click();
         }
     })
-})
-
-addEventListener("DOMContentLoaded", () => {
-    for (let i = 1; i < 60; i++) {
-        const image = new Image();
-        image.src = `assets/img/Sprites/arrow/File${i}.png`;
-    }
 })

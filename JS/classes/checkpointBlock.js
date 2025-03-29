@@ -1,13 +1,12 @@
 //rozszerzenie klasy collisionBlock dziala na takiej samej zasadzie 
 class CheckpointBlock extends collisionBlock {
-    constructor({ position, width, height, color, isPassed, index, rotation }) {
+    constructor({ position, width, height, color, isPassed, index, rotation, images }) {
         super({ position, width, height, color })
         this.isPassed = isPassed // czy checkpoint zotal zaliczony
         this.index = index //index chekpointa
         //zmienne do strzalek pokazujacych nastepny checkpoint
-        this.image = new Image();
-        this.imageSrc = "File1.png"
-        this.image.src = "assets/img/Sprites/arrow/" + this.imageSrc;
+        this.images = images;
+        this.image = images[0];
         //zmienne do okreslania klatek animacji sztrzalki
         this.allFrames = 0;
         this.frameBuffer = 2;
@@ -47,13 +46,12 @@ class CheckpointBlock extends collisionBlock {
         if (this.allFrames % this.frameBuffer == 0) {
             this.frameCounter++;
             this.lastFrame++;
-            this.imageSrc = this.imageSrc.replace(this.lastFrame, this.frameCounter);
-            this.image.src = "assets/img/Sprites/arrow/" + this.imageSrc;
-            if (this.frameCounter == this.maxFrames) {
-                this.frameCounter = 1;
+            this.image = this.images[this.lastFrame];
+            if (this.frameCounter == this.maxFrames - 1) {
+                this.frameCounter = 0;
             }
-            if (this.lastFrame == this.maxFrames) {
-                this.lastFrame = 1;
+            if (this.lastFrame == this.maxFrames - 1) {
+                this.lastFrame = 0;
             }
         }
         this.allFrames++;

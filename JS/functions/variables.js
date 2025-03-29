@@ -27,3 +27,9 @@ const key = {
 }
 let currentAnimation;
 let song;
+const arrowImages = [];
+for (let i = 1; i < 60; i++) {
+    const image = new Image();
+    image.src = `assets/img/Sprites/arrow/File${i}.png`;
+    arrowImages.push(image);
+}
