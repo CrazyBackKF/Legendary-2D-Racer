@@ -520,7 +520,7 @@ const pauseButtons = [
 const startButtons = [
     new Button({
         position: {
-            x: 450,
+            x: 465,
             y: 400
         },
         scale: {

@@ -299,7 +299,12 @@ class Player extends Sprite {
                 wasColliding = true;
 
                 if (!this.isColliding2) {
-                    this.speed *= -0.8;
+                    if (this.speed >= 0) {
+                        this.speed = Math.min(Math.max(-0.2, this.speed *= -0.8), -1);
+                    }
+                    else {
+                        this.speed = Math.max(Math.min(0.2, this.speed *= -0.8), 1);
+                    }
                 }
 
                 this.isColliding2 = true;
@@ -671,9 +676,9 @@ class Player extends Sprite {
 
         const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
         this.distanceFromLastCheckpoint = (distanceToNextCheckpoint - Math.hypot(checkpointX - playerX, checkpointY - playerY) / 2); // podzielic przez 2, ponieważ checkpointy skalujemy 2 razy
-        c.fillStyle = "black";
-        c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
-        c.fillText(this.place, this.position.x + this.width, this.position.y + this.height);
+        // c.fillStyle = "black";
+        // c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
+        // c.fillText(this.place, this.position.x + this.width, this.position.y + this.height);
         ////////////////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

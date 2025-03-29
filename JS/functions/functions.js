@@ -140,6 +140,13 @@ function getObjectsToCollisions(obj, isDifferent = false, angle = 0, isInRadians
 }
 
 function isCollidingButtons(mouse, button) {
+    const boundingRect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
+    
+    const scaledMouseX = mouse.x * scaleX;
+    const scaledMouseY = mouse.y * scaleY;
+
     const scaledWidth = button.width * button.scale.x;
     const scaledHeight = button.height * button.scale.y;
 
@@ -150,12 +157,13 @@ function isCollidingButtons(mouse, button) {
     const scaledY = button.position.y - offsetY + button.translation.y;
 
     return (
-        mouse.x > scaledX &&
-        mouse.x < scaledX + scaledWidth &&
-        mouse.y > scaledY &&
-        mouse.y < scaledY + scaledHeight
+        scaledMouseX > scaledX &&
+        scaledMouseX < scaledX + scaledWidth &&
+        scaledMouseY > scaledY &&
+        scaledMouseY < scaledY + scaledHeight
     );
 }
+
 
 function shadowText(text, position, offset, size, textAllign = "center", textBaseline = "middle", font = "Press Start 2P") {
     c.font = `${size}px "${font}"`;
@@ -314,6 +322,7 @@ function addSnow() {
 
 // Obsługa przycisków kiedy wcisniety kiedy nie
 addEventListener("keydown", (e) => {
+    if (!checkIfFullScreen()) return;
     switch (e.key.toLowerCase()) {
         case "a":
             player.key.a = true;
@@ -334,10 +343,9 @@ addEventListener("keydown", (e) => {
             player.key.space = true;
             break;
         case 'q':
-            if (!key.q) key.q = true
-            else key.q = false
+            key.q = !key.q;
             break;
-        case "escape":
+        case "p":
             if (currentAnimation == "game") {
                 cancelAnimationFrame(frame);
                 pauseButtons.forEach(button => button.isClickable = true);
@@ -349,10 +357,12 @@ addEventListener("keydown", (e) => {
                 counter = 3;
                 startAnimation();
             }
+            break;
     }
 })
 
 addEventListener("keyup", (e) => {
+    if (!checkIfFullScreen()) return;
     switch (e.key.toLowerCase()) {
         case "a":
             player.key.a = false;
@@ -378,15 +388,16 @@ addEventListener("keyup", (e) => {
     }
 })
 
-// document.querySelector("#fullscreen").addEventListener("click", () => {
-//     canvas.requestFullscreen();
-//     lastFullScreen = Date.now();
-//     //animate();
-// })
+document.querySelector("#fullscreen").addEventListener("click", () => {
+    canvas.requestFullscreen();
+    if (!global.running) animateStartMenu();
+    global.running = true;
+})
 
 // event listenery do sprawdzania czy gracz najechał lub kliknął na przycisk gdy jest na "End Screenie". Na razie jest tylko jeden, ale może w przysłości będzie
 // trzeba więcej
 canvas.addEventListener("mousemove", (e) => {
+    if (!checkIfFullScreen()) return; // nie chce sprawdzać kliknięć, gdy gra nie jest w full screenie
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     
@@ -420,6 +431,7 @@ canvas.addEventListener("mousemove", (e) => {
 })
 
 canvas.addEventListener("click", (e) => {
+    if (!checkIfFullScreen()) return;
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
     const buttons = [...endScreenButtons, ...menuButtons, ...tuningButtons, ...carButtons, ...helpButtons, ...pauseButtons, ...startButtons];

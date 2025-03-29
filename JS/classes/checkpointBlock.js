@@ -42,6 +42,8 @@ class CheckpointBlock extends collisionBlock {
     }
     
     //metoda do animacji
+    //zmieniłem sposób animowania strzałki, gdyż zmienianie src nie działało dobrze, gdy strona jest hostowana. teraz przekazuje do obiektu tablice ze wszystkimi obrazami
+    //i je zmieniam co ileś klatek (gdybym zmieniał co jedną to animacja wykonywałaby się zbyt szybko)
     animate() {
         if (this.allFrames % this.frameBuffer == 0) {
             this.frameCounter++;

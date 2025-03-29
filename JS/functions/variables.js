@@ -19,7 +19,8 @@ const global = {
         y: 0
     },
     alpha: 0,
-    firstTime: JSON.parse(localStorage.getItem("firstTime")) !== null ? JSON.parse(localStorage.getItem("firstTime")) : true
+    firstTime: JSON.parse(localStorage.getItem("firstTime")) !== null ? JSON.parse(localStorage.getItem("firstTime")) : true,
+    running: false
 }
 const offset = 3; // offset do cieni
 const key = {

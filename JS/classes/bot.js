@@ -445,13 +445,14 @@ class Bot extends Player {
         const distanceToNextCheckpoint = stage[currentMap].checkpointsTab[lastCheckpoint % stage[currentMap].checkpointsTab.length].distanceToNextCheckpoint
         this.distanceFromLastCheckpoint = distanceToNextCheckpoint - Math.hypot(checkpointX - botX, checkpointY - botY) / 2
 
-        c.save();
-        c.translate(global.translation.x, global.translation.y)
-        c.fillStyle = "black";
-        c.fillStyle = "black";
-        c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
-        c.fillText(this.place, this.position.x + this.width, this.position.y + this.height);
-        c.restore();
+        // zostawie to tutaj i w playerze do późniejszego debugowania
+        // c.save();
+        // c.translate(global.translation.x, global.translation.y)
+        // c.fillStyle = "black";
+        // c.fillStyle = "black";
+        // c.fillText(parseInt(this.distance + this.distanceFromLastCheckpoint), this.position.x, this.position.y);
+        // c.fillText(this.place, this.position.x + this.width, this.position.y + this.height);
+        // c.restore();
         ////////////////////////////// do debugowania
         // c.strokeStyle = "black";
         // c.beginPath();

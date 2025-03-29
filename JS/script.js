@@ -69,9 +69,6 @@ let rotation = 0;
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
     frame = requestAnimationFrame(animate);
-    //if (!checkIfFullScreen() && Date.now() - lastFullScreen > 500) {
-    //    cancelAnimationFrame(frame)
-    //}
     deltaTime = (currentTime - lastFrame) / 1000; // Konwersja na sekundy
     lastFrame = currentTime;
 
@@ -169,6 +166,13 @@ function animate(currentTime) {
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
     c.fillRect(0, 0, canvas.width, canvas.height)
     currentAnimation = "game";
+    if (!checkIfFullScreen()) {
+        cancelAnimationFrame(frame);
+        pauseButtons.forEach(button => button.isClickable = true);
+        canvas.style.cursor = `url("assets/img/Sprites/Cursor/cursor.png"), auto`;
+        pause();   
+    }
+    else canvas.style.cursor = `none`;
 }
 
 let counter = 3;
