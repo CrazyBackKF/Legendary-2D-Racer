@@ -162,7 +162,10 @@ function animate(currentTime) {
 
     if (currentMap == 4 || currentMap == 5) addSnow();
     if (player.isPlaying) UI();
-    else endOfMatch();
+    else {
+        canvas.style.cursor = `url("assets/img/Sprites/Cursor/cursor.png"), auto`;
+        endOfMatch();
+    }
     c.fillStyle = `rgba(0, 0, 0, ${global.alpha})`
     c.fillRect(0, 0, canvas.width, canvas.height)
     currentAnimation = "game";
@@ -172,7 +175,6 @@ function animate(currentTime) {
         canvas.style.cursor = `url("assets/img/Sprites/Cursor/cursor.png"), auto`;
         pause();   
     }
-    else canvas.style.cursor = `none`;
 }
 
 let counter = 3;
