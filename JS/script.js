@@ -160,7 +160,9 @@ function animate(currentTime) {
         shadowText(20, {x: 530, y: 95}, offset, 25, "start");
     }
 
-    
+    c.fillStyle = stage[currentMap].filter;
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
     if (currentMap == 4 || currentMap == 5) addSnow();
     if (player.isPlaying) UI();
     else endOfMatch();
@@ -198,6 +200,9 @@ function startAnimation(currentTime) {
         c.drawImage(foreground, 0, 0);
         c.restore();
     }
+    
+    c.fillStyle = stage[currentMap].filter;
+    c.fillRect(0, 0, canvas.width, canvas.height);
     
     if (currentMap == 4 || currentMap == 5) addSnow();
     shadowText(counter, {x: canvas.width / 2 - 20, y: 100}, offset, 40);

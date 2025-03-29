@@ -3,7 +3,7 @@ const helpScreen = new Sprite({
         x: 0,
         y: 0
     },
-    imageSrc: "assets/img/helpScreen.png"
+    imageSrc: "assets/img/menus/helpScreen.png"
 });
 
 function animateHelpScreen() {

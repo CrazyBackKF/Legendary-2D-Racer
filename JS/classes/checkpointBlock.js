@@ -7,7 +7,7 @@ class CheckpointBlock extends collisionBlock {
         //zmienne do strzalek pokazujacych nastepny checkpoint
         this.image = new Image();
         this.imageSrc = "File1.png"
-        this.image.src = "assets/img/arrow/" + this.imageSrc;
+        this.image.src = "assets/img/Sprites/arrow/" + this.imageSrc;
         //zmienne do okreslania klatek animacji sztrzalki
         this.allFrames = 0;
         this.frameBuffer = 2;
@@ -48,7 +48,7 @@ class CheckpointBlock extends collisionBlock {
             this.frameCounter++;
             this.lastFrame++;
             this.imageSrc = this.imageSrc.replace(this.lastFrame, this.frameCounter);
-            this.image.src = "assets/img/arrow/" + this.imageSrc;
+            this.image.src = "assets/img/Sprites/arrow/" + this.imageSrc;
             if (this.frameCounter == this.maxFrames) {
                 this.frameCounter = 1;
             }

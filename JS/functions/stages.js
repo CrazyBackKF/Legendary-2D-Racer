@@ -8,22 +8,22 @@ const check5 = [3,2,1,0,63,62,61,4,60,59,5,56,57,58,6,7,8,55,43,44,45,42,23,22,9
 const obstaclesType = [{
     type: "oil",
     color: "black",
-    imgSrc:"assets/przeszkody/plamaOleju.png"
+    imgSrc:"assets/img/Sprites/przeszkody/plamaOleju.png"
 },
 {
     type: "traffic cone",
     color: "orange",
-    imgSrc:"assets/przeszkody/pacholekDrogowy.png"
+    imgSrc:"assets/img/Sprites/przeszkody/pacholekDrogowy.png"
 },
 {
     type: "hole",
     color: "gray",
-    imgSrc:"assets/przeszkody/dziura.png"
+    imgSrc:"assets/img/Sprites/przeszkody/dziura.png"
 },
 {
     type: "spikes",
     color: "purple",
-    imgSrc:"assets/przeszkody/kolce.png"
+    imgSrc:"assets/img/Sprites/przeszkody/kolce.png"
 }
 ];
 
@@ -33,12 +33,12 @@ const buffersType = [
     {
         type: "nitro",
         color: "lightblue",
-        imgSrc:"assets/przeszkody/boosterNitro.png"
+        imgSrc:"assets/img/Sprites/przeszkody/boosterNitro.png"
     },
     {
         type: "coin",
         color: "green",
-        imgSrc:"assets/img/Icons/coin.png"
+        imgSrc: "assets/img/Sprites/Coin/Coin.png"
     }
 ];
 
@@ -48,8 +48,8 @@ let index = 0;
 const stage = {
     1: {
         arrowRotations: [90, 90, 180, 180, 270, 270, 0, 0, 270, 270, 270, 180, 180, 270, 270, 0, 0, 0, 90],
-        imgSrc: "assets/img/tlo1.png",
-        foregroundSrc: "assets/img/tlo1Foreground.png",
+        imgSrc: "assets/img/Backgrounds/tlo1.png",
+        foregroundSrc: "assets/img/Backgrounds/tlo1Foreground.png",
         collisionsTab: getCollisions(collisions.background1.parse2d(128), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background1.parse2d(128)).checkpoints, check1), // checkpoint order
         roadTab: getCollisions(collisions.background1.parse2d(128)).road,
@@ -62,13 +62,14 @@ const stage = {
         scale: 1,
         rotation: 270,
         moneyMultiplier: 1,
-        bestTime: JSON.parse(localStorage.getItem("bestTime1")) || -1
+        bestTime: JSON.parse(localStorage.getItem("bestTime1")) || -1,
+        filter: "rgba(120, 168, 77, 0.3)"
     },
     
     2: {
         arrowRotations: [90,90,180,180,180,270,270,270,0,0,90,0,270,270,270,180,180,180,270,180,270,0,270,180,270,0,0,90,90,0,270,270,0,90,0,270,270,180,180,180,270,0,0,0,90,90],
-        imgSrc: "assets/img/tlo2.png",
-        foregroundSrc: "assets/img/tlo2Foreground.png",
+        imgSrc: "assets/Backgrounds/img/tlo2.png",
+        foregroundSrc: "assets/img/Backgrounds/tlo2Foreground.png",
         collisionsTab: getCollisions(collisions.background2.parse2d(128), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background2.parse2d(128)).checkpoints, check2), // checkpoint order
         roadTab: getCollisions(collisions.background2.parse2d(128)).road,
@@ -81,13 +82,14 @@ const stage = {
         scale: 1,
         rotation: 270,
         moneyMultiplier: 1.5,
-        bestTime: JSON.parse(localStorage.getItem("bestTime2")) || -1
+        bestTime: JSON.parse(localStorage.getItem("bestTime2")) || -1,
+        filter: "rgba(216, 158, 71, 0.5)"
     },
 
     3: {
         arrowRotations: [270,270,0,0,0,0,270,270,180,180,180,270,270,270,0,0,90,90,90,0,0,270,270,270,0,90,90,90,90,90,90,90,180,270,270,180,90,90,90,180,180,180,180,180,270],
-        imgSrc: "assets/img/tlo3.png",
-        foregroundSrc: "assets/img/tlo3Foreground.png",
+        imgSrc: "assets/img/Backgrounds/tlo3.png",
+        foregroundSrc: "assets/img/Backgrounds/tlo3Foreground.png",
         collisionsTab: getCollisions(collisions.background3.parse2d(128), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background3.parse2d(128)).checkpoints, check3), // checkpoint order
         roadTab: getCollisions(collisions.background3.parse2d(128)).road,
@@ -100,13 +102,14 @@ const stage = {
         scale: 1,
         rotation: 90,
         moneyMultiplier: 1.5,
-        bestTime: JSON.parse(localStorage.getItem("bestTime3")) || -1
+        bestTime: JSON.parse(localStorage.getItem("bestTime3")) || -1,
+        filter: "rgba(181, 95, 58, 0.3)"
     },
 
     4: {
         arrowRotations: [90,90,180,180,90,90,90,0,0,270,270,270,0,0,90,90,90,90,180,180,180,270,270,270,180,180,90,90,180,270,180,180,270,270,270,0,0,0,270,270,270,180,180,270,270,0,0,0,90,90,0,0,270,270,180,270,0,0,90,90],
-        imgSrc: "assets/img/tlo4.png",
-        foregroundSrc: "assets/img/tlo4Foreground.png",
+        imgSrc: "assets/img/Backgrounds/tlo4.png",
+        foregroundSrc: "assets/img/Backgrounds/tlo4Foreground.png",
         collisionsTab: getCollisions(collisions.background4.parse2d(192), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background4.parse2d(192)).checkpoints, check4),
         roadTab: getCollisions(collisions.background4.parse2d(192)).road,
@@ -119,12 +122,13 @@ const stage = {
         scale: 2,
         rotation: 270,
         moneyMultiplier: 2,
-        bestTime: JSON.parse(localStorage.getItem("bestTime4")) || -1
+        bestTime: JSON.parse(localStorage.getItem("bestTime4")) || -1,
+        filter: "rgba(224, 247, 250, 0.5)"
     },
     5: {
         arrowRotations: [90,90,90,90,0,270,270,270,0,0,0,270,270,270,0,0,90,90,90,180,180,180,90,90,0,0,0,0,270,270,270,270,270,270,270,270,270,270,270,180,180,180,180,90,90,90,90,0,0,0,90,90,90,180,180,180,270,270,270,270,180,90,90,90],
-        imgSrc: "assets/img/tlo5.png",
-        foregroundSrc: "assets/img/tlo5Foreground.png",
+        imgSrc: "assets/img/Backgrounds/tlo5.png",
+        foregroundSrc: "assets/img/Backgrounds/tlo5Foreground.png",
         collisionsTab: getCollisions(collisions.background5.parse2d(192), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background5.parse2d(192)).checkpoints, check5),
         roadTab: getCollisions(collisions.background5.parse2d(192)).road,
@@ -137,6 +141,7 @@ const stage = {
         scale: 2,
         rotation: 270,
         moneyMultiplier: 2,
-        bestTime: JSON.parse(localStorage.getItem("bestTime5")) || -1
+        bestTime: JSON.parse(localStorage.getItem("bestTime5")) || -1,
+        filter: "rgba(224, 247, 250, 0.5)"
     }
 }

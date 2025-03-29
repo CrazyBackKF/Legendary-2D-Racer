@@ -27,8 +27,8 @@ const tuningButtons = [
             x: 420,
             y: 215
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
         name: "brakes",
         click: tuningOnClick
     }),
@@ -39,8 +39,8 @@ const tuningButtons = [
             x: 420,
             y: 335
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
         name: "engine",
         click: tuningOnClick
     }),
@@ -51,8 +51,8 @@ const tuningButtons = [
             x: 420,
             y: 455
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
         name: "wheels",
         click: tuningOnClick
     }),
@@ -63,8 +63,8 @@ const tuningButtons = [
             x: 925,
             y: 215
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
         name: "spoiler",
         click: tuningOnClick
     }),
@@ -75,8 +75,8 @@ const tuningButtons = [
             x: 925,
             y: 335
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
         name: "turbo",
         click: tuningOnClick
     }),
@@ -87,8 +87,8 @@ const tuningButtons = [
             x: 900,
             y: 30
         },
-        imageSrc: "assets/img/Home/Default.png",
-        hoverImageSrc: "assets/img/Home/Hover.png",
+        imageSrc: "assets/img/Buttons/Home/Default.png",
+        hoverImageSrc: "assets/img/Buttons/Home/Hover.png",
         name: "return",
         click: function() {
             const tl = gsap.timeline();
@@ -121,8 +121,8 @@ const carButtons = [
             else carMenu.translation.currentCar--;
             changeCar();
         },
-        imageSrc: "assets/img/ArrowLeft/Default.png",
-        hoverImageSrc: "assets/img/ArrowLeft/Hover.png",
+        imageSrc: "assets/img/Buttons/ArrowLeft/Default.png",
+        hoverImageSrc: "assets/img/Buttons/ArrowLeft/Hover.png",
     }),
 
     new Button({
@@ -135,8 +135,8 @@ const carButtons = [
             else carMenu.translation.currentCar++;
             changeCar();
         },
-        imageSrc: "assets/img/ArrowRight/Default.png",
-        hoverImageSrc: "assets/img/ArrowRight/Hover.png",
+        imageSrc: "assets/img/Buttons/ArrowRight/Default.png",
+        hoverImageSrc: "assets/img/Buttons/ArrowRight/Hover.png",
     }),
 
     // Powrót
@@ -145,8 +145,8 @@ const carButtons = [
             x: 900,
             y: 30
         },
-        imageSrc: "assets/img/Home/Default.png",
-        hoverImageSrc: "assets/img/Home/Hover.png",
+        imageSrc: "assets/img/Buttons/Home/Default.png",
+        hoverImageSrc: "assets/img/Buttons/Home/Hover.png",
         click: function() {
             const tl = gsap.timeline();
             tl.to(global, {
@@ -172,7 +172,7 @@ const speedometer = new Sprite({
         x: 1500,
         y: 550
     },
-    imageSrc: "assets/img/speedometer/speedometer.png",
+    imageSrc: "assets/img/Sprites/speedometer/speedometer.png",
     scale: {
         x: 0.5,
         y: 0.5
@@ -185,7 +185,7 @@ const pointer = new Sprite({     // Po angielsku to chyba pointer xd (chodzi o w
         x: 1690,
         y: 725
     },
-    imageSrc: "assets/img/speedometer/wskaznik.png",
+    imageSrc: "assets/img/Sprites/speedometer/wskaznik.png",
     scale: {
         x: 0.5,
         y: 0.5
@@ -203,7 +203,7 @@ const endScreen = new Sprite({
         x: 0,
         y: 0
     },
-    imageSrc: "assets/img/endScreen.png",
+    imageSrc: "assets/img/menus/endScreen.png",
     alpha: 0.98
 })
 
@@ -212,7 +212,7 @@ const coin = new Sprite({
         x: 1150,
         y: 170
     },
-    imageSrc: "assets/img/Icons/Coin.png",
+    imageSrc: "assets/img/Sprites/Coin/Coin.png",
     scale: {
         x: 0.6,
         y: 0.6
@@ -230,8 +230,8 @@ const menuButtons = [
             else mainMenu.translation.currentLvl--;
             changeLvl();
         },
-        imageSrc: "assets/img/ArrowLeft/Default.png",
-        hoverImageSrc: "assets/img/ArrowLeft/Hover.png"
+        imageSrc: "assets/img/Buttons/ArrowLeft/Default.png",
+        hoverImageSrc: "assets/img/Buttons/ArrowLeft/Hover.png"
     }),
     new Button({
         position: {
@@ -243,8 +243,8 @@ const menuButtons = [
             else mainMenu.translation.currentLvl++;
             changeLvl();
         },
-        imageSrc: "assets/img/ArrowRight/Default.png",
-        hoverImageSrc: "assets/img/ArrowRight/Hover.png"
+        imageSrc: "assets/img/Buttons/ArrowRight/Default.png",
+        hoverImageSrc: "assets/img/Buttons/ArrowRight/Hover.png"
     }),
     new Button({
         position: {
@@ -274,8 +274,8 @@ const menuButtons = [
                 
             })
         },
-        imageSrc: "assets/img/Play/Default.png",
-        hoverImageSrc: "assets/img/Play/Hover.png"
+        imageSrc: "assets/img/Buttons/Play/Default.png",
+        hoverImageSrc: "assets/img/Buttons/Play/Hover.png"
     }),
     new Button({
         position: {
@@ -300,8 +300,8 @@ const menuButtons = [
                 duration: 1.5,
             })
         },
-        imageSrc: "assets/img/Tuning/Default.png",
-        hoverImageSrc: "assets/img/Tuning/Hover.png",
+        imageSrc: "assets/img/Buttons/Tuning/Default.png",
+        hoverImageSrc: "assets/img/Buttons/Tuning/Hover.png",
         scale: {
             x: 0.7,
             y: 0.7
@@ -330,8 +330,8 @@ const menuButtons = [
                 duration: 1.5,
             })
         },
-        imageSrc: "assets/img/CarButton/Default.png",
-        hoverImageSrc: "assets/img/CarButton/Hover.png",
+        imageSrc: "assets/img/Buttons/CarButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/CarButton/Hover.png",
         scale: {
             x: 0.7,
             y: 0.7
@@ -342,8 +342,8 @@ const menuButtons = [
             x: 700,
             y: 5
         },
-        imageSrc: "assets/img/Help/Default.png",
-        hoverImageSrc: "assets/img/Help/Hover.png",
+        imageSrc: "assets/img/Buttons/Help/Default.png",
+        hoverImageSrc: "assets/img/Buttons/Help/Hover.png",
         scale: {
             x: 0.7,
             y: 0.7
@@ -393,8 +393,8 @@ const endScreenButtons = [
                 duration: 1.5,
             })
         },
-        imageSrc: "assets/img/endScreenPlayButton/Default.png",
-        hoverImageSrc: "assets/img/endScreenPlayButton/Hover.png",
+        imageSrc: "assets/img/Buttons/endScreenPlayButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/endScreenPlayButton/Hover.png",
     })
 ]
 
@@ -405,8 +405,8 @@ for (let i = 0; i < 4; i++) {
             x: 470 + 1024 * i,
             y: 400
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
         name: "buy",
         translation: {
             x: -1024 * i,
@@ -460,8 +460,8 @@ const helpButtons = [
                 duration: 1.5,
             })
         },
-        imageSrc: "assets/img/ArrowRight/Default.png",
-        hoverImageSrc: "assets/img/ArrowRight/Hover.png"
+        imageSrc: "assets/img/Buttons/ArrowRight/Default.png",
+        hoverImageSrc: "assets/img/Buttons/ArrowRight/Hover.png"
     })
 ]
 
@@ -481,8 +481,8 @@ const pauseButtons = [
             pauseButtons.forEach(button => button.isClickable = false);
             startAnimation();
         },
-        imageSrc: "assets/img/tuningButton/Default.png", // nie potrzeba nowego przycisku, bo ten świetnie się sprawdza
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png", // nie potrzeba nowego przycisku, bo ten świetnie się sprawdza
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
     }),
     new Button({
         position: {
@@ -512,8 +512,8 @@ const pauseButtons = [
                 duration: 1.5,
             })
         },
-        imageSrc: "assets/img/tuningButton/Default.png",
-        hoverImageSrc: "assets/img/tuningButton/Hover.png",
+        imageSrc: "assets/img/Buttons/tuningButton/Default.png",
+        hoverImageSrc: "assets/img/Buttons/tuningButton/Hover.png",
     })
 ]
 
@@ -557,8 +557,8 @@ const startButtons = [
                 duration: 1.5,
             })
         },
-        imageSrc: "assets/img/ArrowRight/Default.png", // wygląda na znak "play" lol
-        hoverImageSrc: "assets/img/ArrowRight/Hover.png"
+        imageSrc: "assets/img/Buttons/ArrowRight/Default.png", // wygląda na znak "play" lol
+        hoverImageSrc: "assets/img/Buttons/ArrowRight/Hover.png"
     })
 ]
 

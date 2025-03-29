@@ -416,7 +416,7 @@ class Player extends Sprite {
                             ease: "power2.out"
                         })
 
-                        this.oliedMultiplier = 2.5;
+                        this.oliedMultiplier = 1.5;
                     }
                     //reakcja na przezszkode 'hole'
                     else if (obstacles[i].type.type == "hole") {

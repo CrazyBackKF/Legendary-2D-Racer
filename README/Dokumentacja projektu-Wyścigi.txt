@@ -292,3 +292,6 @@
 - zmiana mechaniki pozycji
 - optymalizajca kodu
 - dodanie ostatniego bota (taktyka, próbuje cie dogonić i zajechać ci drogę)
+
+29.03.2025
+- dodanie filtrów na mapy

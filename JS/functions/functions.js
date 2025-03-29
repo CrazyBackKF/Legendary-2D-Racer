@@ -305,8 +305,6 @@ function addSnow() {
             y: Math.random() * 2 + 1
         }
     }))
-    c.fillStyle = "rgba(224, 247, 250, 0.5)";
-    c.fillRect(0, 0, canvas.width, canvas.height);
     snowTab.forEach(snow => {
         snow.update();
     })
@@ -396,7 +394,7 @@ canvas.addEventListener("mousemove", (e) => {
     buttons.forEach(button => {
         if (isCollidingButtons({ x: mouseX, y: mouseY }, button) && button.isClickable) {
             if (!(currentAnimation == "game" || currentAnimation == "counting")) {
-                canvas.style.cursor = `url("assets/img/Cursor/pointer.png"), auto`
+                canvas.style.cursor = `url("assets/img/Sprites/Cursor/pointer.png"), auto`
             }
             isHovering = true;
             button.isHovering = true;
@@ -417,7 +415,7 @@ canvas.addEventListener("mousemove", (e) => {
             })
         }
     })
-    if (!isHovering && !(currentAnimation == "game" || currentAnimation == "counting")) canvas.style.cursor = `url("assets/img/Cursor/cursor.png"), auto`;
+    if (!isHovering && !(currentAnimation == "game" || currentAnimation == "counting")) canvas.style.cursor = `url("assets/img/Sprites/Cursor/cursor.png"), auto`;
 })
 
 canvas.addEventListener("click", (e) => {

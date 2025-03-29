@@ -1,5 +1,5 @@
 const tuningBackground = new Image();
-tuningBackground.src = "assets/img/tuning.png";
+tuningBackground.src = "assets/img/menus/tuning.png";
 
 const tuning = {
     brakes: {

@@ -1,11 +1,11 @@
 const carsForeground = new Sprite({
     position: {x: 0, y: 0},
-    imageSrc: "assets/img/cars.png"
+    imageSrc: "assets/img/menus/cars.png"
 })
 
 const carsBackground = new Sprite({
     position: {x: 0, y: 0},
-    imageSrc: "assets/img/carsBackground.png"
+    imageSrc: "assets/img/menus/carsBackground.png"
 })
 
 const carMenu = {

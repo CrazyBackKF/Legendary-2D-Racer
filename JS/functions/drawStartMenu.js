@@ -1,5 +1,5 @@
 const startMenu = new Image();
-startMenu.src = "assets/img/startMenu/startMenu.png"
+startMenu.src = "assets/img/menus/startMenu/startMenu.png"
 
 const startText = {
     image: new Image(),
@@ -9,7 +9,7 @@ const startText = {
     },
     isFirstFrame: true
 }
-startText.image.src = "assets/img/startMenu/text.png"
+startText.image.src = "assets/img/menus/startMenu/text.png"
 
 startMenuAnimation = {
     isFirstFrame: true,

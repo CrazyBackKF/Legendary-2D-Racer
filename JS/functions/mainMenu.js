@@ -2,10 +2,10 @@
 // const c = canvas.getContext("2d");
 
 const mainMenuBackground = new Image();
-mainMenuBackground.src = "assets/img/mainMenuTlo.png";
+mainMenuBackground.src = "assets/img/menus/mainMenuTlo.png";
 
 const menu = new Image();
-menu.src = "assets/img/menu.png"
+menu.src = "assets/img/menus/menu.png"
 
 const mainMenu = {
     translation: {
