@@ -10,7 +10,17 @@
     <link rel="icon" type="image/png" href="assets/img/Sprites/Logo/logo.png">
     <title>Legendary 2D Racer</title>
     <style>
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         body {
+            background: linear-gradient(-45deg, #0d0d0d, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s infinite ease-in-out;
+            color: white;
             margin: 0;
             overflow: hidden;
             background-color: black;
@@ -20,23 +30,31 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
 
         #fullscreen {
-            border-radius: 50%;
             position: absolute;
-            top: 50%;
+            border-radius: 50%;
             left: 50%;
+            top: 50%;
+            background: none;
             transform: translate(-50%, -50%);
-            border: 0;
+            border: 3px solid #ff00ff;
+            color: #ff00ff;
+            font-size: 18px;
+            padding: 20px 30px;
+            text-transform: uppercase;
+            cursor: url("assets/img/Sprites/Cursor/pointer.png"), auto;;
+            transition: 0.3s;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, #ff7f4f, #a15dc0);
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         #fullscreen:hover {
+            background: #ff00ff;
+            color: white;
+            box-shadow: 0 0 10px #ff00ff;
             transform: translate(-50%, -50%) scale(1.2, 1.2);
         }
 
@@ -50,12 +68,25 @@
 
         canvas {
             background-color: gray;
+            border: 8px solid white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        h1 {
+            font-family: "Press Start 2P";
+            color: white;
+            background: linear-gradient(to right, #ff0000, #ff9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 60px;
+            font-weight: bold;
         }
 
     </style>
 </head>
 
 <body>
+    <h1>LEGENDARY 2D RACER</h1>
     <div>
         <canvas width="1024" height="576"></canvas>
         <button type="button" id="fullscreen">

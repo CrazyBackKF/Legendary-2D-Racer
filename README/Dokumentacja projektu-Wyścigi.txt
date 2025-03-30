@@ -296,3 +296,6 @@
 29.03.2025
 - dodanie filtrów na mapy
 - naprawa fullscreenu
+
+30.03.2025
+- zmiana wyglądu strony

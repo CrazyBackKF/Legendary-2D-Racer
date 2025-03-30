@@ -456,3 +456,12 @@ canvas.addEventListener("click", (e) => {
         }
     })
 })
+
+canvas.addEventListener("fullscreenchange", () => {
+    if(!checkIfFullScreen()) {
+        canvas.style.border = "8px solid white";
+    }
+    else {
+        canvas.style.border = "none";
+    }
+})
