@@ -1,3 +1,4 @@
+// audio do samochodu
 const carAudios = {
     idle: new Howl({
         src: ["assets/audio/car/idle.wav"],
@@ -55,6 +56,7 @@ const carAudios = {
     }),
 }
 
+// muzyka w tle, w grze, menu i na przyciski, po ich kliknięciu
 const music = {
     game: [],
     startMenu: new Howl({
@@ -77,6 +79,7 @@ const music = {
     })
 }
 
+// w grze znajduje się 7 piosenek, które odtwarzają się losowo
 for (let i = 1; i <= 7; i++) {
     music.game.push(`assets/audio/music/game/${i}.ogg`)
 }

@@ -1,5 +1,6 @@
 const pauseText = ["Resume", "Exit to menu"];
 
+// funkcja rysująca pauze po naciśnięciu "p" lub po wyjściu z full screena
 function pause() {
     frame = requestAnimationFrame(pause);
     c.clearRect(200, 150, 600, 300);

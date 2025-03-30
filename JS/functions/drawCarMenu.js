@@ -1,3 +1,4 @@
+// obrazy do menu, w którym wybiera się samochody
 const carsForeground = new Sprite({
     position: {x: 0, y: 0},
     imageSrc: "assets/img/menus/cars.png"
@@ -17,6 +18,7 @@ const carMenu = {
     }
 }
 
+// obiekt określa koszt i src obrazu nowego auta
 const cars = {
     1: {
         imageSrc: "assets/img/cars/player1.png",
@@ -43,6 +45,7 @@ const cars = {
     }
 }
 
+// animacja do zmieniania samochodu
 function changeCar() {
     for (let i = 0; i < 4; i++) {
         carButtons[3 + i].isClickable = false;
@@ -55,11 +58,13 @@ function changeCar() {
     })
 }
 
+// okręgi określające który samochód jest wybrany, żeby lepiej wyglądało
 const circlesCar = [];
 for (let i = 0; i < 4; i++) {
     circlesCar.push({position: {x: 370 + i * 90 , y: 500}})
 }
 
+// animacja do rysowania menu wybierania samochodów
 function animateCarMenu() {
     frame = requestAnimationFrame(animateCarMenu);
     carsBackground.draw();

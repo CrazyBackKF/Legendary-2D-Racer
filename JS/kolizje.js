@@ -1,4 +1,5 @@
 //obiekt zimportowanej mpay 1 == kolizja
+//trochę dużo tych danych, ale nwm jak inaczej wyeksportować kolizje potrzebne do gry
 collisions = {
 
     //mapa 1

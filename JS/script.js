@@ -28,11 +28,13 @@ const background = new Image();
 const foreground = new Image(); // żeby była iluza, że samochód wjeżdża za np drzewa
 const obstacles = [];
 const bots = [];
+// zmienne dla botów (mogliśmy to w sumie dać w obiekt, byłoby wygodniej)
 const botsColor = ['orange', 'darkGreen', 'pink', 'violet'];
 const behavior = ['sprinter', 'stabilny', 'agresor', 'taktyk'];
 const names = ['NitroNinja', 'TurboTornado', 'CrashCrasher', 'Slipstreamer'];
 let snowTab = [];
 
+// tworzymy 4 boty
 for (let i = 0; i < 4; i++) {
     bots.push(new Bot(
         {
@@ -65,7 +67,6 @@ for (let i = 0; i < 4; i++) {
 
 const allCars = [player, ...bots];
 
-let rotation = 0;
 // Funkcja rekurencyjna gry (odpowiedzialna za animacje)
 function animate(currentTime) {
     frame = requestAnimationFrame(animate);
@@ -74,6 +75,8 @@ function animate(currentTime) {
 
     if (deltaTime > 1 / 30  || !deltaTime) deltaTime = 1 / 30; // Zapobieganie skokom FPS
     c.clearRect(0, 0, canvas.width, canvas.height);
+    c.save();
+    c.translate(global.cameraShake.x, global.cameraShake.y) // łatwiej było zrobić camera shake, niż mi się wydawało
     c.save();
     c.translate(global.translation.x, global.translation.y);
     c.scale(global.scale.x, global.scale.y);
@@ -175,11 +178,13 @@ function animate(currentTime) {
         canvas.style.cursor = `url("assets/img/Sprites/Cursor/cursor.png"), auto`;
         pause();   
     }
+    c.restore();
 }
 
 let counter = 3;
 let lastCounterTime;
 
+// przed grą jest counter 3 sekundowy i po to jest ta funkcja
 function startAnimation(currentTime) {
     canvas.style.cursor = "none";
     frame = requestAnimationFrame(startAnimation);

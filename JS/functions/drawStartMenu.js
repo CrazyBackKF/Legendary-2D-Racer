@@ -16,6 +16,7 @@ startMenuAnimation = {
     alpha: 0 // żeby gsap działał, to animowana wartość musi być w obiekcie
 }
 
+// menu startowe
 function animateStartMenu() {
     frame = requestAnimationFrame(animateStartMenu);
     c.clearRect(0, 0, canvas.width, canvas.height);

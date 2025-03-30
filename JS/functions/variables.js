@@ -20,7 +20,11 @@ const global = {
     },
     alpha: 0,
     firstTime: JSON.parse(localStorage.getItem("firstTime")) !== null ? JSON.parse(localStorage.getItem("firstTime")) : true,
-    running: false
+    running: false,
+    cameraShake: {
+        x: 0,
+        y: 0
+    }
 }
 const offset = 3; // offset do cieni
 const key = {

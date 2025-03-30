@@ -1,21 +1,9 @@
-
-
 // Funkcja odpowiada za zamianę stopni na radiany używane w rotacjach na canvas
 function convertToRadians(angle) {
     return (angle * Math.PI / 180);
 }
 
-//funkcja ktora jest warukiem innej funkcji
-function checkCollisionsCondition(corners, object) {
-    if (corners.rt.y <= object.position.y + object.height &&
-        corners.lt.y >= object.position.y + object.height &&
-        corners.rt.x <= object.position.x + object.width &&
-        corners.lt.x >= object.position.x + object.width) {
-        return "collision"
-    }
-}
-
-//funkcja ktora sprawdza kolizje
+//funkcja zwraca wszystkie kolizje na mapach, tzn. kolizje do odbijania się auta, checkpointy, drogę i lód
 function getCollisions(collisions) {
     const checkpointsTab = [];
     const collisionsTab = [];
@@ -86,6 +74,7 @@ function getCollisions(collisions) {
     return { collisions: collisionsTab, checkpoints: checkpointsTab, road: roadTab, ice: iceTab };
 }
 
+// zmieniam indeks w tablicy checkpointów, żeby były w dobrej kolejności
 function reorderArray(arr, order) {
     let reordered = new Array(arr.length); // Tworzymy nową tablicę o tej samej długości
     order.forEach((newPosition, currentIndex) => {
@@ -100,23 +89,9 @@ function checkIfFullScreen() {
     return document.fullscreenElement !== null;
 }
 
-//sprawdzamy strone pozycji z
-function getSidePosition(target, offset) {
-    return {
-        x: target.position.x + Math.cos(target.angle + Math.PI / 2) * offset,
-        y: target.position.y + Math.sin(target.angle + Math.PI / 2) * offset
-    };
-}
-
-//zwracamy kierunek
-function returnDirection(obj1, obj2) {
-    if (obj1.hr.x < obj2.hl.x) return "right";
-    if (obj1.hl.x > obj2.hr.x) return "left";
-    if (obj1.hr.y < obj2.hl.y) return "down";
-    if (obj1.hl.y > obj2.hr.y) return "up";
-}
-
+// tą funkcje używam żeby zwrócić obiekt, który używam w metodach na sprawdzanie kolizji
 // isDifferent dodałem, ponieważ czasem trochę inaczej zapisuje obiekty a nie chce mi się tego zmieniać
+// w sumie już nigdzie nie używam false, ale jestem zbyt leniwy żeby przerabiać lol
 function getObjectsToCollisions(obj, isDifferent = false, angle = 0, isInRadians = false, scale = { x: 1, y: 1 }, translation = { x: 0, y: 0 }) {
     if (!isInRadians) angle = convertToRadians(angle);
     if (!isDifferent) {
@@ -139,8 +114,11 @@ function getObjectsToCollisions(obj, isDifferent = false, angle = 0, isInRadians
     }
 }
 
+// funkcja do sprawdzania czy myszka koliduje z przyciskiem, używana w event listerach
 function isCollidingButtons(mouse, button) {
     const boundingRect = canvas.getBoundingClientRect();
+
+    // muszę skalować, żeby działało jak jest w full screenie
     const scaleX = canvas.width / boundingRect.width;
     const scaleY = canvas.height / boundingRect.height;
     
@@ -156,6 +134,7 @@ function isCollidingButtons(mouse, button) {
     const scaledX = button.position.x - offsetX + button.translation.x;
     const scaledY = button.position.y - offsetY + button.translation.y;
 
+    // tą regułkę na kolizje dwóch prostokątów już chyba znam na pamięć xd (w sumie myszka to jest punkt, ale dwa prostokąty działają podobnie)
     return (
         scaledMouseX > scaledX &&
         scaledMouseX < scaledX + scaledWidth &&
@@ -164,7 +143,7 @@ function isCollidingButtons(mouse, button) {
     );
 }
 
-
+// robię animację cienia na napisy, żeby łatwiej je było odróżnić od jasnego tła
 function shadowText(text, position, offset, size, textAllign = "center", textBaseline = "middle", font = "Press Start 2P") {
     c.font = `${size}px "${font}"`;
     c.textAlign = textAllign;
@@ -175,6 +154,7 @@ function shadowText(text, position, offset, size, textAllign = "center", textBas
     c.fillText(text, position.x, position.y);
 }
 
+// funkcja zwraca czas w formacie minuty:sekundy, żeby łatwiej ją wyświetlać w głównym menu i w grze
 function getTime(time) {
     let minutes = parseInt(time / 60000);
     let seconds = parseInt((time % 60000) / 1000);
@@ -186,6 +166,7 @@ function getTime(time) {
     return `${minutes}:${seconds}`;
 }
 
+// funkcje grają losową piosenkę w grze
 function getRandomTrack() {
     return music.game[Math.floor(Math.random() * music.game.length)];
 }
@@ -206,6 +187,7 @@ function playRandomTrack() {
     song.play();  // Odtwarzamy muzykę
 }
 
+// zmieniam, lub zeruje zmienne, gdy włączam nowy wyścig
 function changeLevelProperties() {
     counter = 3;
     global.translation.x = stage[currentMap].startTranslation.x;
@@ -301,6 +283,7 @@ function changeLevelProperties() {
 
 }
 
+// dodaje śnieg w 4 i 5 mapie
 function addSnow() {
     snowTab.push(new Snow({
         position: {
@@ -402,6 +385,7 @@ addEventListener("keyup", (e) => {
     }
 })
 
+// full screen dla canvasu
 document.querySelector("#fullscreen").addEventListener("click", () => {
     canvas.requestFullscreen();
     if (!global.running) animateStartMenu();
@@ -457,6 +441,7 @@ canvas.addEventListener("click", (e) => {
     })
 })
 
+// gdy wchodzę do fullscreena to usuwam ramkę, bo inaczej źle to wygląda na full screenie
 canvas.addEventListener("fullscreenchange", () => {
     if(!checkIfFullScreen()) {
         canvas.style.border = "8px solid white";

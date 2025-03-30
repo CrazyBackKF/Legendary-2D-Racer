@@ -1,6 +1,3 @@
-// const canvas = document.querySelector("canvas");
-// const c = canvas.getContext("2d");
-
 const mainMenuBackground = new Image();
 mainMenuBackground.src = "assets/img/menus/mainMenuTlo.png";
 
@@ -16,11 +13,13 @@ const mainMenu = {
     }
 }
 
+// to samo co w menu samochodów. Koła są do wskazywania która mapa jest wybrana
 const circles = [];
 for (let i = 0; i < 5; i++) {
     circles.push({position: {x: 350 + i * 75 , y: 500}})
 }
 
+// funkcja która animuje płynne przejścia
 function changeLvl() {
     gsap.to(mainMenu.translation, {
         x: -1024 * (mainMenu.translation.currentLvl - 1),
@@ -29,8 +28,9 @@ function changeLvl() {
     })
 }
 
-let frame;
+let frame; // zmienna do określania klatki, żeby potem można było anulować animacje i zmieniać na inne 
 
+// funkcja do aniowania głównego menu
 function animateMainMenu() {
     if (currentAnimation == "game" || currentAnimation == "pause") {
         song.stop();

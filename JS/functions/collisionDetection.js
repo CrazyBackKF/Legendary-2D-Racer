@@ -113,6 +113,7 @@ function pointInPolygon(point, polygon) { //
     return inside;
 }
 
+// sprawdam kolizję algorytmem Seprating Axis Theorem
 function satCollision(entityA, entityB) {
     const verticesA = getTransformedVertices(entityA);
     const verticesB = getTransformedVertices(entityB);

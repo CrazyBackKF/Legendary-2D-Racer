@@ -1,3 +1,5 @@
+let rotation = 0;
+// funkcja do rysowania interfejsu
 function UI() {
     // Timer i liczba okrążeń
     // c.fillStyle = "rgba(0, 0, 0, 0.7)";
@@ -10,11 +12,13 @@ function UI() {
 
     // Wskaźnik turbo
     c.fillStyle = "black";
-    c.fillRect(714, 515, 300, 25);
+    c.fillRect(10, 250, 50, 300);
     c.fillStyle = "blue";
-    c.fillRect(719 + 290 * ((player.maxTurbo - player.turboAmount) / player.maxTurbo), 520, 290 - (290 * ((player.maxTurbo - player.turboAmount) / player.maxTurbo)), 15);
+    c.fillRect(15, 545 - (290 * (player.turboAmount / player.maxTurbo)), 40, (290 * (player.turboAmount / player.maxTurbo)));
+
     // Prędkościomierz
     c.save();
+    c.scale(0.6, 0.6);
     c.globalAlpha = 0.7;
     speedometer.draw();
     pointer.rotation = (1.2 * Math.PI * Math.abs(player.speed) / player.maxSpeed) + rotation;
@@ -43,6 +47,7 @@ function UI() {
     shadowText("POS", {x: canvas.width - 100, y: 40}, offset, 20);
 }
 
+// funkcja rysująca menu po skończeniu wyścigu
 function endOfMatch() {
     endScreenButtons.forEach(button => button.isClickable = true);
     c.save();

@@ -19,7 +19,7 @@ function tuningOnClick() {
     })
 }
 
-//deklaracja przyciskow
+//deklaracja przyciskow, każde w innej tablicy, żeby łatwiej je było chować i rysować, w zależności od potrzeb
 const tuningButtons = [
     // Hamulce
     new Button({
@@ -167,23 +167,24 @@ const carButtons = [
     })
 ]
 
+// prędkościomierz w UI gry
 const speedometer = new Sprite({
     position: {
-        x: 1500,
-        y: 550
+        x: 2800,
+        y: 1350
     },
     imageSrc: "assets/img/Sprites/speedometer/speedometer.png",
     scale: {
         x: 0.5,
         y: 0.5
     },
-    alpha: 0.8
+    alpha: 0.8,
 })
 
 const pointer = new Sprite({     // Po angielsku to chyba pointer xd (chodzi o wskazówke do prędkościomierza)
     position: {
-        x: 1690,
-        y: 725
+        x: 2990,
+        y: 1525
     },
     imageSrc: "assets/img/Sprites/speedometer/wskaznik.png",
     scale: {
@@ -191,13 +192,14 @@ const pointer = new Sprite({     // Po angielsku to chyba pointer xd (chodzi o w
         y: 0.5
     },
     translation: {
-        x: 857.5,
-        y: 375
+        x: 1507.5,
+        y: 775
     },
     isMovingWithTranslation: true,
     alpha: 0.8
 });
 
+// obraz wyświetla się po skończeniu wyścigu
 const endScreen = new Sprite({
     position: {
         x: 0,
@@ -207,6 +209,7 @@ const endScreen = new Sprite({
     alpha: 0.98
 })
 
+// moneta w menu i w grze
 const coin = new Sprite({
     position: {
         x: 1150,
@@ -562,7 +565,7 @@ const startButtons = [
     })
 ]
 
-//dawanie typow przyciskow
+//określanie typow przyciskow
 menuButtons.forEach(button => button.type = "menu");
 endScreenButtons.forEach(button => button.type = "endScreen");
 tuningButtons.forEach(button => button.type = "tuning");

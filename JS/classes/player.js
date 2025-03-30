@@ -205,7 +205,7 @@ class Player extends Sprite {
 
     // Metoda która obraca pojazd
     turn() {
-        let turnSpeed = Math.min(3.5, this.changeTurningSpeed());
+        let turnSpeed = Math.min(2.5 * deltaTime * 120, this.changeTurningSpeed());
         if (this.key.a) {
             if (this.speed > 0) {
                 this.angle -= turnSpeed;
@@ -259,11 +259,18 @@ class Player extends Sprite {
             this.lastTurbo = Date.now();
             this.speedMultiplier = 1.2;
             this.turboAmount -= 0.01;
+            const shakeIntensity = 1.5;
+            global.cameraShake.x = (Math.random() * 2 - 1) * shakeIntensity;
+            global.cameraShake.y = (Math.random() * 2 - 1) * shakeIntensity;
         }
         else if (this.turboAmount <= 0) {
             this.speedMultiplier = 1;
             this.turboAmount = 0;
             this.speedMultiplier -= 0.005;
+        }
+        if (!this.key.t) {
+            global.cameraShake.x = 0;
+            global.cameraShake.y = 0;
         }
 
     }

@@ -1,13 +1,14 @@
 const tuningBackground = new Image();
 tuningBackground.src = "assets/img/menus/tuning.png";
 
+// obiekt przechowujący dane o upgradach samochodu, ich koszcie i obecnym levelu
 const tuning = {
     brakes: {
         cost: [100, 200, 500, "max"],
         level: JSON.parse(localStorage.getItem("brakesLevel")) || 0,
-        width: JSON.parse(localStorage.getItem("brakesWidth")) || 10,
+        width: JSON.parse(localStorage.getItem("brakesWidth")) || 10, // określa jaką szerokość ma mieć prostokąt, rysujący się pod menu, żeby ładnie to wyglądało
         drawOffset: 0,
-        widthOffset: 98,
+        widthOffset: 98, // niektóe upgrady mają inny offset rysowania, ponieważ krzywo trochę narysowałem lol
         stats: {
             0: 0.01,
             1: 0.02,
@@ -70,6 +71,7 @@ const tuning = {
     }
 }
 
+// funkcja do animowania menu tuningu
 function animateTuning() {
     frame = requestAnimationFrame(animateTuning);
 

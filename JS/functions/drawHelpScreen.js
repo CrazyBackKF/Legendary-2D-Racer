@@ -6,6 +6,7 @@ const helpScreen = new Sprite({
     imageSrc: "assets/img/menus/helpScreen.png"
 });
 
+// animacja do rysowania menu pomocy
 function animateHelpScreen() {
     frame = requestAnimationFrame(animateHelpScreen);
     helpScreen.draw();
