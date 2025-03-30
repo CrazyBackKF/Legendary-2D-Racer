@@ -68,7 +68,7 @@ const stage = {
     
     2: {
         arrowRotations: [90,90,180,180,180,270,270,270,0,0,90,0,270,270,270,180,180,180,270,180,270,0,270,180,270,0,0,90,90,0,270,270,0,90,0,270,270,180,180,180,270,0,0,0,90,90],
-        imgSrc: "assets/Backgrounds/img/tlo2.png",
+        imgSrc: "assets/img/Backgrounds/tlo2.png",
         foregroundSrc: "assets/img/Backgrounds/tlo2Foreground.png",
         collisionsTab: getCollisions(collisions.background2.parse2d(128), this.arrowRotations).collisions,
         checkpointsTab: reorderArray(getCollisions(collisions.background2.parse2d(128)).checkpoints, check2), // checkpoint order
