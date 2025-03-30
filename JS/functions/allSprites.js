@@ -384,7 +384,7 @@ const endScreenButtons = [
                 alpha: 1,
                 duration: 1,
                 onComplete: () => {
-                    if (!music.mainMenu.playing) music.mainMenu.play()
+                    if (!music.mainMenu.playing()) music.mainMenu.play()
                     cancelAnimationFrame(frame);
                     endScreenButtons.forEach(button => button.isClickable = false);
                     menuButtons.forEach(button => button.isClickable = true);
