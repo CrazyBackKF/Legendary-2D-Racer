@@ -445,6 +445,7 @@ canvas.addEventListener("click", (e) => {
 canvas.addEventListener("fullscreenchange", () => {
     if(!checkIfFullScreen()) {
         canvas.style.border = "8px solid white";
+        canvas.style.cursor = `url("assets/img/Sprites/Cursor/cursor.png"), auto`;
     }
     else {
         canvas.style.border = "none";
